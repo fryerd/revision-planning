@@ -1,0 +1,2863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seneca - Planner Recommendations Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-blue: #4B9FE8;
+      --primary-blue-light: #E8F4FC;
+      --secondary-teal: #26B5A6;
+      --accent-purple: #8B5CF6;
+      --accent-orange: #F59E0B;
+      --accent-pink: #EC4899;
+      --accent-green: #10B981;
+      --text-primary: #1F2937;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --bg-white: #FFFFFF;
+      --bg-gray: #F9FAFB;
+      --bg-sidebar: #F3F4F6;
+      --border-light: #E5E7EB;
+      --border-medium: #D1D5DB;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --content-max-width: 935px;
+    }
+
+    body {
+      font-family: 'Mulish', sans-serif;
+      background: var(--bg-gray);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* Layout */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 72px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 16px;
+    }
+
+    .sidebar-item {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+      font-size: 10px;
+      font-weight: 600;
+      gap: 2px;
+    }
+
+    .sidebar-item:hover {
+      background: var(--bg-gray);
+    }
+
+    .sidebar-item.active {
+      color: var(--secondary-teal);
+      background: rgba(38, 181, 166, 0.1);
+    }
+
+    .sidebar-item svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Secondary Sidebar */
+    .secondary-sidebar {
+      width: 240px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      padding: 16px;
+      flex-shrink: 0;
+    }
+
+    .overview-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #4B9FE8 0%, #26B5A6 100%);
+      color: white;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-gray);
+      color: var(--text-primary);
+    }
+
+    .nav-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 16px 0;
+    }
+
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .topic-item:hover {
+      background: var(--bg-gray);
+    }
+
+    .topic-progress {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    .content-wrapper {
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .search-input {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 10px 20px;
+      width: 400px;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus-within {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(75, 159, 232, 0.1);
+    }
+
+    .search-input input {
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .search-input input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .level-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Course Header */
+    .course-header {
+      display: flex;
+      gap: 24px;
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .course-image {
+      width: 160px;
+      height: 120px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      background: linear-gradient(135deg, #4B9FE8 0%, #26B5A6 100%);
+      flex-shrink: 0;
+    }
+
+    .course-info {
+      flex: 1;
+    }
+
+    .course-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .course-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--secondary-teal);
+    }
+
+    .course-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .course-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .course-subtitle a {
+      color: var(--primary-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .progress-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 60px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-fill.blue { background: var(--primary-blue); }
+    .progress-fill.orange { background: var(--accent-orange); }
+    .progress-fill.green { background: var(--accent-green); }
+
+    /* Mode Toggle */
+    .mode-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: var(--bg-gray);
+      border-radius: 24px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .mode-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+    }
+
+    .mode-btn.active {
+      background: var(--bg-white);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mode-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Planner Card */
+    .planner-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .planner-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--primary-blue), var(--secondary-teal));
+    }
+
+    .planner-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .planner-title-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .planner-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(75, 159, 232, 0.1) 100%);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-purple);
+    }
+
+    .planner-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .planner-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .planner-progress {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-circle {
+      position: relative;
+      width: 56px;
+      height: 56px;
+    }
+
+    .progress-circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-circle-bg {
+      fill: none;
+      stroke: var(--bg-gray);
+      stroke-width: 6;
+    }
+
+    .progress-circle-fill {
+      fill: none;
+      stroke: url(#progressGradient);
+      stroke-width: 6;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-circle-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .progress-time {
+      text-align: right;
+    }
+
+    .progress-time-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .progress-time-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* In Progress Header State */
+    .planner-header.in-progress {
+      background: linear-gradient(135deg, rgba(38, 181, 166, 0.05) 0%, rgba(75, 159, 232, 0.05) 100%);
+    }
+
+    .planner-header.in-progress .planner-icon {
+      background: var(--secondary-teal);
+      color: white;
+    }
+
+    .continue-btn-inline {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: var(--secondary-teal);
+      border: none;
+      color: white;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-left: 16px;
+    }
+
+    .continue-btn-inline:hover {
+      background: #1EA896;
+      transform: translateY(-1px);
+    }
+
+    .planner-header.in-progress .continue-btn-inline {
+      display: flex;
+    }
+
+    /* Planner Content */
+    .planner-content {
+      padding: 20px 24px;
+    }
+
+    .planner-description {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(75, 159, 232, 0.05) 100%);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .planner-description-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--primary-blue) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .planner-description-icon svg {
+      color: white;
+    }
+
+    .planner-description strong {
+      color: var(--text-primary);
+    }
+
+    .planner-description-dismiss {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      margin-left: auto;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .planner-description-dismiss:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text-secondary);
+    }
+
+    .planner-description.hidden {
+      display: none;
+    }
+
+    /* Loading State for Content */
+    .planner-content-loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      gap: 16px;
+    }
+
+    .planner-content-loading.visible {
+      display: flex;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .loading-subtext {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Recommendation Groups */
+    .recommendation-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .recommendation-groups.hidden {
+      display: none;
+    }
+
+    .rec-group {
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: grab;
+    }
+
+    .rec-group:active {
+      cursor: grabbing;
+    }
+
+    .rec-group.dragging {
+      opacity: 0.5;
+      transform: scale(1.02);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .rec-group.drag-over {
+      border-color: var(--primary-blue);
+      background: var(--primary-blue-light);
+    }
+
+    /* Loading state for individual groups */
+    .rec-group.loading {
+      pointer-events: none;
+    }
+
+    .rec-group.loading .rec-group-header {
+      opacity: 0.5;
+    }
+
+    .rec-group-loading-overlay {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      gap: 12px;
+      background: var(--bg-gray);
+    }
+
+    .rec-group.loading .rec-group-loading-overlay {
+      display: flex;
+    }
+
+    .rec-group.loading .rec-group-header {
+      display: none;
+    }
+
+    .rec-group-loading-spinner {
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    .rec-group-loading-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .rec-group-header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      gap: 12px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .rec-group:hover .rec-group-header {
+      background: var(--bg-gray);
+    }
+
+    .rec-group.expanded .rec-group-header {
+      background: var(--bg-gray);
+    }
+
+    /* Expand indicator on header */
+    .rec-group-expand-indicator {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+      margin-left: auto;
+      margin-right: 8px;
+    }
+
+    .rec-group.expanded .rec-group-expand-indicator {
+      transform: rotate(180deg);
+    }
+
+    .rec-group-indicator {
+      width: 4px;
+      height: 40px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .rec-group-indicator.purple { background: var(--accent-purple); }
+    .rec-group-indicator.blue { background: var(--primary-blue); }
+    .rec-group-indicator.orange { background: var(--accent-orange); }
+    .rec-group-indicator.pink { background: var(--accent-pink); }
+    .rec-group-indicator.green { background: var(--accent-green); }
+
+    .rec-group-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rec-group-icon.purple { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+    .rec-group-icon.blue { background: rgba(75, 159, 232, 0.1); color: var(--primary-blue); }
+    .rec-group-icon.orange { background: rgba(245, 158, 11, 0.1); color: var(--accent-orange); }
+    .rec-group-icon.pink { background: rgba(236, 72, 153, 0.1); color: var(--accent-pink); }
+    .rec-group-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+
+    .rec-group-info {
+      flex: 1;
+    }
+
+    .rec-group-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .rec-group-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rec-group-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .rec-group-time {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-right: 8px;
+    }
+
+    .rec-group-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .rec-group:hover .rec-group-actions {
+      opacity: 1;
+    }
+
+    .rec-group-action-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .rec-group-action-btn:hover {
+      background: var(--bg-gray);
+      color: var(--text-primary);
+    }
+
+    .rec-group-action-btn.remove:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+
+    /* Tooltips */
+    .rec-group-action-btn {
+      position: relative;
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text-primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--text-primary);
+    }
+
+    .rec-group-action-btn:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Allow tooltip to overflow */
+    .rec-group-actions {
+      overflow: visible;
+    }
+
+    .rec-group-header {
+      overflow: visible;
+    }
+
+    .rec-group {
+      overflow: visible;
+    }
+
+    .drag-handle {
+      color: var(--text-muted);
+      cursor: grab;
+    }
+
+    /* Expanded Items */
+    .rec-group-items {
+      border-top: 1px solid var(--border-light);
+      padding: 8px 16px 16px 68px;
+      display: none;
+    }
+
+    .rec-group.expanded .rec-group-items {
+      display: block;
+    }
+
+    .rec-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      margin-top: 8px;
+      background: var(--bg-gray);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      transition: all 0.2s ease;
+      cursor: grab;
+    }
+
+    .rec-item:hover {
+      background: var(--border-light);
+    }
+
+    .rec-item:active {
+      cursor: grabbing;
+    }
+
+    .rec-item.dragging {
+      opacity: 0.5;
+      transform: scale(1.02);
+      box-shadow: var(--shadow-md);
+    }
+
+    .rec-item.drag-over {
+      border: 2px dashed var(--primary-blue);
+      background: var(--primary-blue-light);
+    }
+
+    /* Loading state for replacement items */
+    .rec-item.loading {
+      pointer-events: none;
+    }
+
+    .rec-item.loading .rec-item-name,
+    .rec-item.loading .rec-item-time,
+    .rec-item.loading .rec-item-drag,
+    .rec-item.loading .rec-item-remove {
+      opacity: 0;
+    }
+
+    .rec-item-loading-content {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .rec-item.loading .rec-item-loading-content {
+      display: flex;
+    }
+
+    .rec-item-loading-spinner {
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+    }
+
+    .rec-item-loading-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .rec-item-drag {
+      color: var(--text-muted);
+      margin-right: 8px;
+      cursor: grab;
+    }
+
+    .rec-item-name {
+      flex: 1;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .rec-item-time {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-right: 8px;
+    }
+
+    .rec-item-remove {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    .rec-item:hover .rec-item-remove {
+      opacity: 1;
+    }
+
+    .rec-item-remove:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+
+    /* Planner Actions */
+    .planner-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-gray);
+    }
+
+    .planner-actions.hidden {
+      display: none;
+    }
+
+    .see-more-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .see-more-btn:hover {
+      background: var(--bg-white);
+      color: var(--text-primary);
+    }
+
+    .see-more-btn svg {
+      transition: transform 0.3s ease;
+    }
+
+    .see-more-btn.expanded svg {
+      transform: rotate(180deg);
+    }
+
+    .start-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--secondary-teal) 0%, #1EA896 100%);
+      border: none;
+      color: white;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(38, 181, 166, 0.3);
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(38, 181, 166, 0.4);
+    }
+
+    .start-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Standard For You Section */
+    .for-you-section {
+      display: none;
+    }
+
+    .for-you-section.visible {
+      display: block;
+    }
+
+    .for-you-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .for-you-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-white);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary-blue);
+      background: var(--primary-blue-light);
+    }
+
+    .for-you-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .for-you-item {
+      display: flex;
+      align-items: center;
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid var(--border-light);
+    }
+
+    .for-you-item:hover {
+      border-color: var(--primary-blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .for-you-indicator {
+      width: 4px;
+      height: 48px;
+      border-radius: 2px;
+      margin-right: 16px;
+    }
+
+    .for-you-info {
+      flex: 1;
+    }
+
+    .for-you-item-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .for-you-item-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .for-you-arrow {
+      color: var(--text-muted);
+    }
+
+    /* State Controls (Demo) */
+    .demo-controls {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+      z-index: 100;
+    }
+
+    .demo-controls-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .demo-btn {
+      display: block;
+      width: 100%;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-white);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .demo-btn:hover {
+      background: var(--bg-gray);
+      border-color: var(--primary-blue);
+    }
+
+    .demo-btn:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Win/Completed State */
+    .win-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .win-state.visible {
+      display: flex;
+    }
+
+    .win-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--bg-white);
+      border: 3px solid var(--primary-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .win-icon svg {
+      color: var(--primary-blue);
+    }
+
+    .win-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+
+    .win-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .win-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 24px;
+      background: #FEF3C7;
+      border: 2px solid #F59E0B;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .win-btn:hover {
+      background: #FDE68A;
+      transform: translateY(-2px);
+    }
+
+    .win-btn-emoji {
+      font-size: 20px;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-teal) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .modal-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-timer {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--primary-blue);
+      margin-bottom: 20px;
+    }
+
+    .modal-game-placeholder {
+      background: var(--bg-gray);
+      border-radius: var(--radius-md);
+      padding: 40px;
+      margin-bottom: 20px;
+    }
+
+    .modal-game-placeholder-text {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .modal-close-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--primary-blue);
+      border: none;
+      border-radius: 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #3B8FD8;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .animate-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .rec-group {
+      animation: slideIn 0.3s ease forwards;
+    }
+
+    .rec-group:nth-child(1) { animation-delay: 0.1s; }
+    .rec-group:nth-child(2) { animation-delay: 0.2s; }
+    .rec-group:nth-child(3) { animation-delay: 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- SVG Gradients -->
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#8B5CF6" />
+        <stop offset="100%" style="stop-color:#26B5A6" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="app-container">
+    <!-- Left Sidebar -->
+    <nav class="sidebar">
+      <svg class="sidebar-logo" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="8" fill="url(#logoGrad)"/>
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+            <stop stop-color="#4B9FE8"/>
+            <stop offset="1" stop-color="#26B5A6"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 14L20 10L28 14V20L20 24L12 20V14Z" fill="white" fill-opacity="0.9"/>
+        <path d="M20 24V30M12 20L20 24L28 20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Home</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <span>Assign</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <span>Premium</span>
+      </div>
+
+      <div class="sidebar-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <span>Geography</span>
+      </div>
+    </nav>
+
+    <!-- Secondary Sidebar -->
+    <aside class="secondary-sidebar">
+      <div class="overview-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        Overview
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Exam Prep
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Assignments
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Ask Amelia
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="topic-list">
+        <div class="topic-item">
+          <span>Geography Skills</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#4B9FE8" stroke-width="3" stroke-dasharray="88" stroke-dashoffset="22" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Geology of the UK</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#4B9FE8" stroke-width="3" stroke-dasharray="88" stroke-dashoffset="44" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Weather & Climate</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#4B9FE8" stroke-width="3" stroke-dasharray="88" stroke-dashoffset="66" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Development</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#4B9FE8" stroke-width="3" stroke-dasharray="88" stroke-dashoffset="55" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <div class="search-input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Search for notes or a topic...">
+          </div>
+          <div class="level-badge">
+            Level 95
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Course Header -->
+        <div class="course-header">
+          <div class="course-image">
+            <svg viewBox="0 0 160 120" fill="none">
+              <rect width="160" height="120" fill="url(#courseGrad)"/>
+              <defs>
+                <linearGradient id="courseGrad" x1="0" y1="0" x2="160" y2="120">
+                  <stop stop-color="#4B9FE8"/>
+                  <stop offset="1" stop-color="#26B5A6"/>
+                </linearGradient>
+              </defs>
+              <circle cx="80" cy="50" r="30" fill="white" fill-opacity="0.2"/>
+              <path d="M60 70 Q80 90 100 70" stroke="white" stroke-width="3" fill="none"/>
+            </svg>
+          </div>
+          <div class="course-info">
+            <div class="course-title-row">
+              <svg class="course-icon" viewBox="0 0 32 32" fill="currentColor">
+                <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 6 L16 16 L22 16" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <h1 class="course-title">Geography</h1>
+            </div>
+            <p class="course-subtitle">KS3 • National Curriculum <a href="#">Switch course</a></p>
+            <div class="progress-bars">
+              <div class="progress-row">
+                <svg class="progress-icon" viewBox="0 0 20 20" fill="#4B9FE8">
+                  <rect x="2" y="4" width="16" height="12" rx="2"/>
+                </svg>
+                <span class="progress-text">127 /274</span>
+                <div class="progress-bar">
+                  <div class="progress-fill blue" style="width: 46%"></div>
+                </div>
+              </div>
+              <div class="progress-row">
+                <svg class="progress-icon" viewBox="0 0 20 20" fill="#F59E0B">
+                  <circle cx="10" cy="10" r="6"/>
+                </svg>
+                <span class="progress-text">7 /249</span>
+                <div class="progress-bar">
+                  <div class="progress-fill orange" style="width: 3%"></div>
+                </div>
+              </div>
+              <div class="progress-row">
+                <svg class="progress-icon" viewBox="0 0 20 20" fill="#10B981">
+                  <path d="M4 10 L8 14 L16 6" stroke="#10B981" stroke-width="2" fill="none"/>
+                </svg>
+                <span class="progress-text">71 /914</span>
+                <div class="progress-bar">
+                  <div class="progress-fill green" style="width: 8%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode Toggle -->
+        <div class="mode-toggle-container">
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="plannerModeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              Today's Plan
+            </button>
+            <button class="mode-btn" id="forYouModeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              For you
+            </button>
+          </div>
+        </div>
+
+        <!-- Planner Card -->
+        <div class="planner-card" id="plannerCard">
+          <div class="planner-header" id="plannerHeader">
+            <div class="planner-title-section">
+              <div class="planner-icon" id="plannerIcon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                  <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+                </svg>
+              </div>
+              <div>
+                <div class="planner-title" id="plannerTitle">Dan's Geography plan</div>
+                <div class="planner-subtitle" id="plannerSubtitle">Based on your weekly planner</div>
+              </div>
+            </div>
+            <div class="planner-progress">
+              <div class="progress-circle">
+                <svg width="56" height="56" viewBox="0 0 56 56">
+                  <circle class="progress-circle-bg" cx="28" cy="28" r="24"/>
+                  <circle class="progress-circle-fill" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="150.8" id="progressCircle"/>
+                </svg>
+                <div class="progress-circle-text" id="progressPercent">0%</div>
+              </div>
+              <div class="progress-time">
+                <div class="progress-time-value"><span id="currentMins">0</span> / 20</div>
+                <div class="progress-time-label">mins</div>
+              </div>
+              <button class="continue-btn-inline" id="continueBtn">
+                Continue
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="planner-content" id="plannerContent">
+            <!-- Loading State -->
+            <div class="planner-content-loading" id="loadingState">
+              <svg class="loading-spinner" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="20" stroke="#E5E7EB" stroke-width="4"/>
+                <path d="M24 4 A20 20 0 0 1 44 24" stroke="url(#progressGradient)" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+              <div class="loading-text">Fetching your plan...</div>
+              <div class="loading-subtext">Scanning recent activity</div>
+            </div>
+
+            <!-- Loaded Content -->
+            <div id="loadedContent">
+              <div class="planner-description" id="plannerDescription">
+                <div class="planner-description-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                  </svg>
+                </div>
+                <span><strong>This 20 mins includes:</strong> Review recent topics, cover new ground, and recap weaker areas</span>
+                <button class="planner-description-dismiss" id="dismissDescription">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Win State -->
+              <div class="win-state" id="winState">
+                <div class="win-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <line x1="7" y1="7" x2="17" y2="17"/>
+                    <line x1="17" y1="7" x2="7" y2="17"/>
+                  </svg>
+                </div>
+                <h2 class="win-title">Well done! Now lets...</h2>
+                <div class="win-actions">
+                  <button class="win-btn" id="takeBreakBtn">
+                    <span class="win-btn-emoji">🌸</span>
+                    Take a break
+                  </button>
+                  <button class="win-btn" id="playGameBtn">
+                    <span class="win-btn-emoji">🎮</span>
+                    Play a game
+                  </button>
+                  <button class="win-btn" id="startBiologyBtn">
+                    <span class="win-btn-emoji">📖</span>
+                    Start Biology
+                  </button>
+                </div>
+              </div>
+
+              <div class="recommendation-groups" id="recGroups">
+                <div class="rec-group" draggable="true" data-group="spaced" data-allows-replacement="true" id="spacedGroup">
+                  <div class="rec-group-loading-overlay">
+                    <svg class="rec-group-loading-spinner" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                      <path d="M12 2 A10 10 0 0 1 22 12" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="rec-group-loading-text">Finding spaced repetition topics...</span>
+                  </div>
+                  <div class="rec-group-header">
+                    <div class="rec-group-indicator purple"></div>
+                    <div class="rec-group-icon purple">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                      </svg>
+                    </div>
+                    <div class="rec-group-info">
+                      <div class="rec-group-title">Spaced repetition recap</div>
+                      <div class="rec-group-meta">
+                        <span>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                          </svg>
+                          3 topics
+                        </span>
+                        <span>~85 XP</span>
+                      </div>
+                    </div>
+                    <div class="rec-group-time">~8 mins</div>
+                    <div class="rec-group-expand-indicator">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </div>
+                    <div class="rec-group-actions">
+                      <button class="rec-group-action-btn remove" data-type="spaced-repetition">
+                        <span class="tooltip">No spaced-repetition today</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="drag-handle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rec-group-items">
+                    <div class="rec-item" draggable="true">
+                      <div class="rec-item-drag">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                      <span class="rec-item-name">Geography Skills</span>
+                      <span class="rec-item-time">~3 mins</span>
+                      <button class="rec-item-remove">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="rec-item-loading-content">
+                        <svg class="rec-item-loading-spinner" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                          <path d="M12 2 A10 10 0 0 1 22 12" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span class="rec-item-loading-text">Finding another topic...</span>
+                      </div>
+                    </div>
+                    <div class="rec-item" draggable="true">
+                      <div class="rec-item-drag">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                      <span class="rec-item-name">Weather & Climate</span>
+                      <span class="rec-item-time">~3 mins</span>
+                      <button class="rec-item-remove">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="rec-item-loading-content">
+                        <svg class="rec-item-loading-spinner" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                          <path d="M12 2 A10 10 0 0 1 22 12" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span class="rec-item-loading-text">Finding another topic...</span>
+                      </div>
+                    </div>
+                    <div class="rec-item" draggable="true">
+                      <div class="rec-item-drag">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                      <span class="rec-item-name">Geology of the UK</span>
+                      <span class="rec-item-time">~2 mins</span>
+                      <button class="rec-item-remove">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="rec-item-loading-content">
+                        <svg class="rec-item-loading-spinner" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                          <path d="M12 2 A10 10 0 0 1 22 12" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span class="rec-item-loading-text">Finding another topic...</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rec-group" draggable="true" data-group="new" data-allows-replacement="true" id="newGroup">
+                  <div class="rec-group-loading-overlay">
+                    <svg class="rec-group-loading-spinner" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                      <path d="M12 2 A10 10 0 0 1 22 12" stroke="#4B9FE8" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="rec-group-loading-text">Finding new topics...</span>
+                  </div>
+                  <div class="rec-group-header">
+                    <div class="rec-group-indicator blue"></div>
+                    <div class="rec-group-icon blue">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                      </svg>
+                    </div>
+                    <div class="rec-group-info">
+                      <div class="rec-group-title">New topics</div>
+                      <div class="rec-group-meta">
+                        <span>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                          </svg>
+                          2 topics
+                        </span>
+                        <span>~110 XP</span>
+                      </div>
+                    </div>
+                    <div class="rec-group-time">~13 mins</div>
+                    <div class="rec-group-expand-indicator">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </div>
+                    <div class="rec-group-actions">
+                      <button class="rec-group-action-btn remove" data-type="new-topics">
+                        <span class="tooltip">No new topics today</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="drag-handle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rec-group-items">
+                    <div class="rec-item" draggable="true">
+                      <div class="rec-item-drag">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                      <span class="rec-item-name">Comparing Development</span>
+                      <span class="rec-item-time">~7 mins</span>
+                      <button class="rec-item-remove">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="rec-item-loading-content">
+                        <svg class="rec-item-loading-spinner" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                          <path d="M12 2 A10 10 0 0 1 22 12" stroke="#4B9FE8" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span class="rec-item-loading-text">Finding another topic...</span>
+                      </div>
+                    </div>
+                    <div class="rec-item" draggable="true">
+                      <div class="rec-item-drag">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                      <span class="rec-item-name">Types of Natural Hazards</span>
+                      <span class="rec-item-time">~6 mins</span>
+                      <button class="rec-item-remove">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="rec-item-loading-content">
+                        <svg class="rec-item-loading-spinner" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                          <path d="M12 2 A10 10 0 0 1 22 12" stroke="#4B9FE8" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span class="rec-item-loading-text">Finding another topic...</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rec-group" draggable="true" data-group="wrong" data-allows-replacement="false" id="wrongGroup">
+                  <div class="rec-group-loading-overlay">
+                    <svg class="rec-group-loading-spinner" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+                      <path d="M12 2 A10 10 0 0 1 22 12" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="rec-group-loading-text">Finding wrong answers...</span>
+                  </div>
+                  <div class="rec-group-header">
+                    <div class="rec-group-indicator orange"></div>
+                    <div class="rec-group-icon orange">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                      </svg>
+                    </div>
+                    <div class="rec-group-info">
+                      <div class="rec-group-title">Wrong answers recap</div>
+                      <div class="rec-group-meta">
+                        <span>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                          </svg>
+                          11 questions
+                        </span>
+                        <span>~55 XP</span>
+                      </div>
+                    </div>
+                    <div class="rec-group-time">~4 mins</div>
+                    <div class="rec-group-expand-indicator">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </div>
+                    <div class="rec-group-actions">
+                      <button class="rec-group-action-btn remove" data-type="wrong-answers">
+                        <span class="tooltip">No wrong answers today</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                      <div class="drag-handle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rec-group-items">
+                    <div class="rec-item">
+                      <div class="rec-item-drag">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="6" x2="8" y2="6.01"/>
+                          <line x1="8" y1="12" x2="8" y2="12.01"/>
+                          <line x1="8" y1="18" x2="8" y2="18.01"/>
+                          <line x1="16" y1="6" x2="16" y2="6.01"/>
+                          <line x1="16" y1="12" x2="16" y2="12.01"/>
+                          <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                      </div>
+                      <span class="rec-item-name">11 questions across 4 topics</span>
+                      <span class="rec-item-time">~4 mins</span>
+                      <button class="rec-item-remove">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="planner-actions" id="plannerActions">
+            <button class="see-more-btn" id="seeMoreBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+              See more & edit
+            </button>
+            <button class="start-btn" id="startBtn">
+              Get started
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Standard For You Section -->
+        <div class="for-you-section" id="forYouSection">
+          <div class="for-you-header">
+            <h2 class="for-you-title">For you</h2>
+            <div class="filter-buttons">
+              <button class="filter-btn" title="New topics">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B9FE8" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+              </button>
+              <button class="filter-btn" title="Spaced repetition">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </button>
+              <button class="filter-btn" title="Wrong answers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                </svg>
+              </button>
+              <button class="filter-btn" title="Hardest questions">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </button>
+              <button class="filter-btn" title="Exam questions">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="for-you-list">
+            <div class="for-you-item">
+              <div class="for-you-indicator" style="background: #4B9FE8;"></div>
+              <div class="for-you-info">
+                <div class="for-you-item-title">Comparing Development</div>
+                <div class="for-you-item-meta">
+                  <span>Next topic</span>
+                  <span>•</span>
+                  <span>~30 XP</span>
+                </div>
+              </div>
+              <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </div>
+
+            <div class="for-you-item">
+              <div class="for-you-indicator" style="background: #8B5CF6;"></div>
+              <div class="for-you-info">
+                <div class="for-you-item-title">Recap recent topics</div>
+                <div class="for-you-item-meta">
+                  <span>5 topics</span>
+                  <span>•</span>
+                  <span>~337 XP</span>
+                </div>
+              </div>
+              <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </div>
+
+            <div class="for-you-item">
+              <div class="for-you-indicator" style="background: #F59E0B;"></div>
+              <div class="for-you-info">
+                <div class="for-you-item-title">Retry all your Wrong Answers</div>
+                <div class="for-you-item-meta">
+                  <span>120 wrong answers</span>
+                  <span>•</span>
+                  <span>~450 XP</span>
+                </div>
+              </div>
+              <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </div>
+
+            <div class="for-you-item">
+              <div class="for-you-indicator" style="background: #EC4899;"></div>
+              <div class="for-you-info">
+                <div class="for-you-item-title">Map Making</div>
+                <div class="for-you-item-meta">
+                  <span>Hardest questions</span>
+                  <span>•</span>
+                  <span>~30 XP</span>
+                </div>
+              </div>
+              <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <div class="demo-controls-title">Demo States</div>
+    <button class="demo-btn" onclick="showLoading()">Loading state</button>
+    <button class="demo-btn" onclick="showLoaded()">Loaded (0 mins)</button>
+    <button class="demo-btn" onclick="showInProgress()">In progress (8 mins)</button>
+    <button class="demo-btn" onclick="showCompleted()">Completed (20 mins)</button>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal-overlay" id="breakModal">
+    <div class="modal">
+      <div class="modal-icon">🌸</div>
+      <h3 class="modal-title">Time for a break!</h3>
+      <p class="modal-text">Rest your eyes and stretch. Come back refreshed in 5 minutes.</p>
+      <div class="modal-timer">5:00</div>
+      <button class="modal-close-btn" onclick="closeModal('breakModal')">Close</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="gameModal">
+    <div class="modal">
+      <div class="modal-icon">🎮</div>
+      <h3 class="modal-title">Let's play!</h3>
+      <div class="modal-game-placeholder">
+        <p class="modal-game-placeholder-text">Game would load here</p>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('gameModal')">Close</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="biologyModal">
+    <div class="modal">
+      <div class="modal-icon">📖</div>
+      <h3 class="modal-title">Ready for Biology?</h3>
+      <p class="modal-text">This would take you to your Biology planner to continue your revision.</p>
+      <button class="modal-close-btn" onclick="closeModal('biologyModal')">Go to Biology</button>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    let currentMins = 0;
+    const totalMins = 20;
+
+    // Replacement topics pool for demo
+    const replacementTopics = {
+      spaced: [
+        { name: 'Rivers & Flooding', time: '~4 mins' },
+        { name: 'Population Dynamics', time: '~3 mins' },
+        { name: 'Urban Environments', time: '~5 mins' },
+        { name: 'Coastal Landscapes', time: '~3 mins' },
+        { name: 'Ecosystems', time: '~4 mins' }
+      ],
+      new: [
+        { name: 'Earthquakes', time: '~6 mins' },
+        { name: 'Volcanoes', time: '~5 mins' },
+        { name: 'Plate Tectonics', time: '~7 mins' },
+        { name: 'Tropical Storms', time: '~4 mins' },
+        { name: 'Climate Change', time: '~8 mins' },
+        { name: 'Deforestation', time: '~5 mins' }
+      ]
+    };
+    let replacementIndex = { spaced: 0, new: 0 };
+
+    // Elements
+    const plannerCard = document.getElementById('plannerCard');
+    const plannerHeader = document.getElementById('plannerHeader');
+    const loadingState = document.getElementById('loadingState');
+    const loadedContent = document.getElementById('loadedContent');
+    const seeMoreBtn = document.getElementById('seeMoreBtn');
+    const plannerModeBtn = document.getElementById('plannerModeBtn');
+    const forYouModeBtn = document.getElementById('forYouModeBtn');
+    const forYouSection = document.getElementById('forYouSection');
+    const progressCircle = document.getElementById('progressCircle');
+    const progressPercent = document.getElementById('progressPercent');
+    const currentMinsEl = document.getElementById('currentMins');
+    const plannerActions = document.getElementById('plannerActions');
+    const plannerTitle = document.getElementById('plannerTitle');
+    const plannerSubtitle = document.getElementById('plannerSubtitle');
+
+    // Click on header to expand/collapse groups
+    document.querySelectorAll('.rec-group-header').forEach(header => {
+      header.addEventListener('click', (e) => {
+        // Don't expand if clicking on action buttons
+        if (e.target.closest('.rec-group-actions')) return;
+
+        const group = header.closest('.rec-group');
+        group.classList.toggle('expanded');
+      });
+    });
+
+    // See more button - expands all groups
+    seeMoreBtn.addEventListener('click', () => {
+      const groups = document.querySelectorAll('.rec-group');
+      const anyExpanded = [...groups].some(g => g.classList.contains('expanded'));
+
+      if (anyExpanded) {
+        // Collapse all
+        groups.forEach(g => g.classList.remove('expanded'));
+        seeMoreBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> See more & edit`;
+        seeMoreBtn.classList.remove('expanded');
+      } else {
+        // Expand all
+        groups.forEach(g => g.classList.add('expanded'));
+        seeMoreBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Show less`;
+        seeMoreBtn.classList.add('expanded');
+      }
+    });
+
+    // Mode toggle
+    plannerModeBtn.addEventListener('click', () => {
+      plannerModeBtn.classList.add('active');
+      forYouModeBtn.classList.remove('active');
+      plannerCard.style.display = 'block';
+      forYouSection.classList.remove('visible');
+    });
+
+    forYouModeBtn.addEventListener('click', () => {
+      forYouModeBtn.classList.add('active');
+      plannerModeBtn.classList.remove('active');
+      plannerCard.style.display = 'none';
+      forYouSection.classList.add('visible');
+    });
+
+    // Drag and drop for groups
+    let draggedGroup = null;
+
+    function initGroupDragDrop() {
+      document.querySelectorAll('.rec-group').forEach(group => {
+        group.addEventListener('dragstart', (e) => {
+          // Only allow dragging from drag handle
+          if (!e.target.closest('.drag-handle') && e.target.classList.contains('rec-group')) {
+            e.preventDefault();
+            return;
+          }
+          draggedGroup = group;
+          group.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+
+        group.addEventListener('dragend', () => {
+          group.classList.remove('dragging');
+          draggedGroup = null;
+          document.querySelectorAll('.rec-group').forEach(g => g.classList.remove('drag-over'));
+        });
+
+        group.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          if (draggedGroup && draggedGroup !== group && !draggedItem) {
+            group.classList.add('drag-over');
+          }
+        });
+
+        group.addEventListener('dragleave', () => {
+          group.classList.remove('drag-over');
+        });
+
+        group.addEventListener('drop', (e) => {
+          e.preventDefault();
+          group.classList.remove('drag-over');
+          if (draggedGroup && draggedGroup !== group && !draggedItem) {
+            const container = document.getElementById('recGroups');
+            const groups = [...container.querySelectorAll('.rec-group')];
+            const draggedIndex = groups.indexOf(draggedGroup);
+            const dropIndex = groups.indexOf(group);
+
+            if (draggedIndex < dropIndex) {
+              group.after(draggedGroup);
+            } else {
+              group.before(draggedGroup);
+            }
+          }
+        });
+      });
+    }
+
+    // Drag and drop for items within groups
+    let draggedItem = null;
+    let draggedItemGroup = null;
+
+    function initItemDragDrop() {
+      document.querySelectorAll('.rec-item').forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+          e.stopPropagation();
+          draggedItem = item;
+          draggedItemGroup = item.closest('.rec-group');
+          item.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+
+        item.addEventListener('dragend', () => {
+          item.classList.remove('dragging');
+          draggedItem = null;
+          draggedItemGroup = null;
+          document.querySelectorAll('.rec-item').forEach(i => i.classList.remove('drag-over'));
+        });
+
+        item.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (draggedItem && draggedItem !== item) {
+            // Only allow dropping within same group
+            const targetGroup = item.closest('.rec-group');
+            if (draggedItemGroup === targetGroup) {
+              item.classList.add('drag-over');
+            }
+          }
+        });
+
+        item.addEventListener('dragleave', () => {
+          item.classList.remove('drag-over');
+        });
+
+        item.addEventListener('drop', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          item.classList.remove('drag-over');
+          if (draggedItem && draggedItem !== item) {
+            // Only allow dropping within same group
+            const targetGroup = item.closest('.rec-group');
+            if (draggedItemGroup !== targetGroup) return;
+
+            const container = item.closest('.rec-group-items');
+            const items = [...container.querySelectorAll('.rec-item')];
+            const draggedIndex = items.indexOf(draggedItem);
+            const dropIndex = items.indexOf(item);
+
+            if (draggedIndex < dropIndex) {
+              item.after(draggedItem);
+            } else {
+              item.before(draggedItem);
+            }
+          }
+        });
+      });
+    }
+
+    // Create a new item element
+    function createRecItem(name, time, groupType) {
+      const item = document.createElement('div');
+      item.className = 'rec-item';
+      item.draggable = true;
+      item.innerHTML = `
+        <div class="rec-item-drag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="8" y2="6.01"/>
+            <line x1="8" y1="12" x2="8" y2="12.01"/>
+            <line x1="8" y1="18" x2="8" y2="18.01"/>
+            <line x1="16" y1="6" x2="16" y2="6.01"/>
+            <line x1="16" y1="12" x2="16" y2="12.01"/>
+            <line x1="16" y1="18" x2="16" y2="18.01"/>
+          </svg>
+        </div>
+        <span class="rec-item-name">${name}</span>
+        <span class="rec-item-time">${time}</span>
+        <button class="rec-item-remove">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <div class="rec-item-loading-content">
+          <svg class="rec-item-loading-spinner" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#E5E7EB" stroke-width="2"/>
+            <path d="M12 2 A10 10 0 0 1 22 12" stroke="${groupType === 'spaced' ? '#8B5CF6' : '#4B9FE8'}" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="rec-item-loading-text">Finding another topic...</span>
+        </div>
+      `;
+
+      // Add event listeners to new item
+      setupItemRemove(item, groupType);
+
+      // Re-init drag for new item
+      item.addEventListener('dragstart', (e) => {
+        e.stopPropagation();
+        draggedItem = item;
+        draggedItemGroup = item.closest('.rec-group');
+        item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+        draggedItem = null;
+        draggedItemGroup = null;
+        document.querySelectorAll('.rec-item').forEach(i => i.classList.remove('drag-over'));
+      });
+
+      item.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (draggedItem && draggedItem !== item) {
+          const targetGroup = item.closest('.rec-group');
+          if (draggedItemGroup === targetGroup) {
+            item.classList.add('drag-over');
+          }
+        }
+      });
+
+      item.addEventListener('dragleave', () => {
+        item.classList.remove('drag-over');
+      });
+
+      item.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        item.classList.remove('drag-over');
+        if (draggedItem && draggedItem !== item) {
+          const targetGroup = item.closest('.rec-group');
+          if (draggedItemGroup !== targetGroup) return;
+
+          const container = item.closest('.rec-group-items');
+          const items = [...container.querySelectorAll('.rec-item')];
+          const draggedIndex = items.indexOf(draggedItem);
+          const dropIndex = items.indexOf(item);
+
+          if (draggedIndex < dropIndex) {
+            item.after(draggedItem);
+          } else {
+            item.before(draggedItem);
+          }
+        }
+      });
+
+      return item;
+    }
+
+    // Setup item remove with replacement logic
+    function setupItemRemove(item, groupType) {
+      const btn = item.querySelector('.rec-item-remove');
+      if (!btn) return;
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const group = item.closest('.rec-group');
+        const allowsReplacement = group.dataset.allowsReplacement === 'true';
+        const itemsContainer = group.querySelector('.rec-group-items');
+
+        if (allowsReplacement && replacementTopics[groupType] && replacementIndex[groupType] < replacementTopics[groupType].length) {
+          // Show loading state on current item
+          item.classList.add('loading');
+
+          setTimeout(() => {
+            // Get replacement topic
+            const replacement = replacementTopics[groupType][replacementIndex[groupType]];
+            replacementIndex[groupType]++;
+
+            // Create new item
+            const newItem = createRecItem(replacement.name, replacement.time, groupType);
+            newItem.classList.add('loading');
+
+            // Replace old item with new one
+            item.replaceWith(newItem);
+
+            // After short delay, show the new content
+            setTimeout(() => {
+              newItem.classList.remove('loading');
+            }, 800);
+          }, 600);
+        } else {
+          // No replacement - just remove
+          item.style.opacity = '0';
+          item.style.transform = 'translateX(-20px)';
+          setTimeout(() => {
+            item.remove();
+          }, 200);
+        }
+      });
+    }
+
+    // Initialize item remove buttons
+    function initItemRemove() {
+      document.querySelectorAll('.rec-item').forEach(item => {
+        const group = item.closest('.rec-group');
+        const groupType = group.dataset.group;
+        setupItemRemove(item, groupType);
+      });
+    }
+
+    // Remove buttons for groups - handled in removeGroupAndCompensate function at initialization
+
+    // Update progress UI
+    function updateProgress(mins) {
+      currentMins = mins;
+      const percent = Math.round((mins / totalMins) * 100);
+      const circumference = 150.8; // 2 * PI * 24
+      const offset = circumference - (percent / 100) * circumference;
+
+      progressCircle.style.strokeDashoffset = offset;
+      progressPercent.textContent = `${percent}%`;
+      currentMinsEl.textContent = mins;
+    }
+
+    // Reset all groups to visible
+    function resetGroups() {
+      replacementIndex = { spaced: 0, new: 0 };
+
+      document.querySelectorAll('.rec-group').forEach(g => {
+        g.style.display = 'block';
+        g.style.opacity = '1';
+        g.style.transform = 'none';
+        g.classList.remove('loading');
+        g.classList.remove('expanded');
+      });
+      document.querySelectorAll('.rec-item').forEach(item => {
+        item.style.display = 'flex';
+        item.style.opacity = '1';
+        item.style.transform = 'none';
+        item.classList.remove('loading');
+      });
+      seeMoreBtn.classList.remove('expanded');
+      seeMoreBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> See more & edit`;
+
+      // Reset win state and description
+      document.getElementById('winState').classList.remove('visible');
+      document.getElementById('recGroups').classList.remove('hidden');
+      document.getElementById('plannerDescription').classList.remove('hidden');
+    }
+
+    // Demo state functions
+    function showLoading() {
+      plannerCard.style.display = 'block';
+      forYouSection.classList.remove('visible');
+      plannerModeBtn.classList.add('active');
+      forYouModeBtn.classList.remove('active');
+      plannerHeader.classList.remove('in-progress');
+      plannerActions.classList.add('hidden');
+
+      // Show loading in content area
+      loadingState.classList.add('visible');
+      loadedContent.style.display = 'none';
+
+      updateProgress(0);
+      plannerTitle.textContent = "Dan's Geography plan";
+      plannerSubtitle.textContent = "Based on your weekly planner";
+
+      // Simulate loading sequence
+      setTimeout(() => {
+        loadingState.classList.remove('visible');
+        loadedContent.style.display = 'block';
+        plannerActions.classList.remove('hidden');
+
+        // Show individual group loading
+        const spacedGroup = document.getElementById('spacedGroup');
+        const newGroup = document.getElementById('newGroup');
+        const wrongGroup = document.getElementById('wrongGroup');
+
+        spacedGroup.classList.add('loading');
+        newGroup.classList.add('loading');
+        wrongGroup.classList.add('loading');
+
+        // Stagger loading completion - slower for better effect
+        setTimeout(() => {
+          spacedGroup.classList.remove('loading');
+        }, 1200);
+
+        setTimeout(() => {
+          newGroup.classList.remove('loading');
+        }, 2000);
+
+        setTimeout(() => {
+          wrongGroup.classList.remove('loading');
+        }, 2800);
+
+      }, 1500);
+    }
+
+    function showLoaded() {
+      plannerCard.style.display = 'block';
+      forYouSection.classList.remove('visible');
+      plannerModeBtn.classList.add('active');
+      forYouModeBtn.classList.remove('active');
+      plannerHeader.classList.remove('in-progress');
+      plannerActions.classList.remove('hidden');
+      loadingState.classList.remove('visible');
+      loadedContent.style.display = 'block';
+
+      updateProgress(0);
+      resetGroups();
+
+      plannerTitle.textContent = "Dan's Geography plan";
+      plannerSubtitle.textContent = "Based on your weekly planner";
+    }
+
+    function showInProgress() {
+      plannerCard.style.display = 'block';
+      forYouSection.classList.remove('visible');
+      plannerModeBtn.classList.add('active');
+      forYouModeBtn.classList.remove('active');
+      plannerHeader.classList.add('in-progress');
+      plannerActions.classList.remove('hidden');
+      loadingState.classList.remove('visible');
+      loadedContent.style.display = 'block';
+
+      updateProgress(8);
+      resetGroups();
+
+      plannerTitle.textContent = "Continue your Geography plan";
+      plannerSubtitle.textContent = "8 mins completed • 12 mins remaining";
+    }
+
+    function showCompleted() {
+      plannerCard.style.display = 'block';
+      forYouSection.classList.remove('visible');
+      plannerModeBtn.classList.add('active');
+      forYouModeBtn.classList.remove('active');
+      plannerHeader.classList.remove('in-progress');
+      plannerActions.classList.add('hidden');
+      loadingState.classList.remove('visible');
+      loadedContent.style.display = 'block';
+
+      updateProgress(20);
+
+      plannerTitle.textContent = "Dan's Geography plan";
+      plannerSubtitle.textContent = "Goal completed!";
+
+      // Hide recommendations and description, show win state
+      document.getElementById('recGroups').classList.add('hidden');
+      document.getElementById('plannerDescription').classList.add('hidden');
+      document.getElementById('winState').classList.add('visible');
+
+      // Add celebration effect
+      plannerCard.style.boxShadow = '0 0 0 4px rgba(38, 181, 166, 0.3), 0 10px 15px -3px rgba(0, 0, 0, 0.1)';
+      setTimeout(() => {
+        plannerCard.style.boxShadow = '';
+      }, 2000);
+    }
+
+    // Start button interaction
+    document.getElementById('startBtn').addEventListener('click', () => {
+      const btn = document.getElementById('startBtn');
+      btn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="loading-spinner">
+          <circle cx="12" cy="12" r="10" stroke-opacity="0.3"/>
+          <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+        </svg>
+        Starting...
+      `;
+      btn.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        btn.innerHTML = `
+          Get started
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        `;
+        btn.style.pointerEvents = '';
+        // In real app, this would navigate to the learning session
+        alert('In the real app, this would launch directly into the first learning section!');
+      }, 1500);
+    });
+
+    // Continue button interaction
+    document.getElementById('continueBtn').addEventListener('click', () => {
+      alert('In the real app, this would continue the learning session from where you left off!');
+    });
+
+    // Dismiss description
+    document.getElementById('dismissDescription').addEventListener('click', () => {
+      document.getElementById('plannerDescription').classList.add('hidden');
+    });
+
+    // Modal functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('visible');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('visible');
+    }
+
+    // Win state button handlers
+    document.getElementById('takeBreakBtn').addEventListener('click', () => openModal('breakModal'));
+    document.getElementById('playGameBtn').addEventListener('click', () => openModal('gameModal'));
+    document.getElementById('startBiologyBtn').addEventListener('click', () => openModal('biologyModal'));
+
+    // Close modals when clicking overlay
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('visible');
+        }
+      });
+    });
+
+    // Additional topics for group removal compensation
+    const additionalNewTopics = [
+      { name: 'Earthquakes', time: '~6 mins' },
+      { name: 'Volcanoes', time: '~5 mins' },
+      { name: 'Tropical Storms', time: '~4 mins' },
+      { name: 'Climate Change Effects', time: '~5 mins' },
+    ];
+
+    // Enhanced group removal - adds new topics to compensate for removed time
+    function removeGroupAndCompensate(group) {
+      const groupType = group.dataset.group;
+      const timeText = group.querySelector('.rec-group-time')?.textContent || '~0 mins';
+      const removedMins = parseInt(timeText.replace(/[^0-9]/g, '')) || 0;
+
+      // Animate removal
+      group.style.opacity = '0';
+      group.style.transform = 'translateX(-20px)';
+
+      setTimeout(() => {
+        group.style.display = 'none';
+
+        // If we removed spaced or wrong answers, add more new topics
+        if (groupType !== 'new' && removedMins > 0) {
+          const newGroup = document.getElementById('newGroup');
+          if (newGroup && newGroup.style.display !== 'none') {
+            const itemsContainer = newGroup.querySelector('.rec-group-items');
+            if (itemsContainer) {
+              // Add compensation topics
+              let addedMins = 0;
+              for (const topic of additionalNewTopics) {
+                if (addedMins >= removedMins) break;
+                const topicMins = parseInt(topic.time.replace(/[^0-9]/g, '')) || 0;
+
+                const newItem = createRecItem(topic.name, topic.time, 'new');
+                newItem.classList.add('loading');
+                itemsContainer.appendChild(newItem);
+
+                setTimeout(() => {
+                  newItem.classList.remove('loading');
+                }, 800);
+
+                addedMins += topicMins;
+              }
+
+              // Update new topics count/time
+              const metaEl = newGroup.querySelector('.rec-group-meta span:first-child');
+              const timeEl = newGroup.querySelector('.rec-group-time');
+              if (metaEl && timeEl) {
+                const currentItems = itemsContainer.querySelectorAll('.rec-item').length;
+                metaEl.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> ${currentItems} topics`;
+                const currentTime = parseInt(timeEl.textContent.replace(/[^0-9]/g, '')) || 0;
+                timeEl.textContent = `~${currentTime + addedMins} mins`;
+              }
+
+              // Expand new topics to show the additions
+              newGroup.classList.add('expanded');
+            }
+          }
+        }
+      }, 300);
+    }
+
+    // Override the group remove buttons to use compensation
+    document.querySelectorAll('.rec-group-action-btn.remove').forEach(btn => {
+      btn.removeEventListener('click', () => {}); // Clear old handlers
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const group = btn.closest('.rec-group');
+        removeGroupAndCompensate(group);
+      });
+    });
+
+    // Initialize
+    updateProgress(0);
+    initGroupDragDrop();
+    initItemDragDrop();
+    initItemRemove();
+  </script>
+</body>
+</html>
