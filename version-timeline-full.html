@@ -797,9 +797,25 @@
       animation: pulse 2s infinite;
     }
 
+    /* Ready/next-up state (first stop when loaded) */
+    .timeline-stop.ready .stop-node {
+      animation: pulseReady 2s infinite;
+    }
+
     @keyframes pulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(38, 181, 166, 0.4); }
       50% { box-shadow: 0 0 0 10px rgba(38, 181, 166, 0); }
+    }
+
+    @keyframes pulseReady {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+        transform: scale(1.05);
+      }
     }
 
     /* Stop content */
@@ -2050,7 +2066,7 @@
       document.getElementById('journeySubtitle').textContent = 'Based on your weekly planner';
 
       timelineStops.forEach(stop => {
-        stop.classList.remove('loading', 'completed', 'active', 'selected');
+        stop.classList.remove('loading', 'completed', 'active', 'selected', 'ready');
       });
 
       if (state === 'loading') {
@@ -2071,6 +2087,9 @@
         seeMoreLink.style.display = 'none';
         descriptionBanner.classList.add('hidden');
         winState.classList.add('visible');
+      } else {
+        // Loaded state - add pulsing to first stop
+        timelineStops[0].classList.add('ready');
       }
     }
 
@@ -2081,6 +2100,9 @@
         setState(btn.dataset.state);
       });
     });
+
+    // Set initial loaded state with pulsing first stop
+    setState('loaded');
   </script>
 </body>
 </html>
