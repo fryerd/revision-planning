@@ -3,53 +3,332 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Planner Recommendations - Card Deck View</title>
+  <title>Seneca - Planner Recommendations (Card Deck View)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary-teal: #26B5A6;
-      --primary-teal-light: #E8F7F5;
-      --primary-teal-dark: #1D9A8D;
-      --accent-purple: #8B5CF6;
-      --accent-purple-light: #EDE9FE;
-      --accent-blue: #4B9FE8;
-      --accent-blue-light: #E0F2FE;
-      --accent-orange: #F59E0B;
-      --accent-orange-light: #FEF3C7;
-      --text-primary: #1F2937;
-      --text-secondary: #6B7280;
-      --text-muted: #9CA3AF;
-      --bg-page: #F0F4F8;
-      --bg-card: #FFFFFF;
-      --border-light: #E5E7EB;
-      --content-max-width: 935px;
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-      --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
-    }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    :root {
+      --primary-blue: #4B9FE8;
+      --primary-blue-light: #E8F4FC;
+      --secondary-teal: #26B5A6;
+      --secondary-teal-light: #E8F7F5;
+      --accent-purple: #8B5CF6;
+      --accent-purple-light: #EDE9FE;
+      --accent-orange: #F59E0B;
+      --accent-orange-light: #FEF3C7;
+      --accent-pink: #EC4899;
+      --accent-green: #10B981;
+      --text-primary: #1F2937;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --bg-white: #FFFFFF;
+      --bg-gray: #F9FAFB;
+      --bg-sidebar: #F3F4F6;
+      --border-light: #E5E7EB;
+      --border-medium: #D1D5DB;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --content-max-width: 935px;
+    }
+
     body {
-      font-family: 'Mulish', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(180deg, #E8F0F7 0%, #F0F4F8 50%, #F8FAFB 100%);
+      font-family: 'Mulish', sans-serif;
+      background: var(--bg-gray);
       color: var(--text-primary);
-      line-height: 1.5;
       min-height: 100vh;
     }
 
-    .container {
+    /* Layout */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 72px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 16px;
+    }
+
+    .sidebar-item {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+      font-size: 10px;
+      font-weight: 600;
+      gap: 2px;
+    }
+
+    .sidebar-item:hover {
+      background: var(--bg-gray);
+    }
+
+    .sidebar-item.active {
+      color: var(--secondary-teal);
+      background: rgba(38, 181, 166, 0.1);
+    }
+
+    .sidebar-item svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Secondary Sidebar */
+    .secondary-sidebar {
+      width: 240px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      padding: 16px;
+      flex-shrink: 0;
+    }
+
+    .overview-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #4B9FE8 0%, #26B5A6 100%);
+      color: white;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-gray);
+      color: var(--text-primary);
+    }
+
+    .nav-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 16px 0;
+    }
+
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .topic-item:hover {
+      background: var(--bg-gray);
+    }
+
+    .topic-progress {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    .content-wrapper {
       max-width: var(--content-max-width);
       margin: 0 auto;
-      padding: 32px 24px;
     }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .search-input {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 10px 20px;
+      width: 400px;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus-within {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(75, 159, 232, 0.1);
+    }
+
+    .search-input input {
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .search-input input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .level-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Course Header */
+    .course-header {
+      display: flex;
+      gap: 24px;
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .course-image {
+      width: 160px;
+      height: 120px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      background: linear-gradient(135deg, #1a5276 0%, #2e86ab 100%);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .course-info {
+      flex: 1;
+    }
+
+    .course-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .course-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .progress-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 60px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-fill.blue { background: var(--primary-blue); }
+    .progress-fill.orange { background: var(--accent-orange); }
+    .progress-fill.green { background: var(--accent-green); }
 
     /* Demo Controls */
     .demo-controls {
@@ -79,50 +358,58 @@
     }
 
     .demo-btn:hover {
-      background: var(--bg-page);
+      background: var(--bg-gray);
       color: var(--text-primary);
     }
 
     .demo-btn.active {
-      background: var(--primary-teal);
+      background: var(--secondary-teal);
       color: white;
-      border-color: var(--primary-teal);
+      border-color: var(--secondary-teal);
     }
 
     /* Mode Toggle */
+    .mode-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
     .mode-toggle {
       display: flex;
-      gap: 4px;
-      background: white;
+      background: var(--bg-gray);
+      border-radius: 24px;
       padding: 4px;
-      border-radius: 10px;
-      margin-bottom: 24px;
-      width: fit-content;
-      box-shadow: var(--shadow-sm);
+      gap: 4px;
     }
 
     .mode-btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: transparent;
-      font-family: inherit;
-      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--text-secondary);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
     }
 
     .mode-btn.active {
-      background: var(--primary-teal);
-      color: white;
+      background: var(--bg-white);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
     }
 
-    /* Main Layout */
+    /* Card Deck Layout */
     .deck-layout {
       display: grid;
-      grid-template-columns: 1fr 320px;
+      grid-template-columns: 1fr 300px;
       gap: 24px;
       align-items: start;
     }
@@ -148,7 +435,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--primary-teal);
+      background: var(--secondary-teal);
       animation: pulseDot 2s infinite;
     }
 
@@ -191,7 +478,7 @@
       color: white;
     }
     .current-card[data-type="new"] .current-card-header {
-      background: linear-gradient(135deg, var(--accent-blue) 0%, #2563EB 100%);
+      background: linear-gradient(135deg, var(--primary-blue) 0%, #2563EB 100%);
       color: white;
     }
     .current-card[data-type="wrong"] .current-card-header {
@@ -219,7 +506,7 @@
     }
 
     .current-card-title {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       margin-bottom: 8px;
       line-height: 1.2;
@@ -250,7 +537,7 @@
       width: 36px;
       height: 36px;
       border-radius: 10px;
-      background: var(--bg-page);
+      background: var(--bg-gray);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -285,11 +572,11 @@
 
     .card-btn {
       flex: 1;
-      padding: 16px 24px;
+      padding: 14px 24px;
       border: none;
       border-radius: 12px;
       font-family: inherit;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -300,17 +587,17 @@
     }
 
     .card-btn-primary {
-      background: var(--primary-teal);
+      background: var(--secondary-teal);
       color: white;
     }
 
     .card-btn-primary:hover {
-      background: var(--primary-teal-dark);
+      background: #1D9A8D;
       transform: translateY(-2px);
     }
 
     .card-btn-secondary {
-      background: var(--bg-page);
+      background: var(--bg-gray);
       color: var(--text-secondary);
     }
 
@@ -332,7 +619,7 @@
     }
 
     .queue-header {
-      padding: 20px 24px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border-light);
       display: flex;
       justify-content: space-between;
@@ -346,24 +633,24 @@
     }
 
     .queue-count {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
-      background: var(--bg-page);
+      background: var(--bg-gray);
       padding: 4px 10px;
       border-radius: 12px;
     }
 
     .queue-progress {
-      padding: 16px 24px;
-      background: var(--bg-page);
+      padding: 14px 20px;
+      background: var(--bg-gray);
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
     .progress-ring {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       position: relative;
     }
 
@@ -379,21 +666,21 @@
 
     .progress-ring-fill {
       fill: none;
-      stroke: var(--primary-teal);
+      stroke: var(--secondary-teal);
       stroke-width: 4;
       stroke-linecap: round;
-      stroke-dasharray: 126;
-      stroke-dashoffset: 126;
+      stroke-dasharray: 113;
+      stroke-dashoffset: 113;
       transition: stroke-dashoffset 0.5s ease;
     }
 
-    .progress-text {
+    .progress-ring-text {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
     }
 
@@ -408,22 +695,23 @@
     }
 
     .progress-detail {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
     }
 
     .queue-list {
       padding: 8px;
+      max-height: 280px;
+      overflow-y: auto;
     }
 
-    /* Queue cards - stacked appearance */
     .queue-card {
-      padding: 14px 16px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
       margin-bottom: 6px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       cursor: pointer;
       transition: all 0.2s;
       position: relative;
@@ -432,7 +720,7 @@
     }
 
     .queue-card:hover {
-      background: var(--bg-page);
+      background: var(--bg-gray);
       transform: translateX(4px);
     }
 
@@ -441,30 +729,32 @@
     }
 
     .queue-card-number {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 6px;
-      background: var(--bg-page);
+      background: var(--bg-gray);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--text-muted);
+      flex-shrink: 0;
     }
 
     .queue-card-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .queue-card-icon svg {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
     }
 
     .queue-card[data-type="spaced"] .queue-card-icon {
@@ -472,8 +762,8 @@
       color: var(--accent-purple);
     }
     .queue-card[data-type="new"] .queue-card-icon {
-      background: var(--accent-blue-light);
-      color: var(--accent-blue);
+      background: var(--primary-blue-light);
+      color: var(--primary-blue);
     }
     .queue-card[data-type="wrong"] .queue-card-icon {
       background: var(--accent-orange-light);
@@ -486,7 +776,7 @@
     }
 
     .queue-card-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-primary);
       white-space: nowrap;
@@ -495,38 +785,36 @@
     }
 
     .queue-card-meta {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-muted);
     }
 
     .queue-card-time {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-muted);
+      flex-shrink: 0;
     }
 
-    /* Completed queue card */
     .queue-card.completed {
       opacity: 0.5;
     }
 
     .queue-card.completed .queue-card-number {
-      background: var(--primary-teal);
+      background: var(--secondary-teal);
       color: white;
     }
 
-    /* Active queue card */
     .queue-card.active {
-      border-color: var(--primary-teal);
-      background: var(--primary-teal-light);
+      border-color: var(--secondary-teal);
+      background: var(--secondary-teal-light);
     }
 
     .queue-card.active .queue-card-number {
-      background: var(--primary-teal);
+      background: var(--secondary-teal);
       color: white;
     }
 
-    /* Shuffle button */
     .queue-actions {
       padding: 12px 16px;
       border-top: 1px solid var(--border-light);
@@ -541,7 +829,7 @@
       border-radius: 8px;
       background: white;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-secondary);
       cursor: pointer;
@@ -553,7 +841,7 @@
     }
 
     .queue-action-btn:hover {
-      background: var(--bg-page);
+      background: var(--bg-gray);
       border-color: var(--text-muted);
     }
 
@@ -591,7 +879,7 @@
       width: 40px;
       height: 40px;
       border: 3px solid var(--border-light);
-      border-top-color: var(--primary-teal);
+      border-top-color: var(--secondary-teal);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -615,7 +903,8 @@
       padding: 48px 32px;
       background: white;
       border-radius: 20px;
-      box-shadow: var(--shadow-xl);
+      box-shadow: var(--shadow-lg);
+      grid-column: 1 / -1;
     }
 
     .win-state.visible {
@@ -634,24 +923,24 @@
     }
 
     .win-title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 800;
       color: var(--text-primary);
       margin-bottom: 8px;
     }
 
     .win-subtitle {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-secondary);
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     .win-stats {
       display: flex;
       gap: 32px;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       padding: 20px 32px;
-      background: var(--bg-page);
+      background: var(--bg-gray);
       border-radius: 12px;
     }
 
@@ -662,7 +951,7 @@
     .win-stat-value {
       font-size: 24px;
       font-weight: 800;
-      color: var(--primary-teal);
+      color: var(--secondary-teal);
     }
 
     .win-stat-label {
@@ -679,12 +968,12 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 14px 24px;
+      padding: 12px 20px;
       border: 2px solid var(--border-light);
-      border-radius: 12px;
+      border-radius: 10px;
       background: white;
       font-family: inherit;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-primary);
       cursor: pointer;
@@ -692,12 +981,12 @@
     }
 
     .win-btn:hover {
-      border-color: var(--primary-teal);
-      background: var(--primary-teal-light);
+      border-color: var(--secondary-teal);
+      background: var(--secondary-teal-light);
     }
 
     .win-btn-emoji {
-      font-size: 18px;
+      font-size: 16px;
     }
 
     /* Swipe animation */
@@ -727,12 +1016,70 @@
       }
     }
 
+    /* For You Section */
+    .for-you-section {
+      display: none;
+    }
+
+    .for-you-section.visible {
+      display: block;
+    }
+
+    .for-you-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .for-you-card:hover {
+      border-color: var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .for-you-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .for-you-color {
+      width: 4px;
+      height: 40px;
+      border-radius: 2px;
+    }
+
+    .for-you-color.blue { background: var(--primary-blue); }
+    .for-you-color.purple { background: var(--accent-purple); }
+    .for-you-color.orange { background: var(--accent-orange); }
+
+    .for-you-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .for-you-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .for-you-arrow {
+      color: var(--text-muted);
+    }
+
     /* Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .deck-layout {
         grid-template-columns: 1fr;
       }
-
       .queue-panel {
         order: -1;
       }
@@ -740,6 +1087,7 @@
   </style>
 </head>
 <body>
+  <!-- Demo Controls -->
   <div class="demo-controls">
     <button class="demo-btn active" data-state="loaded">Loaded</button>
     <button class="demo-btn" data-state="loading">Loading</button>
@@ -747,239 +1095,499 @@
     <button class="demo-btn" data-state="completed">Completed</button>
   </div>
 
-  <div class="container">
-    <div class="mode-toggle">
-      <button class="mode-btn active">Today's plan</button>
-      <button class="mode-btn">For you</button>
-    </div>
+  <div class="app-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <svg class="sidebar-logo" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="8" fill="#26B5A6"/>
+        <path d="M12 20C12 15.5817 15.5817 12 20 12V12C24.4183 12 28 15.5817 28 20V28H20C15.5817 28 12 24.4183 12 20V20Z" fill="white"/>
+      </svg>
 
-    <div class="deck-layout" id="deckLayout">
-      <!-- Current Card -->
-      <div class="current-card-container" id="currentCardContainer">
-        <div class="card-label">
-          <span class="card-label-dot"></span>
-          Up next
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        </svg>
+        <span>Home</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+        <span>Assign</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <span>Upgrade</span>
+      </div>
+
+      <div class="sidebar-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        <span>Biology</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/>
+        </svg>
+        <span>Chemistry</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <span>Coding</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="4" width="16" height="16" rx="2"/>
+          <path d="M9 9h6M9 13h6M9 17h4"/>
+        </svg>
+        <span>Comp Sci</span>
+      </div>
+    </aside>
+
+    <!-- Secondary Sidebar -->
+    <aside class="secondary-sidebar">
+      <div class="overview-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        Overview
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+        </svg>
+        Exam Prep
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+        Assignments
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Ask Amelia
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="topic-list">
+        <div class="topic-item">
+          <span>Geography Skills</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="47" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Geology of the UK</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="70" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Geography of the World</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="56" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Development</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="84" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Weather & Climate</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="28" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>The World of Work</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Natural Resources</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <div class="search-input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Search for notes or a topic...">
+          </div>
+          <div class="level-badge">
+            Level 95
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
         </div>
 
-        <div class="current-card" id="currentCard" data-type="spaced">
-          <div class="loading-overlay">
-            <div class="loading-spinner"></div>
-            <span class="loading-text">Building your plan...</span>
+        <!-- Course Header -->
+        <div class="course-header">
+          <div class="course-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231a5276'/%3E%3Cstop offset='100%25' stop-color='%232e86ab'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='160' height='120'/%3E%3Ccircle cx='80' cy='60' r='35' fill='%2326B5A6' opacity='0.3'/%3E%3Cpath d='M50 80 Q80 40 110 80' stroke='%2326B5A6' stroke-width='3' fill='none'/%3E%3C/svg%3E" alt="Geography">
           </div>
-
-          <div class="current-card-header">
-            <div class="current-card-type">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
-              Spaced Review
-            </div>
-            <h2 class="current-card-title">Weather & Climate</h2>
-            <p class="current-card-subtitle">Recap what you learned last week</p>
-          </div>
-
-          <div class="current-card-body">
-            <div class="current-card-meta">
-              <div class="meta-item">
-                <div class="meta-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12,6 12,12 16,14"/>
-                  </svg>
-                </div>
-                <div class="meta-text">
-                  <span class="meta-value">~4 mins</span>
-                  <span class="meta-label">Estimated time</span>
-                </div>
-              </div>
-              <div class="meta-item">
-                <div class="meta-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-                  </svg>
-                </div>
-                <div class="meta-text">
-                  <span class="meta-value">+45 XP</span>
-                  <span class="meta-label">Potential reward</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="current-card-actions">
-              <button class="card-btn card-btn-primary" id="startCardBtn">
-                Start this topic
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
+          <div class="course-info">
+            <h1 class="course-title">Geography</h1>
+            <p class="course-subtitle">AQA GCSE</p>
+            <div class="progress-bars">
+              <div class="progress-row">
+                <svg class="progress-icon" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
                 </svg>
-              </button>
-              <button class="card-btn card-btn-secondary" id="skipCardBtn">
+                <span class="progress-text">7 /249</span>
+                <div class="progress-bar">
+                  <div class="progress-fill orange" style="width: 3%"></div>
+                </div>
+              </div>
+              <div class="progress-row">
+                <svg class="progress-icon" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+                <span class="progress-text">71 /914</span>
+                <div class="progress-bar">
+                  <div class="progress-fill green" style="width: 8%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode Toggle -->
+        <div class="mode-toggle-container">
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="plannerModeBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+              </svg>
+              Today's plan
+            </button>
+            <button class="mode-btn" id="forYouModeBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              For you
+            </button>
+          </div>
+        </div>
+
+        <!-- Card Deck Layout -->
+        <div class="deck-layout" id="deckLayout">
+          <!-- Current Card -->
+          <div class="current-card-container" id="currentCardContainer">
+            <div class="card-label">
+              <span class="card-label-dot"></span>
+              Up next
+            </div>
+
+            <div class="current-card" id="currentCard" data-type="spaced">
+              <div class="loading-overlay">
+                <div class="loading-spinner"></div>
+                <span class="loading-text">Building your plan...</span>
+              </div>
+
+              <div class="current-card-header">
+                <div class="current-card-type">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                  Spaced Review
+                </div>
+                <h2 class="current-card-title">Weather & Climate</h2>
+                <p class="current-card-subtitle">Recap what you learned last week</p>
+              </div>
+
+              <div class="current-card-body">
+                <div class="current-card-meta">
+                  <div class="meta-item">
+                    <div class="meta-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                      </svg>
+                    </div>
+                    <div class="meta-text">
+                      <span class="meta-value">~4 mins</span>
+                      <span class="meta-label">Estimated time</span>
+                    </div>
+                  </div>
+                  <div class="meta-item">
+                    <div class="meta-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                      </svg>
+                    </div>
+                    <div class="meta-text">
+                      <span class="meta-value">+45 XP</span>
+                      <span class="meta-label">Potential reward</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="current-card-actions">
+                  <button class="card-btn card-btn-primary" id="startCardBtn">
+                    Start this topic
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+                  <button class="card-btn card-btn-secondary" id="skipCardBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="13,17 18,12 13,7"/>
+                      <polyline points="6,17 11,12 6,7"/>
+                    </svg>
+                    Skip
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Queue Panel -->
+          <div class="queue-panel" id="queuePanel">
+            <div class="queue-header">
+              <span class="queue-title">Your queue</span>
+              <span class="queue-count">5 items • 20 mins</span>
+            </div>
+
+            <div class="queue-progress">
+              <div class="progress-ring">
+                <svg width="44" height="44">
+                  <circle class="progress-ring-bg" cx="22" cy="22" r="18"/>
+                  <circle class="progress-ring-fill" id="progressFill" cx="22" cy="22" r="18"/>
+                </svg>
+                <span class="progress-ring-text" id="progressText">0%</span>
+              </div>
+              <div class="progress-info">
+                <div class="progress-label">Dan's Geography plan</div>
+                <div class="progress-detail" id="progressDetail">0 of 20 mins complete</div>
+              </div>
+            </div>
+
+            <div class="queue-list" id="queueList">
+              <div class="queue-card active" data-type="spaced" data-index="0">
+                <span class="queue-card-number">1</span>
+                <div class="queue-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                </div>
+                <div class="queue-card-content">
+                  <div class="queue-card-title">Weather & Climate</div>
+                  <div class="queue-card-meta">Spaced review</div>
+                </div>
+                <span class="queue-card-time">4m</span>
+              </div>
+
+              <div class="queue-card" data-type="spaced" data-index="1">
+                <span class="queue-card-number">2</span>
+                <div class="queue-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                </div>
+                <div class="queue-card-content">
+                  <div class="queue-card-title">Geography Skills</div>
+                  <div class="queue-card-meta">Spaced review</div>
+                </div>
+                <span class="queue-card-time">3m</span>
+              </div>
+
+              <div class="queue-card" data-type="new" data-index="2">
+                <span class="queue-card-number">3</span>
+                <div class="queue-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <path d="M8 21h8M12 17v4"/>
+                  </svg>
+                </div>
+                <div class="queue-card-content">
+                  <div class="queue-card-title">Geology of the UK</div>
+                  <div class="queue-card-meta">New content</div>
+                </div>
+                <span class="queue-card-time">5m</span>
+              </div>
+
+              <div class="queue-card" data-type="new" data-index="3">
+                <span class="queue-card-number">4</span>
+                <div class="queue-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <path d="M8 21h8M12 17v4"/>
+                  </svg>
+                </div>
+                <div class="queue-card-content">
+                  <div class="queue-card-title">Rivers & Flooding</div>
+                  <div class="queue-card-meta">New content</div>
+                </div>
+                <span class="queue-card-time">4m</span>
+              </div>
+
+              <div class="queue-card" data-type="wrong" data-index="4">
+                <span class="queue-card-number">5</span>
+                <div class="queue-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div class="queue-card-content">
+                  <div class="queue-card-title">8 Wrong Answers</div>
+                  <div class="queue-card-meta">Practice questions</div>
+                </div>
+                <span class="queue-card-time">4m</span>
+              </div>
+            </div>
+
+            <div class="queue-actions">
+              <button class="queue-action-btn" id="shuffleBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="13,17 18,12 13,7"/>
-                  <polyline points="6,17 11,12 6,7"/>
+                  <polyline points="16,3 21,3 21,8"/>
+                  <line x1="4" y1="20" x2="21" y2="3"/>
+                  <polyline points="21,16 21,21 16,21"/>
+                  <line x1="15" y1="15" x2="21" y2="21"/>
+                  <line x1="4" y1="4" x2="9" y2="9"/>
                 </svg>
-                Skip
+                Shuffle
+              </button>
+              <button class="queue-action-btn" id="editBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit queue
+              </button>
+            </div>
+          </div>
+
+          <!-- Win State -->
+          <div class="win-state" id="winState">
+            <div class="win-confetti">🎉</div>
+            <h2 class="win-title">Queue complete!</h2>
+            <p class="win-subtitle">You crushed your Geography plan today</p>
+            <div class="win-stats">
+              <div class="win-stat">
+                <div class="win-stat-value">20</div>
+                <div class="win-stat-label">mins studied</div>
+              </div>
+              <div class="win-stat">
+                <div class="win-stat-value">5</div>
+                <div class="win-stat-label">topics covered</div>
+              </div>
+              <div class="win-stat">
+                <div class="win-stat-value">+215</div>
+                <div class="win-stat-label">XP earned</div>
+              </div>
+            </div>
+            <div class="win-actions">
+              <button class="win-btn">
+                <span class="win-btn-emoji">🌸</span>
+                Take a break
+              </button>
+              <button class="win-btn">
+                <span class="win-btn-emoji">🎮</span>
+                Play a game
+              </button>
+              <button class="win-btn">
+                <span class="win-btn-emoji">📖</span>
+                Start Biology
               </button>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Queue Panel -->
-      <div class="queue-panel" id="queuePanel">
-        <div class="queue-header">
-          <span class="queue-title">Your queue</span>
-          <span class="queue-count">5 items • 20 mins</span>
-        </div>
-
-        <div class="queue-progress">
-          <div class="progress-ring">
-            <svg width="48" height="48">
-              <circle class="progress-ring-bg" cx="24" cy="24" r="20"/>
-              <circle class="progress-ring-fill" id="progressFill" cx="24" cy="24" r="20"/>
+        <!-- For You Section -->
+        <div class="for-you-section" id="forYouSection">
+          <div class="for-you-card">
+            <div class="for-you-left">
+              <div class="for-you-color blue"></div>
+              <div>
+                <div class="for-you-title">Comparing Development</div>
+                <div class="for-you-meta">Next topic • ~30 XP</div>
+              </div>
+            </div>
+            <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
             </svg>
-            <span class="progress-text" id="progressText">0%</span>
           </div>
-          <div class="progress-info">
-            <div class="progress-label">Dan's Geography plan</div>
-            <div class="progress-detail">0 of 20 mins complete</div>
-          </div>
-        </div>
-
-        <div class="queue-list" id="queueList">
-          <div class="queue-card active" data-type="spaced" data-index="0">
-            <span class="queue-card-number">1</span>
-            <div class="queue-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
+          <div class="for-you-card">
+            <div class="for-you-left">
+              <div class="for-you-color purple"></div>
+              <div>
+                <div class="for-you-title">Recap recent topics</div>
+                <div class="for-you-meta">5 topics • ~337 XP</div>
+              </div>
             </div>
-            <div class="queue-card-content">
-              <div class="queue-card-title">Weather & Climate</div>
-              <div class="queue-card-meta">Spaced review</div>
-            </div>
-            <span class="queue-card-time">4m</span>
-          </div>
-
-          <div class="queue-card" data-type="spaced" data-index="1">
-            <span class="queue-card-number">2</span>
-            <div class="queue-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
-            </div>
-            <div class="queue-card-content">
-              <div class="queue-card-title">Geography Skills</div>
-              <div class="queue-card-meta">Spaced review</div>
-            </div>
-            <span class="queue-card-time">3m</span>
-          </div>
-
-          <div class="queue-card" data-type="new" data-index="2">
-            <span class="queue-card-number">3</span>
-            <div class="queue-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2"/>
-                <path d="M8 21h8M12 17v4"/>
-              </svg>
-            </div>
-            <div class="queue-card-content">
-              <div class="queue-card-title">Geology of the UK</div>
-              <div class="queue-card-meta">New content</div>
-            </div>
-            <span class="queue-card-time">5m</span>
-          </div>
-
-          <div class="queue-card" data-type="new" data-index="3">
-            <span class="queue-card-number">4</span>
-            <div class="queue-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2"/>
-                <path d="M8 21h8M12 17v4"/>
-              </svg>
-            </div>
-            <div class="queue-card-content">
-              <div class="queue-card-title">Rivers & Flooding</div>
-              <div class="queue-card-meta">New content</div>
-            </div>
-            <span class="queue-card-time">4m</span>
-          </div>
-
-          <div class="queue-card" data-type="wrong" data-index="4">
-            <span class="queue-card-number">5</span>
-            <div class="queue-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
-            </div>
-            <div class="queue-card-content">
-              <div class="queue-card-title">8 Wrong Answers</div>
-              <div class="queue-card-meta">Practice questions</div>
-            </div>
-            <span class="queue-card-time">4m</span>
-          </div>
-        </div>
-
-        <div class="queue-actions">
-          <button class="queue-action-btn" id="shuffleBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="16,3 21,3 21,8"/>
-              <line x1="4" y1="20" x2="21" y2="3"/>
-              <polyline points="21,16 21,21 16,21"/>
-              <line x1="15" y1="15" x2="21" y2="21"/>
-              <line x1="4" y1="4" x2="9" y2="9"/>
+            <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
             </svg>
-            Shuffle
-          </button>
-          <button class="queue-action-btn" id="editBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </div>
+          <div class="for-you-card">
+            <div class="for-you-left">
+              <div class="for-you-color orange"></div>
+              <div>
+                <div class="for-you-title">Retry all your Wrong Answers</div>
+                <div class="for-you-meta">120 wrong answers • ~450 XP</div>
+              </div>
+            </div>
+            <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
             </svg>
-            Edit queue
-          </button>
+          </div>
         </div>
       </div>
-
-      <!-- Win State -->
-      <div class="win-state" id="winState">
-        <div class="win-confetti">🎉</div>
-        <h2 class="win-title">Queue complete!</h2>
-        <p class="win-subtitle">You crushed your Geography plan today</p>
-        <div class="win-stats">
-          <div class="win-stat">
-            <div class="win-stat-value">20</div>
-            <div class="win-stat-label">mins studied</div>
-          </div>
-          <div class="win-stat">
-            <div class="win-stat-value">5</div>
-            <div class="win-stat-label">topics covered</div>
-          </div>
-          <div class="win-stat">
-            <div class="win-stat-value">+215</div>
-            <div class="win-stat-label">XP earned</div>
-          </div>
-        </div>
-        <div class="win-actions">
-          <button class="win-btn">
-            <span class="win-btn-emoji">🌸</span>
-            Take a break
-          </button>
-          <button class="win-btn">
-            <span class="win-btn-emoji">🎮</span>
-            Play a game
-          </button>
-          <button class="win-btn">
-            <span class="win-btn-emoji">📖</span>
-            Start Biology
-          </button>
-        </div>
-      </div>
-    </div>
+    </main>
   </div>
 
   <script>
+    // DOM Elements
     const demoButtons = document.querySelectorAll('.demo-btn');
     const currentCard = document.getElementById('currentCard');
     const currentCardContainer = document.getElementById('currentCardContainer');
@@ -988,6 +1596,11 @@
     const queueCards = document.querySelectorAll('.queue-card');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
+    const progressDetail = document.getElementById('progressDetail');
+    const plannerModeBtn = document.getElementById('plannerModeBtn');
+    const forYouModeBtn = document.getElementById('forYouModeBtn');
+    const deckLayout = document.getElementById('deckLayout');
+    const forYouSection = document.getElementById('forYouSection');
 
     const cardData = [
       { type: 'spaced', title: 'Weather & Climate', subtitle: 'Recap what you learned last week', time: '4', xp: '45', typeLabel: 'Spaced Review' },
@@ -998,6 +1611,21 @@
     ];
 
     let currentIndex = 0;
+
+    // Mode toggle
+    plannerModeBtn.addEventListener('click', () => {
+      plannerModeBtn.classList.add('active');
+      forYouModeBtn.classList.remove('active');
+      deckLayout.style.display = 'grid';
+      forYouSection.classList.remove('visible');
+    });
+
+    forYouModeBtn.addEventListener('click', () => {
+      forYouModeBtn.classList.add('active');
+      plannerModeBtn.classList.remove('active');
+      deckLayout.style.display = 'none';
+      forYouSection.classList.add('visible');
+    });
 
     function updateCard(index) {
       const data = cardData[index];
@@ -1024,7 +1652,7 @@
 
       // Update progress
       const progress = Math.round((index / cardData.length) * 100);
-      const circumference = 2 * Math.PI * 20;
+      const circumference = 2 * Math.PI * 18;
       progressFill.style.strokeDashoffset = circumference - (progress / 100) * circumference;
       progressText.textContent = `${progress}%`;
     }
@@ -1040,10 +1668,10 @@
       } else if (state === 'in-progress') {
         currentIndex = 2;
         updateCard(currentIndex);
-        const circumference = 2 * Math.PI * 20;
+        const circumference = 2 * Math.PI * 18;
         progressFill.style.strokeDashoffset = circumference - 0.4 * circumference;
         progressText.textContent = '40%';
-        document.querySelector('.progress-detail').textContent = '8 of 20 mins complete';
+        progressDetail.textContent = '8 of 20 mins complete';
       } else if (state === 'completed') {
         currentCardContainer.style.display = 'none';
         queuePanel.style.display = 'none';
@@ -1051,7 +1679,7 @@
       } else {
         currentIndex = 0;
         updateCard(0);
-        document.querySelector('.progress-detail').textContent = '0 of 20 mins complete';
+        progressDetail.textContent = '0 of 20 mins complete';
       }
     }
 
@@ -1098,6 +1726,9 @@
         list.style.transform = 'scale(1)';
       }, 300);
     });
+
+    // Initialize
+    setState('loaded');
   </script>
 </body>
 </html>
