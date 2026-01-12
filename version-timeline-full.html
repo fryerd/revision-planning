@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seneca - Planner Recommendations (Timeline View)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-blue: #4B9FE8;
+      --primary-blue-light: #E8F4FC;
+      --secondary-teal: #26B5A6;
+      --secondary-teal-light: #E8F7F5;
+      --accent-purple: #8B5CF6;
+      --accent-purple-light: #EDE9FE;
+      --accent-orange: #F59E0B;
+      --accent-orange-light: #FEF3C7;
+      --accent-pink: #EC4899;
+      --accent-green: #10B981;
+      --text-primary: #1F2937;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --bg-white: #FFFFFF;
+      --bg-gray: #F9FAFB;
+      --bg-sidebar: #F3F4F6;
+      --border-light: #E5E7EB;
+      --border-medium: #D1D5DB;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --content-max-width: 935px;
+    }
+
+    body {
+      font-family: 'Mulish', sans-serif;
+      background: var(--bg-gray);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* Layout */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 72px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 16px;
+    }
+
+    .sidebar-item {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+      font-size: 10px;
+      font-weight: 600;
+      gap: 2px;
+    }
+
+    .sidebar-item:hover {
+      background: var(--bg-gray);
+    }
+
+    .sidebar-item.active {
+      color: var(--secondary-teal);
+      background: rgba(38, 181, 166, 0.1);
+    }
+
+    .sidebar-item svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Secondary Sidebar */
+    .secondary-sidebar {
+      width: 240px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      padding: 16px;
+      flex-shrink: 0;
+    }
+
+    .overview-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #4B9FE8 0%, #26B5A6 100%);
+      color: white;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-gray);
+      color: var(--text-primary);
+    }
+
+    .nav-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 16px 0;
+    }
+
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .topic-item:hover {
+      background: var(--bg-gray);
+    }
+
+    .topic-progress {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    .content-wrapper {
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .search-input {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 10px 20px;
+      width: 400px;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus-within {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(75, 159, 232, 0.1);
+    }
+
+    .search-input input {
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .search-input input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .level-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Course Header */
+    .course-header {
+      display: flex;
+      gap: 24px;
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .course-image {
+      width: 160px;
+      height: 120px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      background: linear-gradient(135deg, #1a5276 0%, #2e86ab 100%);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .course-info {
+      flex: 1;
+    }
+
+    .course-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .course-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .progress-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 60px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-fill.blue { background: var(--primary-blue); }
+    .progress-fill.orange { background: var(--accent-orange); }
+    .progress-fill.green { background: var(--accent-green); }
+
+    /* Demo Controls */
+    .demo-controls {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
+      background: white;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .demo-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      background: white;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .demo-btn:hover {
+      background: var(--bg-gray);
+      color: var(--text-primary);
+    }
+
+    .demo-btn.active {
+      background: var(--secondary-teal);
+      color: white;
+      border-color: var(--secondary-teal);
+    }
+
+    /* Mode Toggle */
+    .mode-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: var(--bg-gray);
+      border-radius: 24px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .mode-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+    }
+
+    .mode-btn.active {
+      background: var(--bg-white);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Journey Card */
+    .journey-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    .journey-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--primary-blue), var(--secondary-teal));
+    }
+
+    /* Journey Header */
+    .journey-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .journey-title-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .journey-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(75, 159, 232, 0.1) 100%);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-purple);
+    }
+
+    .journey-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .journey-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .journey-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .journey-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-circle {
+      position: relative;
+      width: 56px;
+      height: 56px;
+    }
+
+    .progress-circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-circle-bg {
+      fill: none;
+      stroke: var(--bg-gray);
+      stroke-width: 6;
+    }
+
+    .progress-circle-fill {
+      fill: none;
+      stroke: url(#progressGradient);
+      stroke-width: 6;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-circle-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .progress-time {
+      text-align: right;
+    }
+
+    .progress-time-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .progress-time-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .start-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--secondary-teal);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .start-btn:hover {
+      background: #1D9A8D;
+      transform: translateY(-1px);
+    }
+
+    .start-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* In Progress Header */
+    .journey-header.in-progress {
+      background: linear-gradient(135deg, rgba(38, 181, 166, 0.05) 0%, rgba(75, 159, 232, 0.05) 100%);
+    }
+
+    .journey-header.in-progress .journey-icon {
+      background: var(--secondary-teal);
+      color: white;
+    }
+
+    .continue-label {
+      display: none;
+      font-size: 12px;
+      color: var(--secondary-teal);
+      font-weight: 600;
+      background: var(--secondary-teal-light);
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-left: 12px;
+    }
+
+    .journey-header.in-progress .continue-label {
+      display: inline-block;
+    }
+
+    /* Description Banner */
+    .description-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, rgba(75, 159, 232, 0.08) 0%, rgba(38, 181, 166, 0.08) 100%);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .description-banner.hidden {
+      display: none;
+    }
+
+    .description-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .description-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .description-text {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .description-text strong {
+      color: var(--text-primary);
+    }
+
+    .description-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .description-close:hover {
+      background: rgba(0,0,0,0.05);
+      color: var(--text-secondary);
+    }
+
+    /* Timeline Container */
+    .timeline-container {
+      padding: 24px 24px 16px;
+    }
+
+    /* Timeline Track */
+    .timeline-track {
+      position: relative;
+      padding: 16px 0 24px;
+    }
+
+    .time-markers {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 60px;
+      margin-bottom: 24px;
+    }
+
+    .time-marker {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      width: 40px;
+      margin-left: -20px;
+    }
+
+    .time-marker:first-child {
+      margin-left: 0;
+      text-align: left;
+    }
+
+    .time-marker:last-child {
+      margin-right: -20px;
+      text-align: right;
+    }
+
+    .track-line {
+      position: absolute;
+      top: 56px;
+      left: 60px;
+      right: 60px;
+      height: 4px;
+      background: var(--border-light);
+      border-radius: 2px;
+    }
+
+    .track-line-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--secondary-teal), var(--primary-blue));
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    /* Timeline Stops */
+    .timeline-stops {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: relative;
+    }
+
+    .timeline-stop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 110px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .timeline-stop:hover {
+      transform: translateY(-2px);
+    }
+
+    .timeline-stop:hover .stop-node {
+      transform: scale(1.08);
+    }
+
+    .stop-node {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      z-index: 2;
+    }
+
+    .stop-node svg {
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+    }
+
+    /* Colored variants */
+    .timeline-stop[data-type="spaced"] .stop-node {
+      border-color: var(--accent-purple);
+      background: var(--accent-purple-light);
+    }
+    .timeline-stop[data-type="spaced"] .stop-node svg {
+      color: var(--accent-purple);
+    }
+
+    .timeline-stop[data-type="new"] .stop-node {
+      border-color: var(--primary-blue);
+      background: var(--primary-blue-light);
+    }
+    .timeline-stop[data-type="new"] .stop-node svg {
+      color: var(--primary-blue);
+    }
+
+    .timeline-stop[data-type="wrong"] .stop-node {
+      border-color: var(--accent-orange);
+      background: var(--accent-orange-light);
+    }
+    .timeline-stop[data-type="wrong"] .stop-node svg {
+      color: var(--accent-orange);
+    }
+
+    /* Selected state */
+    .timeline-stop.selected .stop-node {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .timeline-stop.selected::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 8px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid var(--bg-gray);
+    }
+
+    /* Completed state */
+    .timeline-stop.completed .stop-node {
+      background: var(--secondary-teal);
+      border-color: var(--secondary-teal);
+    }
+    .timeline-stop.completed .stop-node svg {
+      color: white;
+    }
+
+    /* Active/current state */
+    .timeline-stop.active .stop-node {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(38, 181, 166, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(38, 181, 166, 0); }
+    }
+
+    /* Stop content */
+    .stop-content {
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .stop-type {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .timeline-stop[data-type="spaced"] .stop-type { color: var(--accent-purple); }
+    .timeline-stop[data-type="new"] .stop-type { color: var(--primary-blue); }
+    .timeline-stop[data-type="wrong"] .stop-type { color: var(--accent-orange); }
+
+    .stop-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    .stop-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Loading state */
+    .timeline-stop.loading .stop-node {
+      background: var(--bg-gray);
+      border-color: var(--border-light);
+    }
+
+    .timeline-stop.loading .stop-node::after {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border-light);
+      border-top-color: var(--secondary-teal);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .timeline-stop.loading .stop-node svg {
+      display: none;
+    }
+
+    .timeline-stop.loading .stop-content {
+      opacity: 0.3;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Drill-down Panel */
+    .drilldown-panel {
+      display: none;
+      background: var(--bg-gray);
+      border-top: 1px solid var(--border-light);
+      padding: 20px 24px;
+      animation: slideDown 0.3s ease;
+    }
+
+    .drilldown-panel.visible {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .drilldown-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .drilldown-title-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .drilldown-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drilldown-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .drilldown-icon.purple {
+      background: var(--accent-purple-light);
+      color: var(--accent-purple);
+    }
+    .drilldown-icon.blue {
+      background: var(--primary-blue-light);
+      color: var(--primary-blue);
+    }
+    .drilldown-icon.orange {
+      background: var(--accent-orange-light);
+      color: var(--accent-orange);
+    }
+
+    .drilldown-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .drilldown-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .drilldown-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .drilldown-close:hover {
+      background: var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    .drilldown-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .drilldown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      transition: all 0.2s;
+    }
+
+    .drilldown-item:hover {
+      border-color: var(--border-medium);
+    }
+
+    .drilldown-item.loading {
+      opacity: 0.6;
+    }
+
+    .drilldown-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .drilldown-item-drag {
+      color: var(--text-muted);
+      cursor: grab;
+    }
+
+    .drilldown-item-drag svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .drilldown-item-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .drilldown-item-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .drilldown-item-time {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .drilldown-item-remove {
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .drilldown-item-remove:hover {
+      background: #FEE2E2;
+      color: #EF4444;
+    }
+
+    .drilldown-item-remove svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text-primary);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+      z-index: 100;
+    }
+
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--text-primary);
+    }
+
+    .drilldown-item-remove:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Spinner in item */
+    .item-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border-light);
+      border-top-color: var(--secondary-teal);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Section Legend */
+    .section-legend {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.purple { background: var(--accent-purple); }
+    .legend-dot.blue { background: var(--primary-blue); }
+    .legend-dot.orange { background: var(--accent-orange); }
+
+    .legend-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .legend-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* See More Link */
+    .see-more-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px;
+      border-top: 1px solid var(--border-light);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary-blue);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .see-more-link:hover {
+      background: var(--primary-blue-light);
+    }
+
+    .see-more-link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s;
+    }
+
+    .see-more-link.expanded svg {
+      transform: rotate(180deg);
+    }
+
+    /* Win State */
+    .win-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .win-state.visible {
+      display: flex;
+    }
+
+    .win-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--secondary-teal), var(--primary-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      animation: celebrateBounce 0.6s ease;
+    }
+
+    @keyframes celebrateBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .win-icon svg {
+      width: 36px;
+      height: 36px;
+      color: white;
+    }
+
+    .win-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .win-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+
+    .win-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .win-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: 2px solid var(--border-light);
+      border-radius: 10px;
+      background: white;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .win-btn:hover {
+      border-color: var(--secondary-teal);
+      background: var(--secondary-teal-light);
+    }
+
+    .win-btn-emoji {
+      font-size: 16px;
+    }
+
+    /* For You Section (hidden by default) */
+    .for-you-section {
+      display: none;
+    }
+
+    .for-you-section.visible {
+      display: block;
+    }
+
+    .for-you-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .for-you-card:hover {
+      border-color: var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .for-you-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .for-you-color {
+      width: 4px;
+      height: 40px;
+      border-radius: 2px;
+    }
+
+    .for-you-color.blue { background: var(--primary-blue); }
+    .for-you-color.purple { background: var(--accent-purple); }
+    .for-you-color.orange { background: var(--accent-orange); }
+
+    .for-you-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .for-you-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .for-you-arrow {
+      color: var(--text-muted);
+    }
+
+    /* SVG Gradient Definition */
+    .svg-defs {
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Definitions -->
+  <svg class="svg-defs">
+    <defs>
+      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#8B5CF6"/>
+        <stop offset="50%" stop-color="#4B9FE8"/>
+        <stop offset="100%" stop-color="#26B5A6"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <button class="demo-btn active" data-state="loaded">Loaded</button>
+    <button class="demo-btn" data-state="loading">Loading</button>
+    <button class="demo-btn" data-state="in-progress">In Progress</button>
+    <button class="demo-btn" data-state="completed">Completed</button>
+  </div>
+
+  <div class="app-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <svg class="sidebar-logo" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="8" fill="#26B5A6"/>
+        <path d="M12 20C12 15.5817 15.5817 12 20 12V12C24.4183 12 28 15.5817 28 20V28H20C15.5817 28 12 24.4183 12 20V20Z" fill="white"/>
+      </svg>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        </svg>
+        <span>Home</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+        <span>Assign</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <span>Upgrade</span>
+      </div>
+
+      <div class="sidebar-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        <span>Biology</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/>
+        </svg>
+        <span>Chemistry</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <span>Coding</span>
+      </div>
+
+      <div class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="4" width="16" height="16" rx="2"/>
+          <path d="M9 9h6M9 13h6M9 17h4"/>
+        </svg>
+        <span>Comp Sci</span>
+      </div>
+    </aside>
+
+    <!-- Secondary Sidebar -->
+    <aside class="secondary-sidebar">
+      <div class="overview-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        Overview
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+        </svg>
+        Exam Prep
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+        Assignments
+      </div>
+
+      <div class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Ask Amelia
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="topic-list">
+        <div class="topic-item">
+          <span>Geography Skills</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="47" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Geology of the UK</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="70" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Geography of the World</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="56" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Development</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="84" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Weather & Climate</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#26B5A6" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="28" transform="rotate(-90 18 18)"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>The World of Work</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="topic-item">
+          <span>Natural Resources</span>
+          <svg class="topic-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <div class="search-input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Search for notes or a topic...">
+          </div>
+          <div class="level-badge">
+            Level 95
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Course Header -->
+        <div class="course-header">
+          <div class="course-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231a5276'/%3E%3Cstop offset='100%25' stop-color='%232e86ab'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='160' height='120'/%3E%3Ccircle cx='80' cy='60' r='35' fill='%2326B5A6' opacity='0.3'/%3E%3Cpath d='M50 80 Q80 40 110 80' stroke='%2326B5A6' stroke-width='3' fill='none'/%3E%3C/svg%3E" alt="Geography">
+          </div>
+          <div class="course-info">
+            <h1 class="course-title">Geography</h1>
+            <p class="course-subtitle">AQA GCSE</p>
+            <div class="progress-bars">
+              <div class="progress-row">
+                <svg class="progress-icon" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+                <span class="progress-text">7 /249</span>
+                <div class="progress-bar">
+                  <div class="progress-fill orange" style="width: 3%"></div>
+                </div>
+              </div>
+              <div class="progress-row">
+                <svg class="progress-icon" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+                <span class="progress-text">71 /914</span>
+                <div class="progress-bar">
+                  <div class="progress-fill green" style="width: 8%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode Toggle -->
+        <div class="mode-toggle-container">
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="plannerModeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+              </svg>
+              Today's plan
+            </button>
+            <button class="mode-btn" id="forYouModeBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              For you
+            </button>
+          </div>
+        </div>
+
+        <!-- Journey Card -->
+        <div class="journey-card" id="journeyCard">
+          <!-- Header -->
+          <div class="journey-header" id="journeyHeader">
+            <div class="journey-title-section">
+              <div class="journey-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10,9 9,9 8,9"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="journey-title">Dan's Geography plan</h2>
+                <p class="journey-subtitle" id="journeySubtitle">Based on your weekly planner</p>
+                <span class="continue-label">8 mins done • 12 left</span>
+              </div>
+            </div>
+            <div class="journey-meta">
+              <div class="progress-circle">
+                <svg width="56" height="56">
+                  <circle class="progress-circle-bg" cx="28" cy="28" r="24"/>
+                  <circle class="progress-circle-fill" id="progressCircleFill" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="150.8"/>
+                </svg>
+                <span class="progress-circle-text" id="progressCircleText">0%</span>
+              </div>
+              <div class="progress-time">
+                <div class="progress-time-value" id="progressTimeValue">0 / 20</div>
+                <div class="progress-time-label">mins</div>
+              </div>
+              <button class="start-btn" id="startBtn">
+                Get started
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Description Banner -->
+          <div class="description-banner" id="descriptionBanner">
+            <div class="description-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <p class="description-text">
+              <strong>This 20 mins includes:</strong> Review recent topics, cover new ground, and recap weaker areas
+            </p>
+            <button class="description-close" id="descriptionClose">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Timeline Container -->
+          <div class="timeline-container" id="timelineContainer">
+            <div class="timeline-track">
+              <div class="time-markers">
+                <span class="time-marker">0 min</span>
+                <span class="time-marker">5 min</span>
+                <span class="time-marker">10 min</span>
+                <span class="time-marker">15 min</span>
+                <span class="time-marker">20 min</span>
+              </div>
+
+              <div class="track-line">
+                <div class="track-line-progress" id="trackProgress"></div>
+              </div>
+
+              <div class="timeline-stops" id="timelineStops">
+                <div class="timeline-stop" data-type="spaced" data-section="spaced">
+                  <div class="stop-node">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                  </div>
+                  <div class="stop-content">
+                    <div class="stop-type">Review</div>
+                    <div class="stop-title">Spaced recap</div>
+                    <div class="stop-time">~7 mins</div>
+                  </div>
+                </div>
+
+                <div class="timeline-stop" data-type="new" data-section="new">
+                  <div class="stop-node">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="3" width="20" height="14" rx="2"/>
+                      <path d="M8 21h8M12 17v4"/>
+                    </svg>
+                  </div>
+                  <div class="stop-content">
+                    <div class="stop-type">Learn</div>
+                    <div class="stop-title">New topics</div>
+                    <div class="stop-time">~9 mins</div>
+                  </div>
+                </div>
+
+                <div class="timeline-stop" data-type="wrong" data-section="wrong">
+                  <div class="stop-node">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                      <line x1="12" y1="9" x2="12" y2="13"/>
+                      <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                  </div>
+                  <div class="stop-content">
+                    <div class="stop-type">Practice</div>
+                    <div class="stop-title">Wrong answers</div>
+                    <div class="stop-time">~4 mins</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Drill-down Panel -->
+          <div class="drilldown-panel" id="drilldownPanel">
+            <div class="drilldown-header">
+              <div class="drilldown-title-area">
+                <div class="drilldown-icon" id="drilldownIcon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="drilldown-title" id="drilldownTitle">Spaced repetition recap</h3>
+                  <p class="drilldown-meta" id="drilldownMeta">2 topics • ~7 mins • +80 XP</p>
+                </div>
+              </div>
+              <button class="drilldown-close" id="drilldownClose">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+            <div class="drilldown-items" id="drilldownItems">
+              <!-- Items populated by JS -->
+            </div>
+          </div>
+
+          <!-- Section Legend -->
+          <div class="section-legend" id="sectionLegend">
+            <div class="legend-item">
+              <div class="legend-dot purple"></div>
+              <span class="legend-label">Spaced review</span>
+              <span class="legend-count" id="legendSpacedCount">2 topics</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot blue"></div>
+              <span class="legend-label">New content</span>
+              <span class="legend-count" id="legendNewCount">2 topics</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot orange"></div>
+              <span class="legend-label">Wrong answers</span>
+              <span class="legend-count" id="legendWrongCount">8 questions</span>
+            </div>
+          </div>
+
+          <!-- See More Link -->
+          <div class="see-more-link" id="seeMoreLink">
+            <span id="seeMoreText">See more & edit</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+
+          <!-- Win State -->
+          <div class="win-state" id="winState">
+            <div class="win-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                <polyline points="22,4 12,14.01 9,11.01"/>
+              </svg>
+            </div>
+            <h2 class="win-title">Well done! Now lets...</h2>
+            <p class="win-subtitle">You've completed your Geography plan for today</p>
+            <div class="win-actions">
+              <button class="win-btn">
+                <span class="win-btn-emoji">🌸</span>
+                Take a break
+              </button>
+              <button class="win-btn">
+                <span class="win-btn-emoji">🎮</span>
+                Play a game
+              </button>
+              <button class="win-btn">
+                <span class="win-btn-emoji">📖</span>
+                Start Biology
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- For You Section -->
+        <div class="for-you-section" id="forYouSection">
+          <div class="for-you-card">
+            <div class="for-you-left">
+              <div class="for-you-color blue"></div>
+              <div>
+                <div class="for-you-title">Comparing Development</div>
+                <div class="for-you-meta">Next topic • ~30 XP</div>
+              </div>
+            </div>
+            <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+          <div class="for-you-card">
+            <div class="for-you-left">
+              <div class="for-you-color purple"></div>
+              <div>
+                <div class="for-you-title">Recap recent topics</div>
+                <div class="for-you-meta">5 topics • ~337 XP</div>
+              </div>
+            </div>
+            <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+          <div class="for-you-card">
+            <div class="for-you-left">
+              <div class="for-you-color orange"></div>
+              <div>
+                <div class="for-you-title">Retry all your Wrong Answers</div>
+                <div class="for-you-meta">120 wrong answers • ~450 XP</div>
+              </div>
+            </div>
+            <svg class="for-you-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Data for sections
+    const sectionData = {
+      spaced: {
+        title: 'Spaced repetition recap',
+        icon: 'purple',
+        iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+        items: [
+          { name: 'Weather & Climate', time: '4 mins' },
+          { name: 'Geography Skills', time: '3 mins' }
+        ],
+        replacements: [
+          { name: 'Development', time: '4 mins' },
+          { name: 'Population Change', time: '3 mins' }
+        ],
+        allowsReplacement: true,
+        tooltip: 'Skip this review topic'
+      },
+      new: {
+        title: 'New topics',
+        icon: 'blue',
+        iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+        items: [
+          { name: 'Geology of the UK', time: '5 mins' },
+          { name: 'Rivers & Flooding', time: '4 mins' }
+        ],
+        replacements: [
+          { name: 'Coastal Landscapes', time: '4 mins' },
+          { name: 'Urban Issues', time: '5 mins' },
+          { name: 'Resource Management', time: '4 mins' }
+        ],
+        allowsReplacement: true,
+        tooltip: 'Skip this topic'
+      },
+      wrong: {
+        title: 'Wrong answers recap',
+        icon: 'orange',
+        iconSvg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+        items: [
+          { name: 'Question set 1 (4 questions)', time: '2 mins' },
+          { name: 'Question set 2 (4 questions)', time: '2 mins' }
+        ],
+        replacements: [],
+        allowsReplacement: false,
+        tooltip: 'Remove these questions'
+      }
+    };
+
+    let replacementIndex = { spaced: 0, new: 0 };
+    let currentSection = null;
+
+    // DOM Elements
+    const demoButtons = document.querySelectorAll('.demo-btn');
+    const journeyCard = document.getElementById('journeyCard');
+    const journeyHeader = document.getElementById('journeyHeader');
+    const timelineContainer = document.getElementById('timelineContainer');
+    const sectionLegend = document.getElementById('sectionLegend');
+    const seeMoreLink = document.getElementById('seeMoreLink');
+    const winState = document.getElementById('winState');
+    const descriptionBanner = document.getElementById('descriptionBanner');
+    const drilldownPanel = document.getElementById('drilldownPanel');
+    const drilldownItems = document.getElementById('drilldownItems');
+    const timelineStops = document.querySelectorAll('.timeline-stop');
+    const trackProgress = document.getElementById('trackProgress');
+    const progressCircleFill = document.getElementById('progressCircleFill');
+    const progressCircleText = document.getElementById('progressCircleText');
+    const progressTimeValue = document.getElementById('progressTimeValue');
+    const startBtn = document.getElementById('startBtn');
+    const plannerModeBtn = document.getElementById('plannerModeBtn');
+    const forYouModeBtn = document.getElementById('forYouModeBtn');
+    const forYouSection = document.getElementById('forYouSection');
+
+    // Close description banner
+    document.getElementById('descriptionClose').addEventListener('click', () => {
+      descriptionBanner.classList.add('hidden');
+    });
+
+    // Mode toggle
+    plannerModeBtn.addEventListener('click', () => {
+      plannerModeBtn.classList.add('active');
+      forYouModeBtn.classList.remove('active');
+      journeyCard.style.display = 'block';
+      forYouSection.classList.remove('visible');
+    });
+
+    forYouModeBtn.addEventListener('click', () => {
+      forYouModeBtn.classList.add('active');
+      plannerModeBtn.classList.remove('active');
+      journeyCard.style.display = 'none';
+      forYouSection.classList.add('visible');
+    });
+
+    // Click on timeline stops to show drill-down
+    timelineStops.forEach(stop => {
+      stop.addEventListener('click', () => {
+        const section = stop.dataset.section;
+
+        // Toggle selection
+        if (currentSection === section && drilldownPanel.classList.contains('visible')) {
+          closeDrilldown();
+          return;
+        }
+
+        // Update selection
+        timelineStops.forEach(s => s.classList.remove('selected'));
+        stop.classList.add('selected');
+        currentSection = section;
+
+        // Populate drill-down panel
+        showDrilldown(section);
+      });
+    });
+
+    // Close drill-down
+    document.getElementById('drilldownClose').addEventListener('click', closeDrilldown);
+
+    function closeDrilldown() {
+      drilldownPanel.classList.remove('visible');
+      timelineStops.forEach(s => s.classList.remove('selected'));
+      currentSection = null;
+    }
+
+    function showDrilldown(section) {
+      const data = sectionData[section];
+
+      // Update header
+      document.getElementById('drilldownIcon').className = `drilldown-icon ${data.icon}`;
+      document.getElementById('drilldownIcon').innerHTML = data.iconSvg;
+      document.getElementById('drilldownTitle').textContent = data.title;
+
+      const totalMins = data.items.reduce((sum, item) => {
+        const mins = parseInt(item.time) || 0;
+        return sum + mins;
+      }, 0);
+      document.getElementById('drilldownMeta').textContent = `${data.items.length} items • ~${totalMins} mins`;
+
+      // Populate items
+      drilldownItems.innerHTML = '';
+      data.items.forEach((item, index) => {
+        const itemEl = createDrilldownItem(item, section, index);
+        drilldownItems.appendChild(itemEl);
+      });
+
+      drilldownPanel.classList.add('visible');
+    }
+
+    function createDrilldownItem(item, section, index) {
+      const div = document.createElement('div');
+      div.className = 'drilldown-item';
+      div.dataset.section = section;
+      div.dataset.index = index;
+
+      const data = sectionData[section];
+
+      div.innerHTML = `
+        <div class="drilldown-item-left">
+          <div class="drilldown-item-drag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/>
+              <circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/>
+            </svg>
+          </div>
+          <span class="drilldown-item-name">${item.name}</span>
+        </div>
+        <div class="drilldown-item-right">
+          <span class="drilldown-item-time">~${item.time}</span>
+          <button class="drilldown-item-remove">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+            <span class="tooltip">${data.tooltip}</span>
+          </button>
+        </div>
+      `;
+
+      // Remove button handler
+      const removeBtn = div.querySelector('.drilldown-item-remove');
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handleRemoveItem(div, section, index);
+      });
+
+      return div;
+    }
+
+    function handleRemoveItem(itemEl, section, index) {
+      const data = sectionData[section];
+
+      if (data.allowsReplacement && data.replacements.length > replacementIndex[section]) {
+        // Show loading state
+        itemEl.classList.add('loading');
+        const nameEl = itemEl.querySelector('.drilldown-item-name');
+        const timeEl = itemEl.querySelector('.drilldown-item-time');
+        const originalName = nameEl.textContent;
+
+        nameEl.innerHTML = '<div class="item-spinner"></div>';
+        timeEl.textContent = '';
+
+        setTimeout(() => {
+          nameEl.textContent = 'Finding another topic...';
+        }, 400);
+
+        setTimeout(() => {
+          // Get replacement
+          const replacement = data.replacements[replacementIndex[section]];
+          replacementIndex[section]++;
+
+          // Update item
+          nameEl.textContent = replacement.name;
+          timeEl.textContent = `~${replacement.time}`;
+          itemEl.classList.remove('loading');
+
+          // Update data
+          data.items[index] = replacement;
+          updateLegendCounts();
+        }, 1000);
+      } else {
+        // Just remove (no replacement for wrong answers)
+        itemEl.style.opacity = '0';
+        itemEl.style.transform = 'translateX(-20px)';
+        setTimeout(() => {
+          itemEl.remove();
+          data.items.splice(index, 1);
+          updateLegendCounts();
+
+          // If no items left, close panel
+          if (data.items.length === 0) {
+            closeDrilldown();
+          }
+        }, 300);
+      }
+    }
+
+    function updateLegendCounts() {
+      document.getElementById('legendSpacedCount').textContent = `${sectionData.spaced.items.length} topics`;
+      document.getElementById('legendNewCount').textContent = `${sectionData.new.items.length} topics`;
+      document.getElementById('legendWrongCount').textContent = `${sectionData.wrong.items.length * 4} questions`;
+    }
+
+    // See more link (expand all)
+    seeMoreLink.addEventListener('click', () => {
+      seeMoreLink.classList.toggle('expanded');
+      const text = document.getElementById('seeMoreText');
+
+      if (seeMoreLink.classList.contains('expanded')) {
+        text.textContent = 'Show less';
+        // Show first section by default
+        if (!currentSection) {
+          timelineStops[0].click();
+        }
+      } else {
+        text.textContent = 'See more & edit';
+        closeDrilldown();
+      }
+    });
+
+    // Demo state controls
+    function setState(state) {
+      // Reset everything
+      journeyHeader.classList.remove('in-progress');
+      timelineContainer.style.display = 'block';
+      sectionLegend.style.display = 'flex';
+      seeMoreLink.style.display = 'flex';
+      descriptionBanner.classList.remove('hidden');
+      winState.classList.remove('visible');
+      drilldownPanel.classList.remove('visible');
+      startBtn.innerHTML = 'Get started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      trackProgress.style.width = '0%';
+      progressCircleFill.style.strokeDashoffset = '150.8';
+      progressCircleText.textContent = '0%';
+      progressTimeValue.textContent = '0 / 20';
+      document.getElementById('journeySubtitle').textContent = 'Based on your weekly planner';
+
+      timelineStops.forEach(stop => {
+        stop.classList.remove('loading', 'completed', 'active', 'selected');
+      });
+
+      if (state === 'loading') {
+        timelineStops.forEach(stop => stop.classList.add('loading'));
+      } else if (state === 'in-progress') {
+        journeyHeader.classList.add('in-progress');
+        startBtn.innerHTML = 'Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+        trackProgress.style.width = '40%';
+        progressCircleFill.style.strokeDashoffset = '90.5';
+        progressCircleText.textContent = '40%';
+        progressTimeValue.textContent = '8 / 20';
+        document.getElementById('journeySubtitle').textContent = '8 mins completed • 12 mins remaining';
+        timelineStops[0].classList.add('completed');
+        timelineStops[1].classList.add('active');
+      } else if (state === 'completed') {
+        timelineContainer.style.display = 'none';
+        sectionLegend.style.display = 'none';
+        seeMoreLink.style.display = 'none';
+        descriptionBanner.classList.add('hidden');
+        winState.classList.add('visible');
+      }
+    }
+
+    demoButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        demoButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setState(btn.dataset.state);
+      });
+    });
+  </script>
+</body>
+</html>

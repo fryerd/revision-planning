@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planner Recommendations - Timeline Journey View</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-teal: #26B5A6;
+      --primary-teal-light: #E8F7F5;
+      --primary-teal-dark: #1D9A8D;
+      --accent-purple: #8B5CF6;
+      --accent-purple-light: #EDE9FE;
+      --accent-blue: #4B9FE8;
+      --accent-blue-light: #E0F2FE;
+      --accent-orange: #F59E0B;
+      --accent-orange-light: #FEF3C7;
+      --text-primary: #1F2937;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --bg-page: #F8FAFB;
+      --bg-card: #FFFFFF;
+      --border-light: #E5E7EB;
+      --content-max-width: 935px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Mulish', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Demo Controls */
+    .demo-controls {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
+      background: white;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .demo-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      background: white;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .demo-btn:hover {
+      background: var(--bg-page);
+      color: var(--text-primary);
+    }
+
+    .demo-btn.active {
+      background: var(--primary-teal);
+      color: white;
+      border-color: var(--primary-teal);
+    }
+
+    /* Mode Toggle */
+    .mode-toggle {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-page);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+
+    .mode-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-btn.active {
+      background: white;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Journey Card */
+    .journey-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .journey-header {
+      padding: 28px 32px;
+      background: linear-gradient(135deg, var(--primary-teal) 0%, var(--primary-teal-dark) 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .journey-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .journey-header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .journey-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .journey-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+    }
+
+    .journey-title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .journey-meta {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .journey-time {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .time-ring {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .time-ring-progress {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 3px solid white;
+      border-left-color: transparent;
+      border-bottom-color: transparent;
+      transform: rotate(-45deg);
+    }
+
+    .time-ring-text {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .time-label {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .start-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: white;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-teal);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .start-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Timeline Container */
+    .timeline-container {
+      padding: 32px;
+      background: linear-gradient(180deg, #FAFBFC 0%, white 100%);
+    }
+
+    /* Timeline Track */
+    .timeline-track {
+      position: relative;
+      padding: 20px 0 40px;
+    }
+
+    /* The main track line */
+    .track-line {
+      position: absolute;
+      top: 45px;
+      left: 40px;
+      right: 40px;
+      height: 4px;
+      background: var(--border-light);
+      border-radius: 2px;
+    }
+
+    .track-line-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary-teal), var(--accent-blue));
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    /* Time markers above the line */
+    .time-markers {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      margin-bottom: 32px;
+    }
+
+    .time-marker {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Stops container */
+    .timeline-stops {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    /* Individual stop */
+    .timeline-stop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 120px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-stop:hover {
+      transform: translateY(-4px);
+    }
+
+    .timeline-stop:hover .stop-node {
+      transform: scale(1.1);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    /* The circular node on the track */
+    .stop-node {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      z-index: 2;
+    }
+
+    .stop-node svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text-muted);
+    }
+
+    /* Colored variants */
+    .timeline-stop[data-type="spaced"] .stop-node {
+      border-color: var(--accent-purple);
+      background: var(--accent-purple-light);
+    }
+    .timeline-stop[data-type="spaced"] .stop-node svg {
+      color: var(--accent-purple);
+    }
+
+    .timeline-stop[data-type="new"] .stop-node {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue-light);
+    }
+    .timeline-stop[data-type="new"] .stop-node svg {
+      color: var(--accent-blue);
+    }
+
+    .timeline-stop[data-type="wrong"] .stop-node {
+      border-color: var(--accent-orange);
+      background: var(--accent-orange-light);
+    }
+    .timeline-stop[data-type="wrong"] .stop-node svg {
+      color: var(--accent-orange);
+    }
+
+    /* Completed state */
+    .timeline-stop.completed .stop-node {
+      background: var(--primary-teal);
+      border-color: var(--primary-teal);
+    }
+    .timeline-stop.completed .stop-node svg {
+      color: white;
+    }
+
+    /* Active state */
+    .timeline-stop.active .stop-node {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(38, 181, 166, 0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(38, 181, 166, 0); }
+    }
+
+    /* Stop content below node */
+    .stop-content {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .stop-type {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-stop[data-type="spaced"] .stop-type { color: var(--accent-purple); }
+    .timeline-stop[data-type="new"] .stop-type { color: var(--accent-blue); }
+    .timeline-stop[data-type="wrong"] .stop-type { color: var(--accent-orange); }
+
+    .stop-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .stop-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Section Legend */
+    .section-legend {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 24px 32px;
+      border-top: 1px solid var(--border-light);
+      background: white;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.purple { background: var(--accent-purple); }
+    .legend-dot.blue { background: var(--accent-blue); }
+    .legend-dot.orange { background: var(--accent-orange); }
+
+    .legend-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .legend-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Expanded Stop Panel */
+    .stop-panel {
+      display: none;
+      padding: 24px 32px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-page);
+      animation: slideDown 0.3s ease;
+    }
+
+    .stop-panel.visible {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .panel-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .panel-close:hover {
+      background: var(--border-light);
+    }
+
+    .panel-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .panel-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+    }
+
+    .panel-item-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .panel-item-time {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* In Progress State */
+    .journey-card.in-progress .journey-header {
+      background: linear-gradient(135deg, #1D9A8D 0%, #167A70 100%);
+    }
+
+    .continue-indicator {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .journey-card.in-progress .continue-indicator {
+      display: flex;
+    }
+
+    /* Completed State */
+    .win-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .win-state.visible {
+      display: flex;
+    }
+
+    .win-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-teal), var(--accent-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      animation: celebrateBounce 0.6s ease;
+    }
+
+    @keyframes celebrateBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .win-icon svg {
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
+
+    .win-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .win-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .win-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .win-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border: 2px solid var(--border-light);
+      border-radius: 12px;
+      background: white;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .win-btn:hover {
+      border-color: var(--primary-teal);
+      background: var(--primary-teal-light);
+    }
+
+    .win-btn-emoji {
+      font-size: 18px;
+    }
+
+    /* Loading States */
+    .timeline-stop.loading .stop-node {
+      background: var(--bg-page);
+      border-color: var(--border-light);
+    }
+
+    .timeline-stop.loading .stop-node::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-light);
+      border-top-color: var(--primary-teal);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .timeline-stop.loading .stop-node svg {
+      display: none;
+    }
+
+    .timeline-stop.loading .stop-content {
+      opacity: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .timeline-stops {
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: center;
+      }
+
+      .time-markers {
+        display: none;
+      }
+
+      .track-line {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-btn active" data-state="loaded">Loaded</button>
+    <button class="demo-btn" data-state="loading">Loading</button>
+    <button class="demo-btn" data-state="in-progress">In Progress</button>
+    <button class="demo-btn" data-state="completed">Completed</button>
+  </div>
+
+  <div class="container">
+    <div class="mode-toggle">
+      <button class="mode-btn active">Today's plan</button>
+      <button class="mode-btn">For you</button>
+    </div>
+
+    <div class="journey-card" id="journeyCard">
+      <!-- Header -->
+      <div class="journey-header">
+        <div class="journey-header-content">
+          <div class="journey-title-area">
+            <span class="journey-eyebrow">Based on your weekly planner</span>
+            <h1 class="journey-title">Dan's Geography Journey</h1>
+          </div>
+          <div class="journey-meta">
+            <div class="continue-indicator">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+              8 mins done • 12 mins left
+            </div>
+            <div class="journey-time">
+              <div class="time-ring">
+                <div class="time-ring-progress" id="progressRing"></div>
+                <span class="time-ring-text">20</span>
+              </div>
+              <span class="time-label">minutes<br>planned</span>
+            </div>
+            <button class="start-btn" id="startBtn">
+              Get started
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline-container" id="timelineContainer">
+        <div class="timeline-track">
+          <div class="time-markers">
+            <span class="time-marker">0 min</span>
+            <span class="time-marker">5 min</span>
+            <span class="time-marker">10 min</span>
+            <span class="time-marker">15 min</span>
+            <span class="time-marker">20 min</span>
+          </div>
+
+          <div class="track-line">
+            <div class="track-line-progress" id="trackProgress"></div>
+          </div>
+
+          <div class="timeline-stops" id="timelineStops">
+            <div class="timeline-stop" data-type="spaced" data-index="0">
+              <div class="stop-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+              <div class="stop-content">
+                <div class="stop-type">Review</div>
+                <div class="stop-title">Weather & Climate</div>
+                <div class="stop-time">~4 mins</div>
+              </div>
+            </div>
+
+            <div class="timeline-stop" data-type="spaced" data-index="1">
+              <div class="stop-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+              <div class="stop-content">
+                <div class="stop-type">Review</div>
+                <div class="stop-title">Geography Skills</div>
+                <div class="stop-time">~3 mins</div>
+              </div>
+            </div>
+
+            <div class="timeline-stop" data-type="new" data-index="2">
+              <div class="stop-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+              </div>
+              <div class="stop-content">
+                <div class="stop-type">Learn</div>
+                <div class="stop-title">Geology of the UK</div>
+                <div class="stop-time">~5 mins</div>
+              </div>
+            </div>
+
+            <div class="timeline-stop" data-type="new" data-index="3">
+              <div class="stop-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+              </div>
+              <div class="stop-content">
+                <div class="stop-type">Learn</div>
+                <div class="stop-title">Rivers & Flooding</div>
+                <div class="stop-time">~4 mins</div>
+              </div>
+            </div>
+
+            <div class="timeline-stop" data-type="wrong" data-index="4">
+              <div class="stop-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <div class="stop-content">
+                <div class="stop-type">Practice</div>
+                <div class="stop-title">8 Wrong Answers</div>
+                <div class="stop-time">~4 mins</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="section-legend" id="legend">
+        <div class="legend-item">
+          <div class="legend-dot purple"></div>
+          <span class="legend-label">Spaced review</span>
+          <span class="legend-count">2 topics</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot blue"></div>
+          <span class="legend-label">New content</span>
+          <span class="legend-count">2 topics</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot orange"></div>
+          <span class="legend-label">Wrong answers</span>
+          <span class="legend-count">8 questions</span>
+        </div>
+      </div>
+
+      <!-- Win State -->
+      <div class="win-state" id="winState">
+        <div class="win-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22,4 12,14.01 9,11.01"/>
+          </svg>
+        </div>
+        <h2 class="win-title">Journey complete!</h2>
+        <p class="win-subtitle">You've finished your Geography plan for today</p>
+        <div class="win-actions">
+          <button class="win-btn">
+            <span class="win-btn-emoji">🌸</span>
+            Take a break
+          </button>
+          <button class="win-btn">
+            <span class="win-btn-emoji">🎮</span>
+            Play a game
+          </button>
+          <button class="win-btn">
+            <span class="win-btn-emoji">📖</span>
+            Start Biology
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Demo state controls
+    const demoButtons = document.querySelectorAll('.demo-btn');
+    const journeyCard = document.getElementById('journeyCard');
+    const timelineContainer = document.getElementById('timelineContainer');
+    const legend = document.getElementById('legend');
+    const winState = document.getElementById('winState');
+    const startBtn = document.getElementById('startBtn');
+    const trackProgress = document.getElementById('trackProgress');
+    const stops = document.querySelectorAll('.timeline-stop');
+
+    function setState(state) {
+      // Reset all
+      journeyCard.classList.remove('in-progress');
+      timelineContainer.style.display = 'block';
+      legend.style.display = 'flex';
+      winState.classList.remove('visible');
+      startBtn.textContent = 'Get started';
+      trackProgress.style.width = '0%';
+
+      stops.forEach(stop => {
+        stop.classList.remove('loading', 'completed', 'active');
+      });
+
+      if (state === 'loading') {
+        stops.forEach(stop => stop.classList.add('loading'));
+      } else if (state === 'in-progress') {
+        journeyCard.classList.add('in-progress');
+        startBtn.textContent = 'Continue';
+        trackProgress.style.width = '40%';
+        stops[0].classList.add('completed');
+        stops[1].classList.add('completed');
+        stops[2].classList.add('active');
+      } else if (state === 'completed') {
+        timelineContainer.style.display = 'none';
+        legend.style.display = 'none';
+        winState.classList.add('visible');
+      }
+    }
+
+    demoButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        demoButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setState(btn.dataset.state);
+      });
+    });
+
+    // Click on stops to see details
+    stops.forEach(stop => {
+      stop.addEventListener('click', () => {
+        stops.forEach(s => s.classList.remove('active'));
+        stop.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
