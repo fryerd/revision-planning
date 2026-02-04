@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seneca — Independent Study Survey</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800&display=swap');
+/* ============================================================
+   RESET & VARIABLES
+   ============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f0f3fa;--bg-alt:#e8ebf2;--card:#ffffff;--card-hover:#f7f8fc;
+  --border:rgba(30,39,54,.1);--border-h:rgba(30,39,54,.18);
+  --t1:#1e2736;--t2:#6b7a8d;--t3:#9aa5b4;
+  --amber:#f5a623;--teal:#4ecf86;--rose:#f25c5c;--blue:#5b9bd5;--purple:#9b8fdb;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);color:var(--t1);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 30%,rgba(245,166,35,.04),transparent),
+    radial-gradient(ellipse 50% 40% at 90% 20%,rgba(45,212,191,.03),transparent),
+    radial-gradient(ellipse 60% 50% at 60% 80%,rgba(167,139,250,.025),transparent);
+}
+
+/* ============================================================
+   TOOLTIP
+   ============================================================ */
+.tip{
+  position:fixed;background:rgba(18,20,26,.96);border:1px solid var(--border);
+  color:var(--t1);padding:7px 13px;border-radius:8px;font-size:13px;
+  pointer-events:none;z-index:1000;display:none;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(11,13,18,.82);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  max-width:1080px;margin:0 auto;padding:0 24px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{font-weight:700;font-size:16px;color:var(--amber);display:flex;align-items:center;gap:10px}
+.nav-brand .sep{width:1px;height:18px;background:var(--border)}
+.nav-brand .sub{font-weight:400;font-size:13px;color:var(--t3)}
+.nav-links{display:flex;gap:22px;list-style:none}
+.nav-links a{
+  color:var(--t3);text-decoration:none;font-size:13px;font-weight:500;
+  padding-bottom:3px;border-bottom:2px solid transparent;
+  transition:color .25s,border-color .25s;
+}
+.nav-links a:hover{color:var(--t2)}
+.nav-links a.active{color:var(--t1);border-bottom-color:var(--amber)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;z-index:1;padding:90px 24px 70px;text-align:center}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--amber);
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);
+  border-radius:20px;padding:6px 18px;margin-bottom:30px;
+  opacity:0;animation:fadeUp .6s .05s ease forwards;
+}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{
+  font-weight:800;font-size:clamp(34px,4.8vw,54px);line-height:1.06;letter-spacing:-2.5px;
+  max-width:760px;margin:0 auto 16px;
+  opacity:0;animation:fadeUp .7s .12s ease forwards;
+}
+.hero>p{color:var(--t2);font-size:15px;font-weight:300;margin-bottom:50px;opacity:0;animation:fadeUp .7s .22s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* Stat cards */
+.hero-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;max-width:860px;margin:0 auto}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:28px 24px 26px;flex:1;min-width:200px;max-width:264px;
+  opacity:0;animation:fadeUp .6s ease forwards;
+  transition:border-color .3s,transform .3s,box-shadow .3s;position:relative;overflow:hidden;
+}
+.stat-card:nth-child(1){animation-delay:.24s}.stat-card:nth-child(2){animation-delay:.34s}.stat-card:nth-child(3){animation-delay:.44s}
+.stat-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.28)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card:nth-child(1)::before{background:var(--amber)}.stat-card:nth-child(2)::before{background:var(--rose)}.stat-card:nth-child(3)::before{background:var(--teal)}
+.stat-num{font-weight:800;font-size:40px;letter-spacing:-2px;line-height:1;margin-bottom:8px}
+.stat-card:nth-child(1) .stat-num{color:var(--amber)}.stat-card:nth-child(2) .stat-num{color:var(--rose)}.stat-card:nth-child(3) .stat-num{color:var(--teal)}
+.stat-num .sm{font-size:20px;letter-spacing:-1px}
+.stat-lbl{color:var(--t2);font-size:13px;line-height:1.45}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+section{position:relative;z-index:1;padding:80px 24px}
+section.alt{background:var(--bg-alt)}
+.sec{max-width:1080px;margin:0 auto}
+.sec-hd{margin-bottom:40px}
+.sec-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.sec-title{font-weight:700;font-size:28px;letter-spacing:-1px;line-height:1.2}
+.sec-desc{color:var(--t2);font-size:14px;margin-top:10px;max-width:600px;line-height:1.6}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;transition:border-color .25s}
+.card:hover{border-color:var(--border-h)}
+.card-title{font-weight:600;font-size:15px;letter-spacing:-.2px;margin-bottom:18px;color:var(--t1)}
+.card-title .dim{color:var(--t3);font-weight:400;font-size:12px}
+
+/* ============================================================
+   BAR CHART
+   ============================================================ */
+.bar{margin-bottom:14px;opacity:0;transform:translateX(-10px);transition:opacity .55s ease,transform .55s ease}
+.bar.vis{opacity:1;transform:translateX(0)}
+.bar-hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+.bar-lbl{font-size:13px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58%}
+.bar-val{font-size:12px;font-weight:600;color:var(--t2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.bar-track{height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;width:0%;transition:width 1.1s cubic-bezier(.16,1,.3,1)}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+.tabs{display:flex;gap:6px;margin-bottom:28px;background:rgba(255,255,255,.03);border-radius:11px;padding:4px;width:fit-content}
+.tab-btn{
+  background:transparent;border:none;color:var(--t2);font-family:inherit;
+  font-size:13px;font-weight:500;padding:9px 20px;border-radius:8px;
+  cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:8px;
+}
+.tab-btn:hover{color:var(--t1)}
+.tab-btn.active{background:var(--card);color:var(--t1);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.tab-btn .cnt{font-size:11px;font-weight:600;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:10px;color:var(--t3)}
+.tab-btn.active .cnt{background:rgba(245,166,35,.15);color:var(--amber)}
+.panel{display:none}.panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ============================================================
+   QUOTE CARDS
+   ============================================================ */
+.quote-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:20px;cursor:pointer;transition:border-color .22s,background .22s;
+}
+.quote-card:hover{border-color:var(--border-h);background:var(--card-hover)}
+.qmark{font-size:30px;font-weight:800;color:var(--amber);opacity:.28;line-height:1;margin-bottom:4px}
+.q-short,.q-full{font-size:13px;color:var(--t2);font-style:italic;line-height:1.55}
+.q-full{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.quote-card.open .q-short{display:none}
+.quote-card.open .q-full{display:block}
+.q-foot{display:flex;align-items:center;gap:8px;margin-top:12px}
+.q-yr{font-size:11px;font-weight:600;color:var(--amber);background:rgba(245,166,35,.1);padding:2px 9px;border-radius:6px}
+.q-more{font-size:11px;color:var(--t3);margin-left:auto;transition:color .2s}
+.quote-card:hover .q-more{color:var(--t2)}
+.quote-card.open .q-more{color:var(--amber)}
+
+/* ============================================================
+   INSIGHT BOX
+   ============================================================ */
+.insight{
+  background:linear-gradient(135deg,rgba(96,165,250,.08),rgba(167,139,250,.06));
+  border:1px solid rgba(96,165,250,.18);border-radius:14px;padding:22px 24px;
+  margin-bottom:36px;display:flex;align-items:flex-start;gap:16px;
+}
+.insight-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.insight p{font-size:14px;color:var(--t2);line-height:1.55}
+.insight strong{color:var(--t1)}
+
+/* ============================================================
+   DONUT
+   ============================================================ */
+.donut-wrap{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.donut-svg-wrap{flex-shrink:0;width:220px;height:220px;position:relative}
+.donut-svg{width:100%;height:100%}
+.donut-slice{transition:opacity .2s,filter .2s;cursor:pointer}
+.donut-slice:hover{filter:brightness(1.3)}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donut-center-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px}
+.donut-center-val{font-size:18px;font-weight:700;color:var(--t1);letter-spacing:-.5px}
+.donut-legend{display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:10px;cursor:pointer;padding:5px 8px;border-radius:8px;transition:background .2s}
+.legend-item:hover{background:rgba(255,255,255,.04)}
+.legend-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+.legend-lbl{font-size:13px;color:var(--t1);font-weight:500}
+.legend-cnt{font-size:12px;color:var(--t2);margin-left:auto;font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   LAYOUT GRIDS
+   ============================================================ */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid-barriers{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:start}
+.quote-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(max-width:700px){.grid-2,.grid-barriers{grid-template-columns:1fr}}
+
+/* ============================================================
+   COMPETITOR LEGEND
+   ============================================================ */
+.comp-legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+.comp-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2)}
+.comp-legend-dot{width:10px;height:10px;border-radius:3px}
+
+/* ============================================================
+   EASE RATING
+   ============================================================ */
+.ease-bar-wrap{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:3px;margin:16px 0 8px}
+.ease-seg{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:rgba(255,255,255,.9);border-radius:6px;cursor:default;transition:filter .2s}
+.ease-seg:hover{filter:brightness(1.2)}
+.ease-scale{display:flex;justify-content:space-between}
+.ease-scale span{font-size:11px;color:var(--t3)}
+.ease-avg{display:flex;align-items:baseline;gap:6px;margin-top:16px}
+.ease-avg-num{font-size:34px;font-weight:700;color:var(--teal);letter-spacing:-1.5px}
+.ease-avg-lbl{font-size:13px;color:var(--t2)}
+.ease-note{font-size:12px;color:var(--t3);margin-top:8px}
+
+/* ============================================================
+   DEEPER FINDINGS
+   ============================================================ */
+.findings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.finding-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:24px;transition:border-color .25s,transform .2s;position:relative;overflow:hidden;
+}
+.finding-card:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.finding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber)}
+.finding-icon{font-size:22px;margin-bottom:10px;display:block}
+.finding-card h4{font-size:15px;font-weight:600;letter-spacing:-.2px;margin-bottom:8px;color:var(--t1);line-height:1.3}
+.finding-card>p{font-size:13px;color:var(--t2);line-height:1.55;margin-bottom:14px}
+.finding-quote{background:rgba(255,255,255,.03);border-left:2px solid var(--amber);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:auto}
+.finding-quote span{font-size:12px;font-style:italic;color:var(--t2);line-height:1.5;display:block}
+.finding-quote .fq-yr{font-style:normal;font-size:11px;color:var(--t3);margin-top:4px}
+.finding-card.severity-high::before{background:var(--rose)}
+.finding-card.severity-med::before{background:var(--amber)}
+
+/* ============================================================
+   PRIORITIES
+   ============================================================ */
+.priority-card{
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:32px 28px 28px;position:relative;overflow:hidden;
+  transition:border-color .25s,transform .2s;margin-bottom:16px;
+}
+.priority-card:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.p-num{
+  position:absolute;top:-12px;right:2px;
+  font-size:100px;font-weight:800;color:rgba(255,255,255,.035);
+  letter-spacing:-6px;line-height:1;user-select:none;pointer-events:none;
+}
+.p-border{position:absolute;left:0;top:0;bottom:0;width:3px}
+.p-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 10px;border-radius:6px;margin-bottom:10px}
+.p-badge.critical{background:rgba(251,113,133,.12);color:var(--rose)}
+.p-badge.high{background:rgba(245,166,35,.12);color:var(--amber)}
+.p-badge.medium{background:rgba(96,165,250,.12);color:var(--blue)}
+.priority-card h3{font-size:18px;font-weight:600;letter-spacing:-.3px;margin-bottom:8px;color:var(--t1)}
+.priority-card>p{font-size:14px;color:var(--t2);line-height:1.55;margin-bottom:14px}
+.p-evidence{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.p-ev-tag{font-size:12px;font-weight:500;color:var(--t2);background:rgba(255,255,255,.05);padding:4px 10px;border-radius:6px}
+.p-quote{font-size:13px;font-style:italic;color:var(--t3);border-left:2px solid var(--border);padding-left:14px;line-height:1.55}
+.p-quote .p-q-yr{color:var(--t3);font-style:normal;font-size:11px;display:block;margin-top:4px}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:48px 24px;text-align:center}
+footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0 auto}
+.footer-brand{font-size:14px;font-weight:600;color:var(--amber);margin-bottom:10px}
+
+/* ============================================================
+   REVEAL ANIMATION
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+
+/* ============================================================
+   SENECA LIGHT THEME
+   ============================================================ */
+body{font-family:'Mulish',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body::before{display:none}
+.tip{background:rgba(30,39,54,.93);border:none;color:#fff;box-shadow:0 4px 16px rgba(30,39,54,.18)}
+nav{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 1px 4px rgba(30,39,54,.06)}
+.nav-brand{color:#2d3c6e}
+.nav-links a{color:var(--t2)}
+.nav-links a:hover{color:var(--t1)}
+.nav-links a.active{color:#5b6abf;border-bottom-color:#5b6abf}
+.hero{background:linear-gradient(180deg,rgba(91,106,191,.05) 0%,transparent 70%)}
+.hero-tag{color:#5b6abf;background:rgba(91,106,191,.08);border-color:rgba(91,106,191,.2)}
+.hero-tag .dot{background:#5b6abf}
+.hero h1{color:var(--t1)}
+.stat-card{box-shadow:0 2px 12px rgba(30,39,54,.06)}
+.stat-card::before{height:3px}
+.stat-card:hover{box-shadow:0 6px 24px rgba(30,39,54,.1)}
+.stat-card:nth-child(1)::before{background:var(--teal)}
+.stat-card:nth-child(1) .stat-num{color:var(--teal)}
+.stat-card:nth-child(3)::before{background:#5b6abf}
+.stat-card:nth-child(3) .stat-num{color:#5b6abf}
+.sec-tag{color:#5b6abf}
+.sec-title{color:var(--t1)}
+.card{box-shadow:0 2px 8px rgba(30,39,54,.05);transition:border-color .25s,box-shadow .25s}
+.card:hover{box-shadow:0 4px 16px rgba(30,39,54,.08)}
+.bar-track{background:rgba(30,39,54,.07)}
+.tabs{background:rgba(30,39,54,.05)}
+.tab-btn.active{box-shadow:0 2px 8px rgba(30,39,54,.1)}
+.tab-btn .cnt{background:rgba(30,39,54,.06);color:var(--t2)}
+.tab-btn.active .cnt{background:rgba(78,207,134,.15);color:#3aad6e}
+.quote-card{box-shadow:0 1px 4px rgba(30,39,54,.04);transition:border-color .22s,background .22s,box-shadow .22s}
+.quote-card:hover{box-shadow:0 3px 10px rgba(30,39,54,.07)}
+.qmark{color:#5b6abf}
+.q-yr{color:#5b6abf;background:rgba(91,106,191,.1)}
+.quote-card.open .q-more{color:#5b6abf}
+.insight{background:linear-gradient(135deg,rgba(91,155,213,.06),rgba(155,143,219,.04));border-color:rgba(91,155,213,.2)}
+.donut-slice:hover{filter:brightness(1.12)}
+.legend-item:hover{background:rgba(30,39,54,.04)}
+.ease-avg-num{color:#5b6abf}
+.finding-card{box-shadow:0 2px 8px rgba(30,39,54,.05);transition:border-color .25s,transform .2s,box-shadow .25s}
+.finding-card:hover{box-shadow:0 4px 16px rgba(30,39,54,.08)}
+.finding-card::before{height:3px;background:var(--teal)}
+.finding-quote{background:rgba(30,39,54,.03);border-left-color:#5b6abf}
+.priority-card{box-shadow:0 2px 8px rgba(30,39,54,.05);transition:border-color .25s,transform .2s,box-shadow .25s}
+.priority-card:hover{box-shadow:0 4px 16px rgba(30,39,54,.08)}
+.p-num{color:rgba(30,39,54,.04)}
+.p-badge.critical{background:rgba(242,92,92,.1)}
+.p-badge.high{background:rgba(245,166,35,.12);color:#d48a1a}
+.p-badge.medium{background:rgba(91,155,213,.1)}
+.p-ev-tag{background:rgba(30,39,54,.06)}
+.p-quote{color:var(--t2);border-left-color:var(--border-h)}
+.footer-brand{color:#2d3c6e}
+footer{background:var(--bg-alt)}
+</style>
+</head>
+<body>
+
+<!-- TOOLTIP -->
+<div class="tip" id="tip"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">Seneca<div class="sep"></div><span class="sub">Research</span></div>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#barriers">Barriers</a></li>
+      <li><a href="#competitors">Competitors</a></li>
+      <li><a href="#how">How They Study</a></li>
+      <li><a href="#likes">Likes &amp; Dislikes</a></li>
+      <li><a href="#findings">Deeper Findings</a></li>
+      <li><a href="#priorities">Priorities</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tag"><div class="dot"></div>Independent Study Survey &middot; January 2026</div>
+  <h1>What stops students from<br>studying independently on Seneca?</h1>
+  <p>Analysis of 1,305 student responses across Year 7&ndash;13</p>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-num" id="counter1">0%</div>
+      <div class="stat-lbl">already use Seneca<br>for independent study</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--rose)">#1</div>
+      <div class="stat-lbl">barrier is competing<br>homework &amp; time pressure</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="counter3">0<span class="sm">/5</span></div>
+      <div class="stat-lbl">average ease of finding<br>content to study</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     OVERVIEW
+     ============================================================ -->
+<section id="overview">
+  <div class="sec">
+    <div class="sec-hd reveal">
+      <div class="sec-tag">01 &mdash; Overview</div>
+      <h2 class="sec-title">How do students use Seneca?</h2>
+      <p class="sec-desc">Students self-reported their usage pattern. The majority already mix homework with independent study, but over a third use it for homework only or mostly &mdash; the population we most want to convert.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card reveal">
+        <div class="card-title">Usage segments</div>
+        <div class="donut-wrap">
+          <div class="donut-svg-wrap">
+            <svg class="donut-svg" id="donutSvg" viewBox="0 0 220 220"></svg>
+            <div class="donut-center">
+              <div class="donut-center-lbl" id="dcLbl">Total</div>
+              <div class="donut-center-val" id="dcVal">1,289</div>
+            </div>
+          </div>
+          <div class="donut-legend" id="donutLegend"></div>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">Year group breakdown</div>
+        <div id="yearBars"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BARRIERS
+     ============================================================ -->
+<section id="barriers" class="alt">
+  <div class="sec">
+    <div class="sec-hd reveal">
+      <div class="sec-tag">02 &mdash; Barriers</div>
+      <h2 class="sec-title">What stops students from revising independently?</h2>
+      <p class="sec-desc">Students who don't (or barely) use Seneca independently were asked why. Open-ended transcripts were themed by keyword analysis. Themes are non-mutually-exclusive.</p>
+    </div>
+    <div class="tabs reveal">
+      <button class="tab-btn active" data-tab="oh">Only Homework <span class="cnt">268 students</span></button>
+      <button class="tab-btn" data-tab="mh">Mostly Homework <span class="cnt">227 students</span></button>
+    </div>
+    <!-- Only Homework panel -->
+    <div class="panel active" id="panel-oh">
+      <div class="grid-barriers">
+        <div class="card">
+          <div class="card-title">Barrier themes <span class="dim">(178 transcripts themed)</span></div>
+          <div id="bars-oh"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:var(--t2);margin-bottom:12px;font-weight:500">Student voices</div>
+          <div class="quote-grid" id="quotes-oh"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Mostly Homework panel -->
+    <div class="panel" id="panel-mh">
+      <div class="grid-barriers">
+        <div class="card">
+          <div class="card-title">Barrier themes <span class="dim">(158 transcripts themed)</span></div>
+          <div id="bars-mh"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:var(--t2);margin-bottom:12px;font-weight:500">Student voices</div>
+          <div class="quote-grid" id="quotes-mh"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     COMPETITORS
+     ============================================================ -->
+<section id="competitors">
+  <div class="sec">
+    <div class="sec-hd reveal">
+      <div class="sec-tag">03 &mdash; Competitors</div>
+      <h2 class="sec-title">What do students use instead?</h2>
+      <p class="sec-desc">162 students shared what they use for revision alongside or instead of Seneca. 93% named at least one alternative &mdash; often more than one. Students aren't choosing a single competitor; they're assembling portfolios.</p>
+    </div>
+    <div class="insight reveal">
+      <div class="insight-icon">💡</div>
+      <p><strong>Key insight:</strong> Students aren't choosing one competitor &mdash; they're assembling revision portfolios. <strong>Cognito</strong> for video, <strong>Quizlet</strong> for self-made flashcards, <strong>PMT</strong> for past papers, Seneca for content recap. A large chunk of "competitors" (Sparx, LanguageNut, Educake) are <strong>school-mandated</strong> &mdash; students didn't choose them. They just eat into available study time. Seneca is losing to an <strong>ecosystem</strong>, not a single app.</p>
+    </div>
+    <div class="card reveal">
+      <div class="card-title">Platforms &amp; methods mentioned</div>
+      <div class="comp-legend">
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--teal)"></div>School-mandated</div>
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--blue)"></div>Digital</div>
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--amber)"></div>Physical / Traditional</div>
+        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--purple)"></div>AI tools</div>
+      </div>
+      <div id="bars-comp"></div>
+    </div>
+    <div style="margin-top:24px" class="reveal">
+      <div style="font-size:13px;color:var(--t2);margin-bottom:12px;font-weight:500">Why students prefer alternatives</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px" id="quotes-comp"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HOW THEY STUDY
+     ============================================================ -->
+<section id="how" class="alt">
+  <div class="sec">
+    <div class="sec-hd reveal">
+      <div class="sec-tag">04 &mdash; How They Study</div>
+      <h2 class="sec-title">How do independent studiers use Seneca?</h2>
+      <p class="sec-desc">Students in the Mix of both, Mostly revision, and Only revision segments (794 total) shared how they navigate, what they revise, and how easy it is to find what they need.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card reveal">
+        <div class="card-title">Do they know what to study beforehand?</div>
+        <div id="bars-intent"></div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">Go-to revision methods <span class="dim">(multi-select, 770 responses)</span></div>
+        <div id="bars-methods"></div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">Subjects they revise for <span class="dim">(425 transcripts)</span></div>
+        <div id="bars-subjects"></div>
+      </div>
+      <div class="card reveal">
+        <div class="card-title">How easy to find what you want to study?</div>
+        <div class="ease-bar-wrap" id="easeBars"></div>
+        <div class="ease-scale"><span>Very difficult</span><span>Very easy</span></div>
+        <div class="ease-avg">
+          <span class="ease-avg-num">3.84</span>
+          <span class="ease-avg-lbl">/ 5 &middot; 778 responses</span>
+        </div>
+        <p class="ease-note">28% rate findability 3/5 or below. Year 7 is lowest (3.39 avg) &mdash; Year 10 also notably low (3.57). Students without a study plan rate it 0.5 points lower on average.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LIKES & DISLIKES
+     ============================================================ -->
+<section id="likes">
+  <div class="sec">
+    <div class="sec-hd reveal">
+      <div class="sec-tag">05 &mdash; Sentiment</div>
+      <h2 class="sec-title">What works? What doesn't?</h2>
+      <p class="sec-desc">Students who use Seneca for independent study shared what keeps them coming back &mdash; and what gets in the way. 208 open-ended responses themed below.</p>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--teal);display:inline-block"></span>
+          <span style="font-size:13px;font-weight:600;color:var(--teal)">Likes</span>
+        </div>
+        <div class="card"><div id="bars-likes"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--rose);display:inline-block"></span>
+          <span style="font-size:13px;font-weight:600;color:var(--rose)">Dislikes</span>
+        </div>
+        <div class="card"><div id="bars-dislikes"></div></div>
+      </div>
+    </div>
+    <!-- Quotes row -->
+    <div class="grid-2" style="margin-top:24px">
+      <div class="reveal">
+        <div style="font-size:13px;color:var(--t2);margin-bottom:12px;font-weight:500">Why they like it</div>
+        <div class="quote-grid" id="quotes-likes"></div>
+      </div>
+      <div class="reveal">
+        <div style="font-size:13px;color:var(--t2);margin-bottom:12px;font-weight:500">What bothers them</div>
+        <div class="quote-grid" id="quotes-dislikes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DEEPER FINDINGS
+     ============================================================ -->
+<section id="findings" class="alt">
+  <div class="sec">
+    <div class="sec-hd reveal">
+      <div class="sec-tag">06 &mdash; Deeper Findings</div>
+      <h2 class="sec-title">What the data really says</h2>
+      <p class="sec-desc">These insights only surface when every transcript is read — not keyword-matched. They change the priority picture and point to product decisions, not just content gaps.</p>
+    </div>
+    <div class="findings-grid" id="findingsGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRIORITIES
+     ============================================================ -->
+<section id="priorities" class="alt">
+  <div class="sec">
+    <div class="sec-hd reveal">
+      <div class="sec-tag">07 &mdash; Recommendations</div>
+      <h2 class="sec-title">Prioritised improvements for independent study</h2>
+      <p class="sec-desc">Synthesised from barrier frequency, competitive gaps, likes/dislikes sentiment, and student quotes. Ranked by impact on converting and retaining independent studiers.</p>
+    </div>
+    <div id="priorityCards"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Seneca Research</div>
+  <p>
+    <strong style="color:var(--t2)">Methodology:</strong> 1,305 students surveyed January 2026. Open-ended responses themed via keyword analysis of raw transcripts (AI summaries used as quick-scan reference only). Barrier themes are non-mutually-exclusive &mdash; one response can match multiple themes. 16 edge-case responses with non-standard usage labels excluded from segment analysis. Survey conducted via voice/text interview with AI follow-up questions; transcripts preserved as source of truth.
+  </p>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT — ALL DATA + RENDERING
+     ============================================================ -->
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const SEGMENTS=[
+  {label:'Mix of both',count:469,color:'#4ecf86'},
+  {label:'Only homework',count:268,color:'#6366f1'},
+  {label:'Mostly homework',count:227,color:'#f5b5a0'},
+  {label:'Mostly revision',count:183,color:'#82dce8'},
+  {label:'Only revision',count:142,color:'#9b8fdb'},
+];
+const YEAR_GROUPS=[
+  {label:'Year 11 (GCSE)',count:404},{label:'Year 10',count:250},{label:'Year 7',count:249},
+  {label:'Year 9',count:168},{label:'Year 8',count:164},{label:'Year 12',count:35},{label:'Year 13',count:23},
+];
+const BARRIERS_OH=[
+  {label:'Time / Competing homework',count:32,pct:21,color:'var(--rose)'},
+  {label:'Boredom / Lack of engagement',count:25,pct:16,color:'var(--rose)'},
+  {label:'Navigation — hard to use for revision',count:24,pct:15,color:'var(--rose)'},
+  {label:'Prefers other tools or methods',count:20,pct:13,color:'var(--rose)'},
+  {label:'Paywall / Premium features',count:16,pct:10,color:'var(--rose)'},
+  {label:"Laziness / Can't be bothered",count:8,pct:5,color:'var(--rose)'},
+  {label:"Didn't know revision was possible",count:7,pct:5,color:'var(--rose)'},
+  {label:"Content doesn't match school curriculum",count:7,pct:5,color:'var(--rose)'},
+  {label:'Distractions (phone, games)',count:7,pct:5,color:'var(--rose)'},
+  {label:"Doesn't help me remember",count:5,pct:3,color:'var(--rose)'},
+  {label:'Platform feels slow / tedious',count:4,pct:3,color:'var(--rose)'},
+];
+const BARRIERS_MH=[
+  {label:'Time / Competing homework',count:49,pct:34,color:'var(--rose)'},
+  {label:'Boredom / Lack of engagement',count:19,pct:13,color:'var(--rose)'},
+  {label:'No exam-style practice / wants harder questions',count:18,pct:13,color:'var(--rose)'},
+  {label:"Navigation / Don't know how to use it",count:17,pct:12,color:'var(--rose)'},
+  {label:'Paywall / Premium features',count:15,pct:10,color:'var(--rose)'},
+  {label:'Prefers other tools',count:14,pct:10,color:'var(--rose)'},
+  {label:'Laziness',count:11,pct:8,color:'var(--rose)'},
+  {label:"Content doesn't match curriculum",count:10,pct:7,color:'var(--rose)'},
+  {label:"Didn't know revision was possible",count:8,pct:6,color:'var(--rose)'},
+  {label:'Question format too restrictive (MCQ only)',count:6,pct:4,color:'var(--rose)'},
+  {label:"Don't know what to revise / No guidance",count:5,pct:3,color:'var(--rose)'},
+];
+const QUOTES_OH=[
+  {s:"Seneca is a lovely app for revision but it is way too similar…",f:"Seneca is a lovely app for revision but it is way too similar to a student sitting and getting information then answering some questions on it. It would be better if the revision were in forms of interactive games or quests which would motivate students.",y:"Year 9"},
+  {s:"I am just kinda lazy. But if I do have a test/exam…",f:"I am just kinda lazy. But if I do have a test/exam I definitely would revise just not using Seneca. I would look at YouTube which I think is more better cause it doesn't scold you for getting wrong answers… Also some students could see Seneca as bad cause they see it as loads of homework and so evil and disgusting.",y:"Year 7"},
+  {s:"The layout of the spec can be a bit confusing…",f:"The layout of the spec can be a bit confusing as everything is crammed into the left side of the screen and moreover the different useful features e.g Amelia aren't listed in one area so they're harder to discover.",y:"Year 10"},
+  {s:"THE AMELIA AI THAT WOULD BE VERY HELPFUL TO USE, COSTS MONEY…",f:"THE AMELIA AI THAT WOULD BE VERY HELPFUL TO USE, COSTS MONEY… I always have to use ChatGPT and revise by myself which is probably better than this money costing Amelia AI.",y:"Year 7"},
+  {s:"The questions aren't made in a way that teaches me things…",f:"The questions aren't made in a way that teaches me things, but tells me something I should already know. When I try to revise new topics, it already starts asking me questions about things that I haven't learnt yet, and aren't talked about in the text.",y:"Year 10"},
+];
+const QUOTES_MH=[
+  {s:"I just never really thought about it…",f:"I just never really thought about it… when I have no homework, Seneca is usually empty. There's just nothing to do. There's no recommendations. It just shows me a leaderboard and stuff. I usually just go to Google to study because I forget Seneca isn't just for homework.",y:"Year 10"},
+  {s:"Lack of challenging questions, exam practice…",f:"Lack of challenging questions, exam practice and long term memory retention… 16 markers using PEARL layout, 12 markers, 8 markers using SIAPL.",y:"Year 10"},
+  {s:"If you guys could maybe have the student type…",f:"If you guys could maybe have the student type what he learnt on a blank page and tell what he have missed using the blurting technique study method I think it would be much better.",y:"Year 11"},
+  {s:"Before year 10, Seneca was my best friend…",f:"Before year 10, Seneca was my best friend, I would always use it to revise for all of the science subjects. So, I do know it can be incredibly helpful, but just not for GCSE content.",y:"Year 10"},
+  {s:"Low quality lessons, filled with AI slop…",f:"Low quality lessons, filled with AI slop halfbaked features. No actual useful features with bad recommendations for learning things such as English analysis. No support for learning pronunciation in GCSE French — TTS just reads in English making it harder to learn in speaking exams.",y:"Year 10"},
+];
+const COMPETITORS=[
+  {label:'Flashcards (as technique)',count:21,pct:100,color:'var(--amber)'},
+  {label:'Sparx (school-mandated)',count:21,pct:100,color:'var(--teal)'},
+  {label:'Cognito',count:18,pct:86,color:'var(--blue)'},
+  {label:'Textbooks / Revision guides',count:13,pct:62,color:'var(--amber)'},
+  {label:'Books (general)',count:13,pct:62,color:'var(--amber)'},
+  {label:'Quizlet',count:11,pct:52,color:'var(--blue)'},
+  {label:'Past papers (any source)',count:11,pct:52,color:'var(--amber)'},
+  {label:'BBC Bitesize',count:10,pct:48,color:'var(--blue)'},
+  {label:'Save My Exams',count:9,pct:43,color:'var(--blue)'},
+  {label:'YouTube',count:9,pct:43,color:'var(--blue)'},
+  {label:'LanguageNut (school-mandated)',count:8,pct:38,color:'var(--teal)'},
+  {label:'Maths Genie',count:8,pct:38,color:'var(--blue)'},
+  {label:'Paper notes / worksheets',count:8,pct:38,color:'var(--amber)'},
+  {label:'Educake (school-assigned)',count:7,pct:33,color:'var(--teal)'},
+  {label:'PMT',count:6,pct:29,color:'var(--blue)'},
+  {label:'MathsWatch',count:6,pct:29,color:'var(--blue)'},
+  {label:'Gizmo',count:5,pct:24,color:'var(--blue)'},
+  {label:'CGP Books',count:4,pct:19,color:'var(--amber)'},
+  {label:'AI tools (ChatGPT, Copilot…)',count:3,pct:14,color:'var(--purple)'},
+];
+const QUOTES_COMP=[
+  {s:"I can see what is happening rather than just reading…",f:"Cognito is amazing — I can see what is happening rather than just reading. The topic layout is simpler than Seneca and it stays in my long-term memory better because of the video lessons.",y:"Year 11"},
+  {s:"More questions and less multiple choice…",f:"Quizlet, Languagenut, Mathswatch, Kerboodle, Cognito, Savemyexams. They help more in the sense of more questions and less multiple choice, but I like that Seneca can help with very quick recaps and revision, especially cramming.",y:"Year 11"},
+  {s:"Simple and to the point and its got a person explaining it…",f:"I use YouTube because it is simple and to the point and its got a person explaining it. Visual learners like me find it easier to understand things when someone is showing me rather than just text on a screen.",y:"Year 10"},
+  {s:"I can create my own revision based on topics I have studied in class…",f:"I use Quizlet because I can create my own revision based on topics I have studied in class. Quick and easy to paste words and it actually matches what my teacher teaches us.",y:"Year 9"},
+];
+const STUDY_INTENT=[
+  {label:'Know what to study before opening',count:430,pct:57,color:'var(--teal)'},
+  {label:'Use Seneca to help decide',count:198,pct:26,color:'var(--amber)'},
+  {label:"Don't know — just open Seneca",count:128,pct:17,color:'var(--rose)'},
+];
+const REVISION_METHODS=[
+  {label:'Pick topics in sidebar',count:515,pct:67,color:'var(--blue)'},
+  {label:'Spaced-repetition recap',count:366,pct:48,color:'var(--teal)'},
+  {label:'Exam questions',count:326,pct:42,color:'var(--amber)'},
+  {label:'Cram mode',count:294,pct:38,color:'var(--purple)'},
+  {label:'Wrong answer mode',count:144,pct:19,color:'var(--rose)'},
+];
+const SUBJECTS=[
+  {label:'Science (general / combined)',count:159,pct:37,color:'var(--blue)'},
+  {label:'English',count:72,pct:17,color:'var(--blue)'},
+  {label:'Maths',count:71,pct:17,color:'var(--blue)'},
+  {label:'Geography',count:63,pct:15,color:'var(--blue)'},
+  {label:'History',count:60,pct:14,color:'var(--blue)'},
+  {label:'GCSEs (no subject named)',count:59,pct:14,color:'var(--blue)'},
+  {label:'Biology',count:46,pct:11,color:'var(--blue)'},
+  {label:'Chemistry',count:45,pct:11,color:'var(--blue)'},
+  {label:'Physics',count:39,pct:9,color:'var(--blue)'},
+  {label:'Computer Science',count:31,pct:7,color:'var(--blue)'},
+  {label:'RE / Religious Studies',count:30,pct:7,color:'var(--blue)'},
+  {label:'English Literature',count:23,pct:5,color:'var(--blue)'},
+  {label:'French',count:16,pct:4,color:'var(--blue)'},
+  {label:'Spanish',count:14,pct:3,color:'var(--blue)'},
+];
+const LIKES=[
+  {label:'Gamification / Memes / Rewards',count:75,pct:36,color:'var(--teal)'},
+  {label:'Active recall / Quizzes',count:61,pct:29,color:'var(--teal)'},
+  {label:'Covers full syllabus / Trustworthy',count:49,pct:24,color:'var(--teal)'},
+  {label:'Explains wrong answers',count:22,pct:11,color:'var(--teal)'},
+  {label:'Structured / Organised topics',count:20,pct:10,color:'var(--teal)'},
+  {label:'Easy to use / Simple',count:19,pct:9,color:'var(--teal)'},
+  {label:'Concise / Summarised notes',count:18,pct:9,color:'var(--teal)'},
+  {label:'Free / Accessible',count:16,pct:8,color:'var(--teal)'},
+  {label:'Variety of revision methods',count:13,pct:6,color:'var(--teal)'},
+  {label:'Spaced repetition / Recap',count:8,pct:4,color:'var(--teal)'},
+];
+const DISLIKES=[
+  {label:'Paywall blocks exam prep features',count:32,pct:15,color:'var(--rose)'},
+  {label:'Missing topics / Content gaps',count:25,pct:12,color:'var(--rose)'},
+  {label:'No exam-style / long-mark questions',count:25,pct:12,color:'var(--rose)'},
+  {label:'Questions too easy / not challenging',count:19,pct:9,color:'var(--rose)'},
+  {label:'Questions too repetitive',count:16,pct:8,color:'var(--rose)'},
+  {label:'Content too shallow / not detailed',count:16,pct:8,color:'var(--rose)'},
+  {label:'Synonym / marking errors',count:10,pct:5,color:'var(--rose)'},
+  {label:'Hard to find / navigate content',count:9,pct:4,color:'var(--rose)'},
+  {label:'Outdated content',count:6,pct:3,color:'var(--rose)'},
+  {label:'Auto-complete gives away answers',count:5,pct:2,color:'var(--rose)'},
+];
+const QUOTES_LIKES=[
+  {s:"The funny and inspiring comments actually help to romanticize study…",f:"The funny and inspiring comments that you get in quizzes, they actually help to romanticize study. The memes on it are really enticing and the leaderboard makes me feel competitive and motivates me more.",y:"Year 10"},
+  {s:"I use Seneca for content lock-in, then Anki, then exam technique…",f:"Personally, I like Seneca Learning because it uses spaced repetition and active recall to target my weaknesses, making it effective for GCSE revision. It helps me quickly relearn and recap content so I can lock in knowledge before using Anki and practising exam technique for a grade 9.",y:"Year 11"},
+  {s:"It helps me active recall everything and includes everything in one website…",f:"It helps me active recall everything and includes everything in just one website. I would prefer for you to add more geography case studies but overall it is brilliant for revision.",y:"Year 11"},
+];
+const QUOTES_DISLIKES=[
+  {s:"It feels like I'm memorising the questions, rather than the content…",f:"I don't like how the sections are pretty repetitive. It feels like I'm memorising the questions that come up, rather than the content. The questions need to be more varied so you actually learn.",y:"Year 11"},
+  {s:"I can't reach my full potential due to the stuff I can't afford…",f:"I disliked that they make you pay for a lot of things. I feel as if I can't reach my full potential due to the stuff I can't afford — while I am not poor, I feel as if I need to spend my money on other, more beneficial stuff.",y:"Year 10"},
+  {s:"In biology I typed the correct answer and it corrected me with the same answer…",f:"In biology i typed 'rejection isnt possible' in one of stem cell advantages and it corrected me with the same answer. This has happened multiple times and it is really frustrating when you know the answer is right.",y:"Year 11"},
+];
+const EASE=[
+  {score:1,count:15,pct:1.9,color:'#e11d48'},
+  {score:2,count:43,pct:5.5,color:'#e8505e'},
+  {score:3,count:176,pct:22.6,color:'#6b7280'},
+  {score:4,count:360,pct:46.3,color:'#0e9585'},
+  {score:5,count:184,pct:23.7,color:'#1a9e6e'},
+];
+const FINDINGS=[
+  {icon:'🎥',sev:'high',title:'Video is the single biggest content gap',
+   desc:'Cognito (18 mentions) dominates the competitor list specifically because of video. YouTube (9) is cited for the same reason. 27 students, all citing the same missing feature. Seneca has no video. This is not a minor gap.',
+   quote:"I can see what is happening rather than just reading. The topic layout is simpler than Seneca and it stays in my long-term memory better because of the video lessons.",qy:"Year 11"},
+  {icon:'📭',sev:'high',title:'The "empty state" — homepage offers nothing when no homework is due',
+   desc:"When no homework is due, the homepage shows a leaderboard and nothing else. No recommendations. No 'here's what to do next.' Students forget the platform can do anything beyond homework. This is the clearest single product fix in the data.",
+   quote:"Seneca is usually empty… theres just nothing to do. Theres no recommendations. It just shows me a leaderboard and stuff and I feel that the self revision part just slips out of my mind.",qy:"Year 10"},
+  {icon:'🤖',sev:'high',title:'Amelia AI: most wanted AND most resented feature',
+   desc:"Students who've seen it want it badly. The paywall on it generates fury from Year 7 students in particular — one capitalised their entire complaint. It is actively poisoning sentiment among the youngest cohort.",
+   quote:"THE AMELIA AI THAT WOULD BE VERY HELPFUL TO USE, COSTS MONEY. MAYBE MAKE IT FREE… I always have to use ChatGPT and revise by myself which is probably better than this money costing Amelia AI.",qy:"Year 7"},
+  {icon:'🔄',sev:'med',title:'Infinite retries are undermining learning',
+   desc:'Students can scroll back to the notes directly above and copy answers. One student flagged this as cheating. Another described doing it habitually. The unlimited retry + visible notes combination is short-circuiting the active recall loop — which is the feature students themselves value most.',
+   quote:"It doesnt help cause i can just cheat my way through like looking back at the start notes. I feel I shouldnt but I still do.",qy:"Year 10"},
+  {icon:'✖️',sev:'high',title:'Synonym marking errors are dealbreakers',
+   desc:"10 students reported this. Every single one was specific and frustrated. One gave a reproducible biology example. In an active-recall platform, being told you're wrong when you're right doesn't just frustrate — it teaches the wrong lesson.",
+   quote:"In biology i typed 'rejection isnt possible' in one of stem cell advantages and it corrected me with the same answer. This has happened multiple times.",qy:"Year 11"},
+  {icon:'📚',sev:'med',title:"Students aren't choosing one tool — they're building portfolios",
+   desc:"One Year 11 student explicitly described a 3-stage pipeline: Seneca for content lock-in, then Anki for drilling, then separate exam technique practice. Seneca occupies a valued but narrow niche. The competitive threat isn't one app — it's an ecosystem.",
+   quote:"I use Seneca for content lock-in, then Anki for flashcard drilling, then separate exam technique practice for a grade 9.",qy:"Year 11"},
+  {icon:'⚖️',sev:'high',title:'Paywall complaints are equity arguments, not price complaints',
+   desc:'Multiple students independently arrived at the same structure: acknowledge Seneca needs revenue, identify the paywall as the specific barrier, propose a concrete solution (daily free allowance, one mock per month). This is organised, principled, and hard to dismiss.',
+   quote:"I acknowledge money has to be made — but the main thing preventing usage is the paywall for that specific feature. It would be appreciated if even just a couple of mini-mocks were provided for free daily.",qy:"Year 10"},
+  {icon:'📝',sev:'med',title:'Notes visible during questions defeats active recall',
+   desc:'Questions sit directly below the notes. Students scroll up. This undermines the mechanism students say they value most — a direct tension in the product design.',
+   quote:"The questions are a bit pointless — they pretty much are word for word from the notes at the top. They need to be different, maybe applied knowledge in places.",qy:"Year 10"},
+  {icon:'😵',sev:'med',title:'"Lazy" students are actually overwhelmed, not disengaged',
+   desc:'Students who say "can\'t be bothered" often elaborate to reveal they don\'t know what to revise, or feel paralysed by too many options. The fix isn\'t more content — it\'s a guided entry point.',
+   quote:"I am just kinda lazy. But if I do have a test/exam I definitely would revise just not using Seneca. I would look at YouTube which I think is more better cause it doesn't scold you for getting wrong answers.",qy:"Year 7"},
+  {icon:'🏷️',sev:'high',title:'The "homework" brand association is actively poisonous',
+   desc:"This isn't a UX problem or a content problem. Students have learned that opening Seneca = doing something they were told to do. That association is extremely hard to break and it's the single biggest perception barrier across both non-studier segments.",
+   quote:"I don't revise that much and when I do Seneca doesn't come to mind as I see it as more of a compulsory homework website even though maybe its really good for revision.",qy:"Year 9"},
+];
+const PRIORITIES=[
+  {num:'01',badge:'Critical',bc:'critical',border:'var(--rose)',
+   title:'Fix the empty state / homepage',
+   desc:'When no homework is set, the homepage shows just a leaderboard. No recommendations, no "what to do next." Students forget the platform can do revision at all. This is the most concrete single product fix in the data.',
+   ev:['Students say "Seneca is usually empty"','No recommendations when homework is done','Clearest single product fix identified','Directly causes revision drop-off'],
+   q:"I just never really thought about it… when I have no homework, Seneca is usually empty. There's just nothing to do. There's no recommendations. It just shows me a leaderboard and stuff.",qy:"Year 10"},
+  {num:'02',badge:'Critical',bc:'critical',border:'var(--rose)',
+   title:'Fix navigation for Year 7–8',
+   desc:'Navigation is both a top barrier for non-studiers and a key dislike from current studiers. Year 7 rates findability lowest (3.39/5). Year 10 is also notably low (3.57). 28% of independent studiers rate findability 3 or below.',
+   ev:['15% cite navigation (Only HW)','12% cite navigation (Mostly HW)','Year 7 findability: 3.39 / 5','28% rate findability ≤ 3/5'],
+   q:"The layout of the spec can be a bit confusing as everything is crammed into the left side of the screen and moreover the different useful features e.g Amelia aren't listed in one area so they're harder to discover.",qy:"Year 10"},
+  {num:'03',badge:'High',bc:'high',border:'var(--amber)',
+   title:'Reduce paywall friction on exam features',
+   desc:'Students aren\'t upgrading — they\'re leaving to PMT and Save My Exams. The paywall is generating churn, not revenue from this cohort. Students independently propose concrete alternatives: daily free allowance, one mock per month.',
+   ev:['10% cite paywall (Only HW)','10% cite paywall (Mostly HW)','Paywall = #1 dislike (32 mentions)','Students propose concrete alternatives'],
+   q:"I acknowledge money has to be made — but the main thing preventing usage is the paywall for that specific feature. It would be appreciated if even just a couple of mini-mocks were provided for free daily.",qy:"Year 10"},
+  {num:'04',badge:'High',bc:'high',border:'var(--amber)',
+   title:'Add exam-style extended response questions',
+   desc:'Multiple choice and fill-in-the-blank don\'t match actual GCSE exam formats — particularly for History (essays), English, and Sciences. Competitors like past papers and Save My Exams are preferred precisely for realistic practice. A dealbreaker for GCSE prep.',
+   ev:['13% want harder questions (Mostly HW)','No exam-style = dealbreaker (25 mentions)','Competitors preferred for "realistic practice"','Students want essays & extended responses'],
+   q:"Lack of challenging questions, exam practice and long term memory retention… 16 markers using PEARL layout, 12 markers, 8 markers using SIAPL.",qy:"Year 10"},
+  {num:'05',badge:'High',bc:'high',border:'var(--amber)',
+   title:'Fix synonym marking errors',
+   desc:'10 students reported being marked wrong for correct synonyms. Every single one was specific and frustrated — one gave a reproducible biology example. In an active-recall platform, false negatives don\'t just frustrate — they teach the wrong lesson. Highest frustration-per-mention in the dataset.',
+   ev:['10 specific, reproducible reports','Corrupts the core learning mechanism','Highest frustration-per-mention','One gave word-for-word biology example'],
+   q:"In biology i typed 'rejection isnt possible' in one of stem cell advantages and it corrected me with the same answer. This has happened multiple times and it is really frustrating.",qy:"Year 11"},
+  {num:'06',badge:'High',bc:'high',border:'var(--amber)',
+   title:'Address the infinite retry / notes-visible tension',
+   desc:'Questions sit directly below the notes. Students scroll up and copy answers. The unlimited retry + visible notes combination is short-circuiting the active recall loop — which is the feature students themselves value most.',
+   ev:['Students scroll up to copy answers','Undermines active recall (top-liked feature)','One student flagged it as "cheating"','Product design flaw, not a content issue'],
+   q:"It doesnt help cause i can just cheat my way through like looking back at the start notes. I feel I shouldnt but I still do.",qy:"Year 10"},
+  {num:'07',badge:'Medium',bc:'medium',border:'var(--blue)',
+   title:'Consider video content — the biggest single content gap',
+   desc:'Cognito (18 mentions) is the most-cited digital competitor — nearly every mention names video lessons as the reason. YouTube (9) is cited for the same. 27 students independently cite the same missing feature. Expensive decision, but the data is unambiguous.',
+   ev:['Cognito cited 18× for video lessons','YouTube cited 9× for same reason','27 students cite video as missing','Most-cited content gap overall'],
+   q:"I can see what is happening rather than just reading. The topic layout is simpler than Seneca and it stays in my long-term memory better because of the video lessons.",qy:"Year 11"},
+  {num:'08',badge:'Medium',bc:'medium',border:'var(--blue)',
+   title:'Build a revision planner / recommendation engine',
+   desc:'43% of independent studiers don\'t arrive knowing what to revise — 17% just open Seneca with no plan. A structured planner tied to upcoming exams or weak areas could convert passive browsers into active revisers.',
+   ev:['17% "don\'t know — just open Seneca"','26% use Seneca to help decide','Uncertain students rate findability 0.5pts lower','Structure converts browsers into revisers'],
+   q:"I don't know what I want to study… should I revise for my GCSEs in yr 9.",qy:"Year 9"},
+];
+
+// ============================================================
+// RENDER: BARS
+// ============================================================
+function renderBars(id,data){
+  document.getElementById(id).innerHTML=data.map((d,i)=>`
+    <div class="bar" style="transition-delay:${i*.07}s">
+      <div class="bar-hd">
+        <span class="bar-lbl">${d.label}</span>
+        <span class="bar-val">${d.count} · ${d.pct}%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" data-w="${d.pct}" style="background:${d.color||'var(--blue)'}"></div></div>
+    </div>`).join('');
+}
+
+// ============================================================
+// RENDER: QUOTES
+// ============================================================
+function renderQuotes(id,arr){
+  document.getElementById(id).innerHTML=arr.map(q=>`
+    <div class="quote-card" onclick="this.classList.toggle('open')">
+      <div class="qmark">"</div>
+      <p class="q-short">${q.s}</p>
+      <p class="q-full">${q.f}</p>
+      <div class="q-foot"><span class="q-yr">${q.y}</span><span class="q-more">tap to expand</span></div>
+    </div>`).join('');
+}
+
+// ============================================================
+// RENDER: DONUT
+// ============================================================
+function renderDonut(){
+  const svg=document.getElementById('donutSvg');
+  const legend=document.getElementById('donutLegend');
+  const total=SEGMENTS.reduce((s,d)=>s+d.count,0);
+  const cx=110,cy=110,oR=95,iR=58;
+  let sa=-Math.PI/2,paths='';
+  SEGMENTS.forEach((seg,i)=>{
+    const a=(seg.count/total)*2*Math.PI, ea=sa+a;
+    const x1=cx+oR*Math.cos(sa),y1=cy+oR*Math.sin(sa);
+    const x2=cx+oR*Math.cos(ea),y2=cy+oR*Math.sin(ea);
+    const ix1=cx+iR*Math.cos(ea),iy1=cy+iR*Math.sin(ea);
+    const ix2=cx+iR*Math.cos(sa),iy2=cy+iR*Math.sin(sa);
+    const lg=a>Math.PI?1:0;
+    paths+=`<path class="donut-slice" data-i="${i}" d="M${x1} ${y1} A${oR} ${oR} 0 ${lg} 1 ${x2} ${y2} L${ix1} ${iy1} A${iR} ${iR} 0 ${lg} 0 ${ix2} ${iy2}Z" fill="${seg.color}" stroke="#ffffff" stroke-width="3"/>`;
+    sa=ea;
+  });
+  svg.innerHTML=paths;
+  legend.innerHTML=SEGMENTS.map((seg,i)=>`
+    <div class="legend-item" data-i="${i}">
+      <div class="legend-dot" style="background:${seg.color}"></div>
+      <span class="legend-lbl">${seg.label}</span>
+      <span class="legend-cnt">${seg.count} (${(seg.count/total*100).toFixed(1)}%)</span>
+    </div>`).join('');
+  // Interactions
+  const slices=svg.querySelectorAll('.donut-slice');
+  const items=legend.querySelectorAll('.legend-item');
+  const lbl=document.getElementById('dcLbl'),val=document.getElementById('dcVal');
+  function hi(i){
+    slices.forEach((s,j)=>s.style.opacity=(i===null||i===j)?'1':'0.3');
+    items.forEach((l,j)=>l.style.opacity=(i===null||i===j)?'1':'0.45');
+    if(i!==null){lbl.textContent=SEGMENTS[i].label;val.textContent=`${SEGMENTS[i].count} (${(SEGMENTS[i].count/total*100).toFixed(1)}%)`}
+    else{lbl.textContent='Total';val.textContent=total.toLocaleString()}
+  }
+  slices.forEach((s,i)=>{s.onmouseenter=()=>hi(i);s.onmouseleave=()=>hi(null)});
+  items.forEach((l,i)=>{l.onmouseenter=()=>hi(i);l.onmouseleave=()=>hi(null)});
+}
+
+// ============================================================
+// RENDER: EASE BAR
+// ============================================================
+function renderEase(){
+  document.getElementById('easeBars').innerHTML=EASE.map(r=>`
+    <div class="ease-seg" style="flex-grow:${r.pct};background:${r.color}" data-tip="${r.score} star${r.score>1?'s':''}: ${r.count} students (${r.pct}%)">
+      <span>${r.pct>4?r.score:''}</span>
+    </div>`).join('');
+  document.querySelectorAll('.ease-seg').forEach(s=>{
+    s.onmouseenter=e=>showTip(e,s.dataset.tip);
+    s.onmousemove=moveTip;
+    s.onmouseleave=hideTip;
+  });
+}
+
+// ============================================================
+// RENDER: PRIORITIES
+// ============================================================
+function renderPriorities(){
+  document.getElementById('priorityCards').innerHTML=PRIORITIES.map(p=>`
+    <div class="priority-card reveal">
+      <div class="p-num">${p.num}</div>
+      <div class="p-border" style="background:${p.border}"></div>
+      <span class="p-badge ${p.bc}">${p.badge}</span>
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+      <div class="p-evidence">${p.ev.map(e=>`<span class="p-ev-tag">${e}</span>`).join('')}</div>
+      <div class="p-quote">${p.q}<span class="p-q-yr">— ${p.qy}</span></div>
+    </div>`).join('');
+}
+
+// ============================================================
+// RENDER: FINDINGS
+// ============================================================
+function renderFindings(){
+  document.getElementById('findingsGrid').innerHTML=FINDINGS.map(f=>`
+    <div class="finding-card severity-${f.sev} reveal">
+      <span class="finding-icon">${f.icon}</span>
+      <h4>${f.title}</h4>
+      <p>${f.desc}</p>
+      <div class="finding-quote">
+        <span>"${f.quote}"</span>
+        <span class="fq-yr">— ${f.qy}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// TOOLTIP
+// ============================================================
+const tip=document.getElementById('tip');
+function showTip(e,t){tip.textContent=t;tip.style.display='block';moveTip(e)}
+function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-34)+'px'}
+function hideTip(){tip.style.display='none'}
+function addBarTips(id){
+  document.querySelectorAll('#'+id+' .bar').forEach(b=>{
+    const l=b.querySelector('.bar-lbl')?.textContent||'';
+    const v=b.querySelector('.bar-val')?.textContent||'';
+    b.onmouseenter=e=>showTip(e,l+': '+v);
+    b.onmousemove=moveTip;
+    b.onmouseleave=hideTip;
+  });
+}
+
+// ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    setTimeout(triggerAllBars,80);
+  };
+});
+
+// ============================================================
+// SCROLL ANIMATIONS
+// ============================================================
+// Reveal sections
+new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+},{threshold:.12}).observe && document.querySelectorAll('.reveal').forEach(el=>{
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+  },{threshold:.12}).observe(el);
+});
+
+// Animate bars when card scrolls in
+function triggerBarsIn(container){
+  container.querySelectorAll('.bar').forEach((bar,i)=>{
+    if(bar.classList.contains('vis'))return;
+    const fill=bar.querySelector('.bar-fill');
+    setTimeout(()=>{
+      bar.classList.add('vis');
+      if(fill)fill.style.width=fill.dataset.w+'%';
+    },i*70);
+  });
+}
+function triggerAllBars(){
+  document.querySelectorAll('.card,.panel').forEach(c=>triggerBarsIn(c));
+}
+new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)triggerBarsIn(e.target)});
+},{threshold:.08}).observe && document.querySelectorAll('.card,.panel').forEach(el=>{
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)triggerBarsIn(e.target)});
+  },{threshold:.08}).observe(el);
+});
+
+// ============================================================
+// NAV ACTIVE STATE
+// ============================================================
+document.querySelectorAll('section[id]').forEach(s=>{
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+        const link=document.querySelector('.nav-links a[href="#'+e.target.id+'"]');
+        if(link)link.classList.add('active');
+      }
+    });
+  },{rootMargin:'-38% 0px -55% 0px'}).observe(s);
+});
+
+// ============================================================
+// HERO COUNTER ANIMATION
+// ============================================================
+function animateCount(el,target,dur=1300){
+  const isFloat=String(target).includes('.');
+  const unit=isFloat?'':'%';
+  const suffix=isFloat?'<span class="sm">/5</span>':'';
+  const start=performance.now();
+  (function step(now){
+    const p=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    const v=isFloat?(target*ease).toFixed(2):Math.round(target*ease);
+    el.innerHTML=v+unit+suffix;
+    if(p<1)requestAnimationFrame(step);
+  })(start);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(function(){
+  // Year group bars: convert count to pct of 1305
+  const ygData=YEAR_GROUPS.map(d=>({...d,pct:Math.round(d.count/1305*100),color:'var(--blue)'}));
+
+  renderDonut();
+  renderBars('yearBars',ygData);
+  renderBars('bars-oh',BARRIERS_OH);
+  renderBars('bars-mh',BARRIERS_MH);
+  renderQuotes('quotes-oh',QUOTES_OH);
+  renderQuotes('quotes-mh',QUOTES_MH);
+  renderBars('bars-comp',COMPETITORS);
+  renderQuotes('quotes-comp',QUOTES_COMP);
+  renderBars('bars-intent',STUDY_INTENT);
+  renderBars('bars-methods',REVISION_METHODS);
+  renderBars('bars-subjects',SUBJECTS);
+  renderBars('bars-likes',LIKES);
+  renderBars('bars-dislikes',DISLIKES);
+  renderQuotes('quotes-likes',QUOTES_LIKES);
+  renderQuotes('quotes-dislikes',QUOTES_DISLIKES);
+  renderEase();
+  renderFindings();
+  renderPriorities();
+
+  // Observe dynamically-rendered reveal cards (findings + priorities)
+  document.querySelectorAll('#findingsGrid .reveal,#priorityCards .reveal').forEach(el=>{
+    new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+    },{threshold:.12}).observe(el);
+  });
+
+  // Add tooltips to all bar charts
+  ['yearBars','bars-oh','bars-mh','bars-comp','bars-intent','bars-methods','bars-subjects','bars-likes','bars-dislikes'].forEach(addBarTips);
+
+  // Hero counters
+  animateCount(document.getElementById('counter1'),61);
+  animateCount(document.getElementById('counter3'),3.84);
+
+  // Initial trigger for visible bars
+  setTimeout(triggerAllBars,200);
+})();
+</script>
+</body>
+</html>
