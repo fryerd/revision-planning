@@ -261,9 +261,9 @@ section.alt{background:var(--bg-alt)}
 }
 .p-border{position:absolute;left:0;top:0;bottom:0;width:3px}
 .p-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 10px;border-radius:6px;margin-bottom:10px}
-.p-badge.critical{background:rgba(251,113,133,.12);color:var(--rose)}
-.p-badge.high{background:rgba(245,166,35,.12);color:var(--amber)}
-.p-badge.medium{background:rgba(96,165,250,.12);color:var(--blue)}
+.p-badge.high{background:rgba(251,113,133,.12);color:var(--rose)}
+.p-badge.medium{background:rgba(245,166,35,.12);color:var(--amber)}
+.p-badge.low{background:rgba(96,165,250,.12);color:var(--blue)}
 .priority-card h3{font-size:18px;font-weight:600;letter-spacing:-.3px;margin-bottom:8px;color:var(--t1)}
 .priority-card>p{font-size:14px;color:var(--t2);line-height:1.55;margin-bottom:14px}
 .p-evidence{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
@@ -331,13 +331,24 @@ nav{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow
 .priority-card{box-shadow:0 2px 8px rgba(30,39,54,.05);transition:border-color .25s,transform .2s,box-shadow .25s}
 .priority-card:hover{box-shadow:0 4px 16px rgba(30,39,54,.08)}
 .p-num{color:rgba(30,39,54,.04)}
-.p-badge.critical{background:rgba(242,92,92,.1)}
-.p-badge.high{background:rgba(245,166,35,.12);color:#d48a1a}
-.p-badge.medium{background:rgba(91,155,213,.1)}
+.p-badge.high{background:rgba(242,92,92,.1);color:var(--rose)}
+.p-badge.medium{background:rgba(245,166,35,.12);color:#d48a1a}
+.p-badge.low{background:rgba(91,155,213,.1);color:var(--blue)}
 .p-ev-tag{background:rgba(30,39,54,.06)}
 .p-quote{color:var(--t2);border-left-color:var(--border-h)}
 .footer-brand{color:#2d3c6e}
 footer{background:var(--bg-alt)}
+/* Scroll snap */
+html{scroll-snap-type:y proximity;scroll-padding-top:56px}
+header.hero,section,footer{scroll-snap-align:start}
+/* Smoother tab panel animation */
+.panel.active{animation:panelIn .38s cubic-bezier(.4,0,.2,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* Collapsible cards */
+.card[data-collapsible]{max-height:210px;overflow:hidden;position:relative;cursor:pointer;transition:max-height .45s cubic-bezier(.4,0,.2,1),opacity .6s ease,transform .6s ease,border-color .25s,box-shadow .25s}
+.card[data-collapsible]::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(to top,var(--card),transparent);pointer-events:none;transition:opacity .35s}
+.card[data-collapsible].expanded{max-height:2000px}
+.card[data-collapsible].expanded::after{opacity:0}
 </style>
 </head>
 <body>
@@ -471,19 +482,21 @@ footer{background:var(--bg-alt)}
       <div class="insight-icon">💡</div>
       <p><strong>Key insight:</strong> Students aren't choosing one competitor &mdash; they're assembling revision portfolios. <strong>Cognito</strong> for video, <strong>Quizlet</strong> for self-made flashcards, <strong>PMT</strong> for past papers, Seneca for content recap. A large chunk of "competitors" (Sparx, LanguageNut, Educake) are <strong>school-mandated</strong> &mdash; students didn't choose them. They just eat into available study time. Seneca is losing to an <strong>ecosystem</strong>, not a single app.</p>
     </div>
-    <div class="card reveal">
-      <div class="card-title">Platforms &amp; methods mentioned</div>
-      <div class="comp-legend">
-        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--teal)"></div>School-mandated</div>
-        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--blue)"></div>Digital</div>
-        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--amber)"></div>Physical / Traditional</div>
-        <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--purple)"></div>AI tools</div>
+    <div class="grid-barriers reveal">
+      <div class="card">
+        <div class="card-title">Platforms &amp; methods mentioned</div>
+        <div class="comp-legend">
+          <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--teal)"></div>School-mandated</div>
+          <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--blue)"></div>Digital</div>
+          <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--amber)"></div>Physical / Traditional</div>
+          <div class="comp-legend-item"><div class="comp-legend-dot" style="background:var(--purple)"></div>AI tools</div>
+        </div>
+        <div id="bars-comp"></div>
       </div>
-      <div id="bars-comp"></div>
-    </div>
-    <div style="margin-top:24px" class="reveal">
-      <div style="font-size:13px;color:var(--t2);margin-bottom:12px;font-weight:500">Why students prefer alternatives</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px" id="quotes-comp"></div>
+      <div>
+        <div style="font-size:13px;color:var(--t2);margin-bottom:12px;font-weight:500">Why students prefer alternatives</div>
+        <div class="quote-grid" id="quotes-comp"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -507,11 +520,11 @@ footer{background:var(--bg-alt)}
         <div class="card-title">Go-to revision methods <span class="dim">(multi-select, 770 responses)</span></div>
         <div id="bars-methods"></div>
       </div>
-      <div class="card reveal">
+      <div class="card reveal" data-collapsible>
         <div class="card-title">Subjects they revise for <span class="dim">(425 transcripts)</span></div>
         <div id="bars-subjects"></div>
       </div>
-      <div class="card reveal">
+      <div class="card reveal" data-collapsible>
         <div class="card-title">How easy to find what you want to study?</div>
         <div class="ease-bar-wrap" id="easeBars"></div>
         <div class="ease-scale"><span>Very difficult</span><span>Very easy</span></div>
@@ -756,78 +769,83 @@ const EASE=[
   {score:5,count:184,pct:23.7,color:'#1a9e6e'},
 ];
 const FINDINGS=[
-  {icon:'🎥',sev:'high',title:'Video is the single biggest content gap',
-   desc:'Cognito (18 mentions) dominates the competitor list specifically because of video. YouTube (9) is cited for the same reason. 27 students, all citing the same missing feature. Seneca has no video. This is not a minor gap.',
-   quote:"I can see what is happening rather than just reading. The topic layout is simpler than Seneca and it stays in my long-term memory better because of the video lessons.",qy:"Year 11"},
-  {icon:'📭',sev:'high',title:'The "empty state" — homepage offers nothing when no homework is due',
-   desc:"When no homework is due, the homepage shows a leaderboard and nothing else. No recommendations. No 'here's what to do next.' Students forget the platform can do anything beyond homework. This is the clearest single product fix in the data.",
-   quote:"Seneca is usually empty… theres just nothing to do. Theres no recommendations. It just shows me a leaderboard and stuff and I feel that the self revision part just slips out of my mind.",qy:"Year 10"},
-  {icon:'🤖',sev:'high',title:'Amelia AI: most wanted AND most resented feature',
-   desc:"Students who've seen it want it badly. The paywall on it generates fury from Year 7 students in particular — one capitalised their entire complaint. It is actively poisoning sentiment among the youngest cohort.",
-   quote:"THE AMELIA AI THAT WOULD BE VERY HELPFUL TO USE, COSTS MONEY. MAYBE MAKE IT FREE… I always have to use ChatGPT and revise by myself which is probably better than this money costing Amelia AI.",qy:"Year 7"},
-  {icon:'🔄',sev:'med',title:'Infinite retries are undermining learning',
-   desc:'Students can scroll back to the notes directly above and copy answers. One student flagged this as cheating. Another described doing it habitually. The unlimited retry + visible notes combination is short-circuiting the active recall loop — which is the feature students themselves value most.',
-   quote:"It doesnt help cause i can just cheat my way through like looking back at the start notes. I feel I shouldnt but I still do.",qy:"Year 10"},
-  {icon:'✖️',sev:'high',title:'Synonym marking errors are dealbreakers',
-   desc:"10 students reported this. Every single one was specific and frustrated. One gave a reproducible biology example. In an active-recall platform, being told you're wrong when you're right doesn't just frustrate — it teaches the wrong lesson.",
-   quote:"In biology i typed 'rejection isnt possible' in one of stem cell advantages and it corrected me with the same answer. This has happened multiple times.",qy:"Year 11"},
-  {icon:'📚',sev:'med',title:"Students aren't choosing one tool — they're building portfolios",
-   desc:"One Year 11 student explicitly described a 3-stage pipeline: Seneca for content lock-in, then Anki for drilling, then separate exam technique practice. Seneca occupies a valued but narrow niche. The competitive threat isn't one app — it's an ecosystem.",
-   quote:"I use Seneca for content lock-in, then Anki for flashcard drilling, then separate exam technique practice for a grade 9.",qy:"Year 11"},
-  {icon:'⚖️',sev:'high',title:'Paywall complaints are equity arguments, not price complaints',
-   desc:'Multiple students independently arrived at the same structure: acknowledge Seneca needs revenue, identify the paywall as the specific barrier, propose a concrete solution (daily free allowance, one mock per month). This is organised, principled, and hard to dismiss.',
-   quote:"I acknowledge money has to be made — but the main thing preventing usage is the paywall for that specific feature. It would be appreciated if even just a couple of mini-mocks were provided for free daily.",qy:"Year 10"},
-  {icon:'📝',sev:'med',title:'Notes visible during questions defeats active recall',
-   desc:'Questions sit directly below the notes. Students scroll up. This undermines the mechanism students say they value most — a direct tension in the product design.',
-   quote:"The questions are a bit pointless — they pretty much are word for word from the notes at the top. They need to be different, maybe applied knowledge in places.",qy:"Year 10"},
-  {icon:'😵',sev:'med',title:'"Lazy" students are actually overwhelmed, not disengaged',
-   desc:'Students who say "can\'t be bothered" often elaborate to reveal they don\'t know what to revise, or feel paralysed by too many options. The fix isn\'t more content — it\'s a guided entry point.',
-   quote:"I am just kinda lazy. But if I do have a test/exam I definitely would revise just not using Seneca. I would look at YouTube which I think is more better cause it doesn't scold you for getting wrong answers.",qy:"Year 7"},
   {icon:'🏷️',sev:'high',title:'The "homework" brand association is actively poisonous',
    desc:"This isn't a UX problem or a content problem. Students have learned that opening Seneca = doing something they were told to do. That association is extremely hard to break and it's the single biggest perception barrier across both non-studier segments.",
    quote:"I don't revise that much and when I do Seneca doesn't come to mind as I see it as more of a compulsory homework website even though maybe its really good for revision.",qy:"Year 9"},
+  {icon:'📭',sev:'high',title:'The "empty state" — homepage offers nothing when no homework is due',
+   desc:"When no homework is due, the homepage shows a leaderboard and nothing else. No recommendations. No 'here's what to do next.' Students forget the platform can do anything beyond homework. This is the clearest single product fix in the data.",
+   quote:"Seneca is usually empty… theres just nothing to do. Theres no recommendations. It just shows me a leaderboard and stuff and I feel that the self revision part just slips out of my mind.",qy:"Year 10"},
+  {icon:'😵',sev:'med',title:'"Lazy" students are actually overwhelmed, not disengaged',
+   desc:'Students who say "can\'t be bothered" often elaborate to reveal they don\'t know what to revise, or feel paralysed by too many options. The fix isn\'t more content — it\'s a guided entry point.',
+   quote:"I am just kinda lazy. But if I do have a test/exam I definitely would revise just not using Seneca. I would look at YouTube which I think is more better cause it doesn't scold you for getting wrong answers.",qy:"Year 7"},
+  {icon:'📚',sev:'med',title:"Students aren't choosing one tool — they're building portfolios",
+   desc:"One Year 11 student explicitly described a 3-stage pipeline: Seneca for content lock-in, then Anki for drilling, then separate exam technique practice. Seneca occupies a valued but narrow niche. The competitive threat isn't one app — it's an ecosystem.",
+   quote:"I use Seneca for content lock-in, then Anki for flashcard drilling, then separate exam technique practice for a grade 9.",qy:"Year 11"},
+  {icon:'🤖',sev:'high',title:'Amelia AI: most wanted AND most resented feature',
+   desc:"Students who've seen it want it badly. The paywall on it generates fury from Year 7 students in particular — one capitalised their entire complaint. It is actively poisoning sentiment among the youngest cohort.",
+   quote:"THE AMELIA AI THAT WOULD BE VERY HELPFUL TO USE, COSTS MONEY. MAYBE MAKE IT FREE… I always have to use ChatGPT and revise by myself which is probably better than this money costing Amelia AI.",qy:"Year 7"},
+  {icon:'⚖️',sev:'high',title:'Paywall complaints are equity arguments, not price complaints',
+   desc:'Multiple students independently arrived at the same structure: acknowledge Seneca needs revenue, identify the paywall as the specific barrier, propose a concrete solution (daily free allowance, one mock per month). This is organised, principled, and hard to dismiss.',
+   quote:"I acknowledge money has to be made — but the main thing preventing usage is the paywall for that specific feature. It would be appreciated if even just a couple of mini-mocks were provided for free daily.",qy:"Year 10"},
+  {icon:'🎥',sev:'high',title:'Video is the single biggest content gap',
+   desc:'Cognito (18 mentions) dominates the competitor list specifically because of video. YouTube (9) is cited for the same reason. 27 students, all citing the same missing feature. Seneca has no video. This is not a minor gap.',
+   quote:"I can see what is happening rather than just reading. The topic layout is simpler than Seneca and it stays in my long-term memory better because of the video lessons.",qy:"Year 11"},
+  {icon:'✖️',sev:'high',title:'Synonym marking errors are dealbreakers',
+   desc:"10 students reported this. Every single one was specific and frustrated. One gave a reproducible biology example. In an active-recall platform, being told you're wrong when you're right doesn't just frustrate — it teaches the wrong lesson.",
+   quote:"In biology i typed 'rejection isnt possible' in one of stem cell advantages and it corrected me with the same answer. This has happened multiple times.",qy:"Year 11"},
+  {icon:'📝',sev:'med',title:'Notes visible during questions defeats active recall',
+   desc:'Questions sit directly below the notes. Students scroll up. This undermines the mechanism students say they value most — a direct tension in the product design.',
+   quote:"The questions are a bit pointless — they pretty much are word for word from the notes at the top. They need to be different, maybe applied knowledge in places.",qy:"Year 10"},
+  {icon:'🔄',sev:'med',title:'Infinite retries are undermining learning',
+   desc:'Students can scroll back to the notes directly above and copy answers. One student flagged this as cheating. Another described doing it habitually. The unlimited retry + visible notes combination is short-circuiting the active recall loop — which is the feature students themselves value most.',
+   quote:"It doesnt help cause i can just cheat my way through like looking back at the start notes. I feel I shouldnt but I still do.",qy:"Year 10"},
 ];
 const PRIORITIES=[
-  {num:'01',badge:'Critical',bc:'critical',border:'var(--rose)',
+  {num:'01',badge:'High',bc:'high',border:'var(--rose)',
    title:'Fix the empty state / homepage',
    desc:'When no homework is set, the homepage shows just a leaderboard. No recommendations, no "what to do next." Students forget the platform can do revision at all. This is the most concrete single product fix in the data.',
    ev:['Students say "Seneca is usually empty"','No recommendations when homework is done','Clearest single product fix identified','Directly causes revision drop-off'],
    q:"I just never really thought about it… when I have no homework, Seneca is usually empty. There's just nothing to do. There's no recommendations. It just shows me a leaderboard and stuff.",qy:"Year 10"},
-  {num:'02',badge:'Critical',bc:'critical',border:'var(--rose)',
-   title:'Fix navigation for Year 7–8',
-   desc:'Navigation is both a top barrier for non-studiers and a key dislike from current studiers. Year 7 rates findability lowest (3.39/5). Year 10 is also notably low (3.57). 28% of independent studiers rate findability 3 or below.',
-   ev:['15% cite navigation (Only HW)','12% cite navigation (Mostly HW)','Year 7 findability: 3.39 / 5','28% rate findability ≤ 3/5'],
-   q:"The layout of the spec can be a bit confusing as everything is crammed into the left side of the screen and moreover the different useful features e.g Amelia aren't listed in one area so they're harder to discover.",qy:"Year 10"},
-  {num:'03',badge:'High',bc:'high',border:'var(--amber)',
-   title:'Reduce paywall friction on exam features',
-   desc:'Students aren\'t upgrading — they\'re leaving to PMT and Save My Exams. The paywall is generating churn, not revenue from this cohort. Students independently propose concrete alternatives: daily free allowance, one mock per month.',
-   ev:['10% cite paywall (Only HW)','10% cite paywall (Mostly HW)','Paywall = #1 dislike (32 mentions)','Students propose concrete alternatives'],
-   q:"I acknowledge money has to be made — but the main thing preventing usage is the paywall for that specific feature. It would be appreciated if even just a couple of mini-mocks were provided for free daily.",qy:"Year 10"},
-  {num:'04',badge:'High',bc:'high',border:'var(--amber)',
-   title:'Add exam-style extended response questions',
-   desc:'Multiple choice and fill-in-the-blank don\'t match actual GCSE exam formats — particularly for History (essays), English, and Sciences. Competitors like past papers and Save My Exams are preferred precisely for realistic practice. A dealbreaker for GCSE prep.',
-   ev:['13% want harder questions (Mostly HW)','No exam-style = dealbreaker (25 mentions)','Competitors preferred for "realistic practice"','Students want essays & extended responses'],
-   q:"Lack of challenging questions, exam practice and long term memory retention… 16 markers using PEARL layout, 12 markers, 8 markers using SIAPL.",qy:"Year 10"},
-  {num:'05',badge:'High',bc:'high',border:'var(--amber)',
-   title:'Fix synonym marking errors',
-   desc:'10 students reported being marked wrong for correct synonyms. Every single one was specific and frustrated — one gave a reproducible biology example. In an active-recall platform, false negatives don\'t just frustrate — they teach the wrong lesson. Highest frustration-per-mention in the dataset.',
-   ev:['10 specific, reproducible reports','Corrupts the core learning mechanism','Highest frustration-per-mention','One gave word-for-word biology example'],
-   q:"In biology i typed 'rejection isnt possible' in one of stem cell advantages and it corrected me with the same answer. This has happened multiple times and it is really frustrating.",qy:"Year 11"},
-  {num:'06',badge:'High',bc:'high',border:'var(--amber)',
-   title:'Address the infinite retry / notes-visible tension',
-   desc:'Questions sit directly below the notes. Students scroll up and copy answers. The unlimited retry + visible notes combination is short-circuiting the active recall loop — which is the feature students themselves value most.',
-   ev:['Students scroll up to copy answers','Undermines active recall (top-liked feature)','One student flagged it as "cheating"','Product design flaw, not a content issue'],
-   q:"It doesnt help cause i can just cheat my way through like looking back at the start notes. I feel I shouldnt but I still do.",qy:"Year 10"},
-  {num:'07',badge:'Medium',bc:'medium',border:'var(--blue)',
-   title:'Consider video content — the biggest single content gap',
-   desc:'Cognito (18 mentions) is the most-cited digital competitor — nearly every mention names video lessons as the reason. YouTube (9) is cited for the same. 27 students independently cite the same missing feature. Expensive decision, but the data is unambiguous.',
-   ev:['Cognito cited 18× for video lessons','YouTube cited 9× for same reason','27 students cite video as missing','Most-cited content gap overall'],
-   q:"I can see what is happening rather than just reading. The topic layout is simpler than Seneca and it stays in my long-term memory better because of the video lessons.",qy:"Year 11"},
-  {num:'08',badge:'Medium',bc:'medium',border:'var(--blue)',
+  {num:'02',badge:'High',bc:'high',border:'var(--rose)',
    title:'Build a revision planner / recommendation engine',
    desc:'43% of independent studiers don\'t arrive knowing what to revise — 17% just open Seneca with no plan. A structured planner tied to upcoming exams or weak areas could convert passive browsers into active revisers.',
    ev:['17% "don\'t know — just open Seneca"','26% use Seneca to help decide','Uncertain students rate findability 0.5pts lower','Structure converts browsers into revisers'],
    q:"I don't know what I want to study… should I revise for my GCSEs in yr 9.",qy:"Year 9"},
+  {num:'03',badge:'High',bc:'high',border:'var(--rose)',
+   title:'Consider video content — the biggest single content gap',
+   desc:'Cognito (18 mentions) is the most-cited digital competitor — nearly every mention names video lessons as the reason. YouTube (9) is cited for the same. 27 students independently cite the same missing feature. Expensive decision, but the data is unambiguous.',
+   ev:['Cognito cited 18× for video lessons','YouTube cited 9× for same reason','27 students cite video as missing','Most-cited content gap overall'],
+   q:"I can see what is happening rather than just reading. The topic layout is simpler than Seneca and it stays in my long-term memory better because of the video lessons.",qy:"Year 11"},
+  {num:'04',badge:'Medium',bc:'medium',border:'var(--amber)',
+   title:'Add exam-style extended response questions',
+   desc:'Multiple choice and fill-in-the-blank don\'t match actual GCSE exam formats — particularly for History (essays), English, and Sciences. Competitors like past papers and Save My Exams are preferred precisely for realistic practice. A dealbreaker for GCSE prep.',
+   ev:['13% want harder questions (Mostly HW)','No exam-style = dealbreaker (25 mentions)','Competitors preferred for "realistic practice"','Students want essays & extended responses'],
+   q:"Lack of challenging questions, exam practice and long term memory retention… 16 markers using PEARL layout, 12 markers, 8 markers using SIAPL.",qy:"Year 10"},
+  {num:'05',badge:'Medium',bc:'medium',border:'var(--amber)',
+   title:'Reduce paywall friction on exam features',
+   desc:'Students aren\'t upgrading — they\'re leaving to PMT and Save My Exams. The paywall is generating churn, not revenue from this cohort. Students independently propose concrete alternatives: daily free allowance, one mock per month.',
+   ev:['10% cite paywall (Only HW)','10% cite paywall (Mostly HW)','Paywall = #1 dislike (32 mentions)','Students propose concrete alternatives'],
+   q:"I acknowledge money has to be made — but the main thing preventing usage is the paywall for that specific feature. It would be appreciated if even just a couple of mini-mocks were provided for free daily.",qy:"Year 10"},
+  {num:'06',badge:'Medium',bc:'medium',border:'var(--amber)',
+   title:'Fix synonym marking errors',
+   desc:'10 students reported being marked wrong for correct synonyms. Every single one was specific and frustrated — one gave a reproducible biology example. In an active-recall platform, false negatives don\'t just frustrate — they teach the wrong lesson. Highest frustration-per-mention in the dataset.',
+   ev:['10 specific, reproducible reports','Corrupts the core learning mechanism','Highest frustration-per-mention','One gave word-for-word biology example'],
+   q:"In biology i typed 'rejection isnt possible' in one of stem cell advantages and it corrected me with the same answer. This has happened multiple times and it is really frustrating.",qy:"Year 11"},
+  {num:'07',badge:'Medium',bc:'medium',border:'var(--amber)',
+   title:'Address the infinite retry / notes-visible tension',
+   desc:'Questions sit directly below the notes. Students scroll up and copy answers. The unlimited retry + visible notes combination is short-circuiting the active recall loop — which is the feature students themselves value most.',
+   ev:['Students scroll up to copy answers','Undermines active recall (top-liked feature)','One student flagged it as "cheating"','Product design flaw, not a content issue'],
+   q:"It doesnt help cause i can just cheat my way through like looking back at the start notes. I feel I shouldnt but I still do.",qy:"Year 10"},
+  {num:'08',badge:'Low',bc:'low',border:'var(--blue)',
+   title:'Fix navigation for Year 7–8',
+   desc:'Navigation is both a top barrier for non-studiers and a key dislike from current studiers. Year 7 rates findability lowest (3.39/5). Year 10 is also notably low (3.57). 28% of independent studiers rate findability 3 or below.',
+   ev:['15% cite navigation (Only HW)','12% cite navigation (Mostly HW)','Year 7 findability: 3.39 / 5','28% rate findability ≤ 3/5'],
+   q:"The layout of the spec can be a bit confusing as everything is crammed into the left side of the screen and moreover the different useful features e.g Amelia aren't listed in one area so they're harder to discover.",qy:"Year 10"},
+  {num:'09',badge:'Low',bc:'low',border:'var(--blue)',
+   title:'Continue gamification and rewarding efforts',
+   desc:'Gamification is the single most-liked feature category — 75 students (36%) cited memes, leaderboards, and rewards unprompted. This is Seneca\'s strongest retention lever. Doubling down here (streaks, badges, social proof) costs less than any content investment and directly addresses the "boring" perception.',
+   ev:['#1 liked feature: 75 mentions (36%)','Memes + leaderboard cited together','Directly counters "boring" perception','Low-cost, high-retention lever'],
+   q:"The funny and inspiring comments that you get in quizzes, they actually help to romanticize study. The memes on it are really enticing and the leaderboard makes me feel competitive and motivates me more.",qy:"Year 10"},
 ];
 
 // ============================================================
@@ -848,7 +866,8 @@ function renderBars(id,data){
 // RENDER: QUOTES
 // ============================================================
 function renderQuotes(id,arr){
-  document.getElementById(id).innerHTML=arr.map(q=>`
+  const sorted=[...arr].sort((a,b)=>(parseInt(b.y.replace(/\D/g,''))||0)-(parseInt(a.y.replace(/\D/g,''))||0));
+  document.getElementById(id).innerHTML=sorted.map(q=>`
     <div class="quote-card" onclick="this.classList.toggle('open')">
       <div class="qmark">"</div>
       <p class="q-short">${q.s}</p>
@@ -1075,6 +1094,15 @@ function animateCount(el,target,dur=1300){
 
   // Add tooltips to all bar charts
   ['yearBars','bars-oh','bars-mh','bars-comp','bars-intent','bars-methods','bars-subjects','bars-likes','bars-dislikes'].forEach(addBarTips);
+
+  // Open first competitor quote by default
+  const firstCompQuote=document.querySelector('#quotes-comp .quote-card');
+  if(firstCompQuote)firstCompQuote.classList.add('open');
+
+  // Collapsible cards
+  document.querySelectorAll('.card[data-collapsible]').forEach(card=>{
+    card.onclick=()=>card.classList.toggle('expanded');
+  });
 
   // Hero counters
   animateCount(document.getElementById('counter1'),61);
