@@ -76,10 +76,10 @@ nav{
 .stat-card:nth-child(1)::before{background:var(--teal)}
 .stat-card:nth-child(2)::before{background:var(--amber)}
 .stat-card:nth-child(3)::before{background:var(--purple)}
-.stat-num{font-weight:800;font-size:40px;letter-spacing:-2px;line-height:1;margin-bottom:8px}
-.stat-card:nth-child(1) .stat-num{color:var(--teal)}
-.stat-card:nth-child(2) .stat-num{color:var(--amber)}
-.stat-card:nth-child(3) .stat-num{color:var(--purple)}
+.stat-num{font-size:48px;line-height:1;margin-bottom:10px}
+.stat-card:nth-child(1) .stat-lbl{color:#3aad6e}
+.stat-card:nth-child(2) .stat-lbl{color:#d48a1a}
+.stat-card:nth-child(3) .stat-lbl{color:#7b6fbf}
 .stat-lbl{color:var(--t2);font-size:13px;line-height:1.45}
 
 /* SECTIONS */
@@ -115,6 +115,13 @@ section.alt{background:var(--bg-alt)}
 .planner-badge.first{background:rgba(91,155,213,.12);color:var(--blue)}
 .planner-badge.none{background:rgba(30,39,54,.06);color:var(--t3)}
 .p-card-desc{font-size:13px;color:var(--t2);line-height:1.5}
+.p-card-quote{font-size:12.5px;color:var(--t2);font-style:italic;line-height:1.5;margin-top:10px;padding:10px 12px;background:rgba(30,39,54,.03);border-radius:8px;border-left:2px solid #5b6abf}
+.participant-row-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin:24px 0 12px;grid-column:1/-1}
+.participant-row-label:first-child{margin-top:0}
+
+/* PLANNER SUB-SECTIONS */
+.planner-subsection{margin-top:32px}
+.planner-subsection h3{font-size:16px;font-weight:600;letter-spacing:-.2px;color:var(--t1);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 
 /* INSIGHT BOX */
 .insight{
@@ -243,16 +250,16 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
   <p>Qualitative analysis of 7 interviews with 8 students across Year 8&ndash;13</p>
   <div class="hero-stats">
     <div class="stat-card">
-      <div class="stat-num">7/7</div>
-      <div class="stat-lbl">students responded positively<br>to the planner</div>
+      <div class="stat-num">&#129321;</div>
+      <div class="stat-lbl">7/7 students responded positively to the planner</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num">#1</div>
-      <div class="stat-lbl">request: choose which subject<br>to study each day</div>
+      <div class="stat-num">&#128591;</div>
+      <div class="stat-lbl">Most common request: more flexibility to choose which subject to study each day</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num">5/7</div>
-      <div class="stat-lbl">want custom exam dates,<br>not a fixed May endpoint</div>
+      <div class="stat-num">&#128198;</div>
+      <div class="stat-lbl">5/7 want custom exam dates, not a fixed May endpoint</div>
     </div>
   </div>
 </header>
@@ -266,29 +273,32 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
       <p class="sec-desc">Semi-structured interviews conducted remotely via video call with screen-sharing on 18&ndash;19 February 2026. Mix of existing planner users, first-time walkthroughs, and one student who could not access the feature.</p>
     </div>
     <div class="participant-grid">
-      <div class="p-card reveal">
-        <div class="p-card-head">
-          <span class="p-card-name">Yahya</span>
-          <span class="yr-badge">Y10</span>
-          <span class="planner-badge first">Set up, not following</span>
-        </div>
-        <div class="p-card-desc">Planner as organiser vs behaviour driver. Exam question realism concerns. AI tutor (Amelia) feedback.</div>
-      </div>
+      <div class="participant-row-label reveal">Already seen planner</div>
       <div class="p-card reveal">
         <div class="p-card-head">
           <span class="p-card-name">Aaryan</span>
           <span class="yr-badge">Y11</span>
           <span class="planner-badge active">Active user ~1 week</span>
         </div>
-        <div class="p-card-desc">Day-level subject control, time cap too low, XP/social features, exam question session control.</div>
+        <div class="p-card-quote">&ldquo;It&rsquo;s working fantastically so far&rdquo;</div>
       </div>
+      <div class="p-card reveal">
+        <div class="p-card-head">
+          <span class="p-card-name">Yahya</span>
+          <span class="yr-badge">Y10</span>
+          <span class="planner-badge first">Set up, not following</span>
+        </div>
+        <div class="p-card-quote">&ldquo;It&rsquo;s actually, like, a really nice idea&rdquo;</div>
+      </div>
+
+      <div class="participant-row-label reveal">First time during interview</div>
       <div class="p-card reveal">
         <div class="p-card-head">
           <span class="p-card-name">Izzy</span>
           <span class="yr-badge">Y11</span>
           <span class="planner-badge first">First time via link</span>
         </div>
-        <div class="p-card-desc">Planner discoverability broken. Exam question topic misalignment. Free/premium equity concern.</div>
+        <div class="p-card-quote">&ldquo;Sometimes I come in here and I&rsquo;m like, oh, what should I do today? But I like having a plan, a structure.&rdquo;</div>
       </div>
       <div class="p-card reveal">
         <div class="p-card-head">
@@ -296,15 +306,7 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
           <span class="yr-badge">Y10</span>
           <span class="planner-badge first">First time via link</span>
         </div>
-        <div class="p-card-desc">Custom mock dates needed. Daily flexibility for school tests. Strategic habit-building in Year 10.</div>
-      </div>
-      <div class="p-card reveal">
-        <div class="p-card-head">
-          <span class="p-card-name">Ali</span>
-          <span class="yr-badge">Y8</span>
-          <span class="planner-badge none">No access (Y8)</span>
-        </div>
-        <div class="p-card-desc">Cram Mode 20-question cap. Challenge-seeking drives feature use. Content discoverability gaps for KS3.</div>
+        <div class="p-card-quote">&ldquo;It looks good&hellip; I don&rsquo;t have to make my own study schedule. It&rsquo;s, like, made one here, and I think it&rsquo;s very helpful.&rdquo;</div>
       </div>
       <div class="p-card reveal">
         <div class="p-card-head">
@@ -312,7 +314,7 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
           <span class="yr-badge">Y13</span>
           <span class="planner-badge first">Briefly / No</span>
         </div>
-        <div class="p-card-desc">Self-made plan failed. Planner disappeared after early release. AI marking valued. Recommendations invisible.</div>
+        <div class="p-card-quote">Alina: &ldquo;It was good, and I did a bunch of topics for the chemistry one.&rdquo; Maya: &ldquo;I think it seems useful for just tracking your revision up until the exams.&rdquo;</div>
       </div>
       <div class="p-card reveal">
         <div class="p-card-head">
@@ -320,7 +322,17 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
           <span class="yr-badge">Y10</span>
           <span class="planner-badge first">First time (walkthrough)</span>
         </div>
-        <div class="p-card-desc">Already using Copilot for scheduling. Gaming concern. End-of-week tests. Grade-progress motivation.</div>
+        <div class="p-card-quote">&ldquo;It&rsquo;s actually quite decent. It&rsquo;s organised &mdash; simple things I can do, like content.&rdquo;</div>
+      </div>
+
+      <div class="participant-row-label reveal">No access</div>
+      <div class="p-card reveal">
+        <div class="p-card-head">
+          <span class="p-card-name">Ali</span>
+          <span class="yr-badge">Y8</span>
+          <span class="planner-badge none">No access (Y8)</span>
+        </div>
+        <div class="p-card-quote">&ldquo;Ali was drawn to Seneca by using Cram mode and wanted the 20 Question cap lifted&rdquo;</div>
       </div>
     </div>
   </div>
@@ -359,36 +371,72 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
       </div>
     </div>
 
-    <div class="quote-grid">
-      <div class="quote-card reveal">
-        <div class="qmark">&ldquo;</div>
-        <div class="q-text">It&rsquo;s really helped with just concentrating on what I need to revise and reducing the stress of the magnitude of content that I need to do.</div>
-        <div class="q-foot"><span class="q-name">Aaryan</span><span class="q-yr">Y11</span></div>
+    <div class="planner-subsection reveal">
+      <h3>Day-level flexibility</h3>
+      <div class="quote-grid">
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">I would prefer to choose what subjects I do on each day. Because I have a tutor for English. I don&rsquo;t really see the point in my plan saying &lsquo;do English language&rsquo; when I&rsquo;ve already done English language with my tutor.</div>
+          <div class="q-foot"><span class="q-name">Aaryan</span><span class="q-yr">Y11</span></div>
+        </div>
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">Maybe choosing which one you can do on which day depending on, like, whether you have, like, a test in school the next day or something.</div>
+          <div class="q-foot"><span class="q-name">Isabella</span><span class="q-yr">Y10</span></div>
+        </div>
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">Say I was struggling in biology more than physics &mdash; I could allocate some time from physics into biology. So maybe I&rsquo;d have 45 on biology and then 15 on physics.</div>
+          <div class="q-foot"><span class="q-name">Aaryan</span><span class="q-yr">Y11</span></div>
+        </div>
       </div>
-      <div class="quote-card reveal">
-        <div class="qmark">&ldquo;</div>
-        <div class="q-text">Sometimes I come in here and I&rsquo;m like, oh, what should I do today? But I like having a plan, a structure, and I like that it&rsquo;s telling me how long I should do it for.</div>
-        <div class="q-foot"><span class="q-name">Izzy</span><span class="q-yr">Y11</span></div>
+    </div>
+
+    <div class="planner-subsection reveal">
+      <h3>Custom exam dates</h3>
+      <div class="quote-grid">
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">I would probably set the end date to be, like, when I start my mocks. Like, I start my mocks in April 2026.</div>
+          <div class="q-foot"><span class="q-name">Isabella</span><span class="q-yr">Y10</span></div>
+        </div>
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">An end point would actually be nice. It kinda, like, mocks where your test is. So if you, like, have a calendar, it shows you, like, visually how much time you have left to revise.</div>
+          <div class="q-foot"><span class="q-name">Yahya</span><span class="q-yr">Y10</span></div>
+        </div>
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">Maybe there could be like &mdash; we could make it a bit more personal to when our exams actually start.</div>
+          <div class="q-foot"><span class="q-name">Maya</span><span class="q-yr">Y13</span></div>
+        </div>
       </div>
-      <div class="quote-card reveal">
-        <div class="qmark">&ldquo;</div>
-        <div class="q-text">I would prefer to choose what subjects I do on each day. Because I have a tutor for English. I don&rsquo;t really see the point in my plan saying &lsquo;do English language&rsquo; when I&rsquo;ve already done English language with my tutor.</div>
-        <div class="q-foot"><span class="q-name">Aaryan</span><span class="q-yr">Y11</span></div>
+    </div>
+
+    <div class="planner-subsection reveal">
+      <h3>90-minute daily cap</h3>
+      <div class="quote-grid">
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">Ninety minutes is good for some people, but some people allocate three, four, even five hours to revision. So only ninety minutes is just a fraction of their total revision time.</div>
+          <div class="q-foot"><span class="q-name">Aaryan</span><span class="q-yr">Y11</span></div>
+        </div>
       </div>
-      <div class="quote-card reveal">
-        <div class="qmark">&ldquo;</div>
-        <div class="q-text">I would probably set the end date to be, like, when I start my mocks. Like, I start my mocks in April 2026.</div>
-        <div class="q-foot"><span class="q-name">Isabella</span><span class="q-yr">Y10</span></div>
-      </div>
-      <div class="quote-card reveal">
-        <div class="qmark">&ldquo;</div>
-        <div class="q-text">I feel like I could just manipulate it and not study one particular subject I&rsquo;m not good at.</div>
-        <div class="q-foot"><span class="q-name">Zion</span><span class="q-yr">Y10</span></div>
-      </div>
-      <div class="quote-card reveal">
-        <div class="qmark">&ldquo;</div>
-        <div class="q-text">At the end of one week, why don&rsquo;t you add mini papers &mdash; where you can do mini mocks, so you can know what you have to work on?</div>
-        <div class="q-foot"><span class="q-name">Zion</span><span class="q-yr">Y10</span></div>
+    </div>
+
+    <div class="planner-subsection reveal">
+      <h3>Other concerns &amp; ideas</h3>
+      <div class="quote-grid">
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">I feel like I could just manipulate it and not study one particular subject I&rsquo;m not good at.</div>
+          <div class="q-foot"><span class="q-name">Zion</span><span class="q-yr">Y10</span></div>
+        </div>
+        <div class="quote-card">
+          <div class="qmark">&ldquo;</div>
+          <div class="q-text">At the end of one week, why don&rsquo;t you add mini papers &mdash; where you can do mini mocks, so you can know what you have to work on?</div>
+          <div class="q-foot"><span class="q-name">Zion</span><span class="q-yr">Y10</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -418,15 +466,6 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
           <div class="fq-attr">Yahya &middot; Y10</div>
         </div>
       </div>
-      <div class="finding-card bar-rose">
-        <span class="finding-icon">&#10060;</span>
-        <h4>Marking too strict</h4>
-        <p>Correct-in-substance answers are rejected when they don&rsquo;t match exact mark scheme phrasing. Most acute in business and English.</p>
-        <div class="finding-quote">
-          <span>&ldquo;I get an answer right, but the mark scheme is on a different thing. So it&rsquo;s kind of hard to get the mark.&rdquo;</span>
-          <div class="fq-attr">Zion &middot; Y10</div>
-        </div>
-      </div>
       <div class="finding-card bar-amber">
         <span class="finding-icon">&#128279;</span>
         <h4>Topic misalignment</h4>
@@ -434,6 +473,15 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
         <div class="finding-quote">
           <span>&ldquo;I really, really enjoy Seneca, and I don&rsquo;t actually wanna go onto another website to find more exam questions. I just think if they were more specific.&rdquo;</span>
           <div class="fq-attr">Izzy &middot; Y11</div>
+        </div>
+      </div>
+      <div class="finding-card bar-rose">
+        <span class="finding-icon">&#10060;</span>
+        <h4>Marking too strict</h4>
+        <p>Correct-in-substance answers are rejected when they don&rsquo;t match exact mark scheme phrasing. Most acute in business and English.</p>
+        <div class="finding-quote">
+          <span>&ldquo;I get an answer right, but the mark scheme is on a different thing. So it&rsquo;s kind of hard to get the mark.&rdquo;</span>
+          <div class="fq-attr">Zion &middot; Y10</div>
         </div>
       </div>
     </div>
@@ -482,15 +530,6 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
           <div class="fq-attr">Yahya &middot; Y10</div>
         </div>
       </div>
-      <div class="finding-card bar-blue reveal">
-        <span class="finding-icon">&#128276;</span>
-        <h4>Notifications &amp; reminders are a missing activation layer</h4>
-        <p>Students who value the planner still forget to open it. Three students explicitly requested push notifications or email reminders at their scheduled study time.</p>
-        <div class="finding-quote">
-          <span>&ldquo;It&rsquo;d be quite nice to have a reminder button. Some days I&rsquo;ll be like, oh shoot, I need to do my Seneca.&rdquo;</span>
-          <div class="fq-attr">Izzy &middot; Y11</div>
-        </div>
-      </div>
       <div class="finding-card bar-amber reveal">
         <span class="finding-icon">&#128106;</span>
         <h4>Parent accountability is valued, not resented</h4>
@@ -500,12 +539,12 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
           <div class="fq-attr">Izzy &middot; Y11</div>
         </div>
       </div>
-      <div class="finding-card bar-purple reveal">
-        <span class="finding-icon">&#129302;</span>
-        <h4>AI tools are already competing for scheduling</h4>
-        <p>Zion uses Microsoft Copilot for revision scheduling. Students aren&rsquo;t waiting for Seneca &mdash; they&rsquo;re building solutions with whatever tools are available.</p>
+      <div class="finding-card bar-teal reveal">
+        <span class="finding-icon">&#127942;</span>
+        <h4>Social features emerging organically</h4>
+        <p>Students are self-organising peer competition around XP. But they also self-regulate &mdash; Zion flagged leaderboards could be pressuring and gameable. Grade-progress feedback preferred over rankings.</p>
         <div class="finding-quote">
-          <span>&ldquo;It&rsquo;s similar [to Copilot], but&hellip; so far it&rsquo;s really good.&rdquo;</span>
+          <span>&ldquo;You could see you&rsquo;ve moved up one more grade that you normally are on &mdash; because that&rsquo;s self affirmative.&rdquo;</span>
           <div class="fq-attr">Zion &middot; Y10</div>
         </div>
       </div>
@@ -518,12 +557,21 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
           <div class="fq-attr">Izzy &middot; Y11</div>
         </div>
       </div>
-      <div class="finding-card bar-teal reveal">
-        <span class="finding-icon">&#127942;</span>
-        <h4>Social features emerging organically</h4>
-        <p>Students are self-organising peer competition around XP. But they also self-regulate &mdash; Zion flagged leaderboards could be pressuring and gameable. Grade-progress feedback preferred over rankings.</p>
+      <div class="finding-card bar-blue reveal">
+        <span class="finding-icon">&#128276;</span>
+        <h4>Notifications &amp; reminders are a missing activation layer</h4>
+        <p>Students who value the planner still forget to open it. Three students explicitly requested push notifications or email reminders at their scheduled study time.</p>
         <div class="finding-quote">
-          <span>&ldquo;You could see you&rsquo;ve moved up one more grade that you normally are on &mdash; because that&rsquo;s self affirmative.&rdquo;</span>
+          <span>&ldquo;It&rsquo;d be quite nice to have a reminder button. Some days I&rsquo;ll be like, oh shoot, I need to do my Seneca.&rdquo;</span>
+          <div class="fq-attr">Izzy &middot; Y11</div>
+        </div>
+      </div>
+      <div class="finding-card bar-purple reveal">
+        <span class="finding-icon">&#129302;</span>
+        <h4>AI tools are already competing for scheduling</h4>
+        <p>Zion uses Microsoft Copilot for revision scheduling. Students aren&rsquo;t waiting for Seneca &mdash; they&rsquo;re building solutions with whatever tools are available.</p>
+        <div class="finding-quote">
+          <span>&ldquo;It&rsquo;s similar [to Copilot], but&hellip; so far it&rsquo;s really good.&rdquo;</span>
           <div class="fq-attr">Zion &middot; Y10</div>
         </div>
       </div>
@@ -550,10 +598,10 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
         <div class="p-badge high">High Priority</div>
         <h3>Allow custom exam/mock date input</h3>
         <p>The default May endpoint is wrong for Y10 mock students (April), A-level students with staggered exams, and students who want longer plans. A student whose mocks are in April will immediately see the plan as irrelevant.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Isabella</span><span class="p-ev-tag">Yahya</span><span class="p-ev-tag">Alina/Maya</span><span class="p-ev-tag">Zion</span><span class="p-ev-tag">Aaryan</span>
-        </div>
         <div class="p-quote">&ldquo;I would probably set the end date to be, like, when I start my mocks. Like, I start my mocks in April 2026.&rdquo;<span class="p-q-attr">Isabella &middot; Y10</span></div>
+        <div class="p-quote" style="margin-top:8px">&ldquo;An end point would actually be nice. It kinda, like, mocks where your test is.&rdquo;<span class="p-q-attr">Yahya &middot; Y10</span></div>
+        <div class="p-quote" style="margin-top:8px">&ldquo;We could make it a bit more personal to when our exams actually start.&rdquo;<span class="p-q-attr">Maya &middot; Y13</span></div>
+        <div class="p-quote" style="margin-top:8px">&ldquo;If I made it longer, it&rsquo;s gonna help me be consistent over week&hellip; week and [week].&rdquo;<span class="p-q-attr">Zion &middot; Y10</span></div>
       </div>
 
       <div class="priority-card">
@@ -562,22 +610,8 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
         <div class="p-badge high">High Priority</div>
         <h3>Add daily subject swap/override</h3>
         <p>Let students choose which subject to study on a given day without disrupting the weekly plan. The most requested structural feature &mdash; addresses tutor conflicts, school tests, and personal preferences.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Aaryan</span><span class="p-ev-tag">Isabella</span><span class="p-ev-tag">Izzy</span><span class="p-ev-tag">Yahya</span>
-        </div>
-        <div class="p-quote">&ldquo;I don&rsquo;t really see the point in my plan saying &lsquo;do English language&rsquo; when I&rsquo;ve already done English language with my tutor.&rdquo;<span class="p-q-attr">Aaryan &middot; Y11</span></div>
-      </div>
-
-      <div class="priority-card">
-        <div class="p-num">3</div>
-        <div class="p-border" style="background:var(--rose)"></div>
-        <div class="p-badge high">High Priority</div>
-        <h3>Fix planner discoverability</h3>
-        <p>Ensure the planner has a visible, persistent entry point in main navigation. Multiple motivated students could not find or access the feature despite actively looking for it.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Izzy</span><span class="p-ev-tag">Alina</span><span class="p-ev-tag">Ali</span>
-        </div>
-        <div class="p-quote">&ldquo;I really, really enjoy Seneca, and I don&rsquo;t actually wanna go onto another website to find more exam questions.&rdquo;<span class="p-q-attr">Izzy &middot; Y11</span></div>
+        <div class="p-quote">&ldquo;I would prefer to choose what subjects I do on each day. Because I have a tutor for English.&rdquo;<span class="p-q-attr">Aaryan &middot; Y11</span></div>
+        <div class="p-quote" style="margin-top:8px">&ldquo;Maybe choosing which one you can do on which day depending on, like, whether you have, like, a test in school the next day.&rdquo;<span class="p-q-attr">Isabella &middot; Y10</span></div>
       </div>
     </div>
 
@@ -586,14 +620,21 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
       <div class="priority-group-label p1"><span class="pg-dot"></span>P1 &mdash; Do Next</div>
 
       <div class="priority-card">
+        <div class="p-num">3</div>
+        <div class="p-border" style="background:var(--amber)"></div>
+        <div class="p-badge medium">Medium Priority</div>
+        <h3>Add push notifications / email reminders</h3>
+        <p>Three students requested this explicitly. The gap between intention and action is attentional, not motivational. Also: actively promote the mobile app &mdash; multiple students were unaware it exists.</p>
+        <div class="p-quote">&ldquo;It&rsquo;d be quite nice to have a reminder button. Some days I&rsquo;ll be like, oh shoot, I need to do my Seneca.&rdquo;<span class="p-q-attr">Izzy &middot; Y11</span></div>
+        <div class="p-quote" style="margin-top:8px">&ldquo;I probably [would] put email notifications, like, to remind students.&rdquo;<span class="p-q-attr">Yahya &middot; Y10</span></div>
+      </div>
+
+      <div class="priority-card">
         <div class="p-num">4</div>
         <div class="p-border" style="background:var(--amber)"></div>
         <div class="p-badge medium">Medium Priority</div>
         <h3>Raise or remove the 90-minute daily cap</h3>
-        <p>Allow students to set higher daily targets for intensive revision periods. A 90-minute cap means the planner covers only a fraction of serious revisers&rsquo; days during half term and study leave.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Aaryan</span><span class="p-ev-tag">Izzy</span>
-        </div>
+        <p>Allow students to set higher daily targets for intensive revision periods. A 90-minute cap means the planner covers only a fraction of serious revisers&rsquo; days during <strong>half term</strong>, <strong>Easter</strong>, and <strong>study leave</strong>.</p>
         <div class="p-quote">&ldquo;Ninety minutes is good for some people, but some people allocate three, four, even five hours to revision.&rdquo;<span class="p-q-attr">Aaryan &middot; Y11</span></div>
       </div>
 
@@ -603,22 +644,8 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
         <div class="p-badge medium">Medium Priority</div>
         <h3>Audit exam question topic mapping</h3>
         <p>Exam questions are sometimes mapped at too broad a topic level, breaking the learn-then-test loop. Start with biology where specific examples were reported.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Izzy</span><span class="p-ev-tag">Yahya</span><span class="p-ev-tag">Zion</span>
-        </div>
         <div class="p-quote">&ldquo;I then started asking me about plants, and I was like, what? I was just a bit confused.&rdquo;<span class="p-q-attr">Izzy &middot; Y11</span></div>
-      </div>
-
-      <div class="priority-card">
-        <div class="p-num">6</div>
-        <div class="p-border" style="background:var(--amber)"></div>
-        <div class="p-badge medium">Medium Priority</div>
-        <h3>Add push notifications / email reminders</h3>
-        <p>Three students requested this explicitly. The gap between intention and action is attentional, not motivational. Also: actively promote the mobile app &mdash; multiple students were unaware it exists.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Izzy</span><span class="p-ev-tag">Yahya</span><span class="p-ev-tag">Zion</span>
-        </div>
-        <div class="p-quote">&ldquo;It&rsquo;d be quite nice to have a reminder button.&rdquo;<span class="p-q-attr">Izzy &middot; Y11</span></div>
+        <div class="p-quote" style="margin-top:8px">&ldquo;I really, really enjoy Seneca, and I don&rsquo;t actually wanna go onto another website to find more exam questions.&rdquo;<span class="p-q-attr">Izzy &middot; Y11</span></div>
       </div>
     </div>
 
@@ -627,27 +654,13 @@ footer p{color:var(--t3);font-size:13px;line-height:1.7;max-width:600px;margin:0
       <div class="priority-group-label p2"><span class="pg-dot"></span>P2 &mdash; Consider</div>
 
       <div class="priority-card">
-        <div class="p-num">7</div>
+        <div class="p-num">6</div>
         <div class="p-border" style="background:var(--blue)"></div>
         <div class="p-badge low">Explore</div>
         <h3>End-of-week review and progress feedback</h3>
         <p>Students want to know how they did each week and what to adjust. Close the &ldquo;how did I do?&rdquo; gap that the planner currently leaves open.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Zion</span><span class="p-ev-tag">Maya</span><span class="p-ev-tag">Aaryan</span>
-        </div>
         <div class="p-quote">&ldquo;At the end of one week, why don&rsquo;t you add mini papers &mdash; where you can do mini mocks.&rdquo;<span class="p-q-attr">Zion &middot; Y10</span></div>
-      </div>
-
-      <div class="priority-card">
-        <div class="p-num">8</div>
-        <div class="p-border" style="background:var(--blue)"></div>
-        <div class="p-badge low">Explore</div>
-        <h3>Grade-progress motivation over leaderboards</h3>
-        <p>Students prefer &ldquo;you&rsquo;ve moved up a grade&rdquo; signals over XP rankings, which are seen as gameable and potentially pressuring.</p>
-        <div class="p-evidence">
-          <span class="p-ev-tag">Zion</span><span class="p-ev-tag">Aaryan</span>
-        </div>
-        <div class="p-quote">&ldquo;You could see you&rsquo;ve moved up one more grade that you normally are on &mdash; because that&rsquo;s self affirmative.&rdquo;<span class="p-q-attr">Zion &middot; Y10</span></div>
+        <div class="p-quote" style="margin-top:8px">&ldquo;Just more targeted exam questions. So if I&rsquo;ve done badly on something, I can get more practice on that.&rdquo;<span class="p-q-attr">Maya &middot; Y13</span></div>
       </div>
     </div>
   </div>
