@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Seneca · Student Post-Purchase Report · Apr 2025 – Apr 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box }
+:root {
+  /* Seneca Premium purple-tinted palette */
+  --bg: #F3EFFA;
+  --bg-alt: #EAE2F5;
+  --card: #FFFFFF;
+  --card-hover: #F9F6FD;
+
+  --ink: #1E2736;
+  --ink-soft: #4E5A75;
+  --ink-mute: #8A91A4;
+  --line: #E1D8F0;
+  --line-hover: #CFC2E5;
+
+  /* Seneca signal palette — matches planner reports */
+  --teal: #4ECF86;
+  --teal-dark: #3AAD6E;
+  --teal-soft: #E1F5EA;
+
+  --rose: #F25C5C;
+  --rose-soft: #FBE3E3;
+
+  --amber: #F5A623;
+  --amber-dark: #D48A1A;
+  --amber-soft: #FBEBD2;
+
+  --blue: #5B9BD5;
+  --blue-soft: #E1EDF8;
+
+  --purple: #7B6FBF;
+  --purple-bright: #9B8FDB;
+  --purple-deep: #5B6ABF;
+  --purple-soft: #E9E3F7;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 1px 4px rgba(91,106,191,.06);
+  --shadow: 0 2px 12px rgba(91,106,191,.08);
+  --shadow-lg: 0 4px 24px rgba(91,106,191,.10);
+}
+html, body { background: var(--bg); color: var(--ink); margin: 0; padding: 0; font-family: 'Mulish', system-ui, sans-serif; font-weight: 400; line-height: 1.6; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale }
+body { background-image: radial-gradient(ellipse at top, rgba(155,143,219,.18), transparent 60%), radial-gradient(ellipse at bottom right, rgba(123,111,191,.12), transparent 55%); background-attachment: fixed }
+a { color: var(--purple-deep); text-decoration: none; border-bottom: 1px solid rgba(91,106,191,.3); transition: border-color .15s }
+a:hover { border-bottom-color: var(--purple-deep) }
+.container { max-width: 1120px; margin: 0 auto; padding: 56px 28px 96px }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: .14em; font-size: 11px; font-weight: 700; color: var(--purple-deep); background: rgba(91,106,191,.1); border: 1px solid rgba(91,106,191,.18); padding: 6px 14px; border-radius: 999px; margin-bottom: 22px }
+.eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--purple-deep); animation: pulse 2s infinite }
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+h1 { font-size: 52px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 20px; color: var(--ink) }
+h2 { font-size: 32px; font-weight: 800; letter-spacing: -0.015em; margin: 0 0 18px; color: var(--ink) }
+h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 12px; color: var(--ink) }
+h4 { font-size: 16px; font-weight: 700; letter-spacing: 0; margin: 0 0 8px; color: var(--ink) }
+p { margin: 0 0 14px }
+.sub { font-size: 18px; color: var(--ink-soft); max-width: 740px; margin: 0 0 28px; line-height: 1.55; font-weight: 400 }
+.meta { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 13px; color: var(--ink-mute); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px 0; margin: 0 0 48px }
+.meta span { display: inline-flex; align-items: baseline; gap: 6px }
+.meta strong { color: var(--ink); font-weight: 700; letter-spacing: -.005em }
+
+section { margin: 0 0 60px; opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease }
+section.in { opacity: 1; transform: none }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 0 0 32px }
+.stat { background: var(--card); border-radius: var(--radius); padding: 20px 22px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; overflow: hidden }
+.stat::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: var(--purple-bright) }
+.stat.teal::before { background: var(--teal) }
+.stat.rose::before { background: var(--rose) }
+.stat.amber::before { background: var(--amber) }
+.stat.purple::before { background: var(--purple) }
+.stat .val { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1.02; margin-bottom: 4px }
+.stat.teal .val { color: var(--teal-dark) }
+.stat.rose .val { color: var(--rose) }
+.stat.purple .val { color: var(--purple) }
+.stat.amber .val { color: var(--amber-dark) }
+.stat .lbl { font-size: 12px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: .1em; font-weight: 700 }
+
+.card { background: var(--card); border-radius: var(--radius); padding: 30px 32px; border: 1px solid var(--line); box-shadow: var(--shadow) }
+.card + .card { margin-top: 20px }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px }
+
+.kv-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line) }
+.kv-row:last-of-type { border-bottom: none }
+.kv-row .lbl { font-weight: 600; color: var(--ink); font-size: 14px }
+.kv-row .bar-wrap { width: 280px; background: rgba(91,106,191,.08); border-radius: 3px; height: 6px; overflow: hidden; position: relative }
+.kv-row .bar { height: 100%; width: 0; background: var(--purple-bright); border-radius: 3px; transition: width 1.2s cubic-bezier(.22,.8,.28,1) }
+.kv-row .bar.blue { background: var(--blue) }
+.kv-row .bar.rose { background: var(--rose) }
+.kv-row .bar.amber { background: var(--amber) }
+.kv-row .bar.purple { background: var(--purple) }
+.kv-row .bar.teal { background: var(--teal) }
+.kv-row .val { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; font-size: 14px }
+
+.period-table { width: 100%; border-collapse: collapse; margin-top: 12px }
+.period-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-mute); font-weight: 700; padding: 10px 12px; border-bottom: 2px solid var(--line) }
+.period-table td { padding: 13px 12px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle }
+.period-table td:first-child { font-weight: 600 }
+.period-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600 }
+.period-table tr:last-child td { border-bottom: none }
+.period-table tr:hover td { background: rgba(91,106,191,.03) }
+.period-table td.hi { color: var(--teal-dark); font-weight: 800 }
+.period-table td.lo { color: var(--rose); font-weight: 700 }
+
+.quote-card { border-radius: var(--radius-sm); background: var(--card); border: 1px solid var(--line); padding: 18px 22px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm); transition: border-color .22s, background .22s, box-shadow .22s }
+.quote-card:hover { border-color: var(--line-hover); background: var(--card-hover); box-shadow: var(--shadow) }
+.quote-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--teal) }
+.quote-card.rose::before { background: var(--rose) }
+.quote-card.amber::before { background: var(--amber) }
+.quote-card.blue::before { background: var(--blue) }
+.quote-card.purple::before { background: var(--purple) }
+.quote-card .qmark { font-size: 28px; font-weight: 800; color: var(--purple-deep); opacity: .3; line-height: 1; margin-bottom: 2px; font-family: Georgia, serif }
+.quote-card p { margin: 0 0 6px; font-size: 15px; color: var(--ink); font-weight: 500; line-height: 1.5 }
+.quote-card .attr { font-size: 11px; color: var(--purple-deep); background: rgba(91,106,191,.1); padding: 2px 9px; border-radius: 6px; font-weight: 600; display: inline-block; margin-top: 6px }
+.quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0 }
+.quote-grid.single { grid-template-columns: 1fr }
+
+.big-quote { padding: 32px 36px 28px; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); position: relative; overflow: hidden; box-shadow: var(--shadow); margin: 18px 0 }
+.big-quote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--purple) }
+.big-quote.amber::before { background: var(--amber) }
+.big-quote.rose::before { background: var(--rose) }
+.big-quote.teal::before { background: var(--teal) }
+.big-quote .qmark { font-size: 46px; font-weight: 800; color: var(--purple-deep); opacity: .2; line-height: .8; margin-bottom: 4px; font-family: Georgia, serif }
+.big-quote.amber .qmark { color: var(--amber-dark) }
+.big-quote.rose .qmark { color: var(--rose) }
+.big-quote.teal .qmark { color: var(--teal-dark) }
+.big-quote p { font-size: 20px; line-height: 1.5; font-weight: 600; color: var(--ink); margin: 0 0 6px }
+.big-quote .attr { font-size: 12px; color: var(--purple-deep); background: rgba(91,106,191,.1); padding: 3px 10px; border-radius: 6px; font-weight: 600; display: inline-block; margin-top: 10px }
+.big-quote.amber .attr { color: var(--amber-dark); background: rgba(245,166,35,.12) }
+.big-quote.rose .attr { color: var(--rose); background: rgba(242,92,92,.1) }
+.big-quote.teal .attr { color: var(--teal-dark); background: rgba(78,207,134,.12) }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 999px; background: var(--teal-soft); color: var(--teal-dark); font-size: 11px; font-weight: 700; letter-spacing: .04em }
+.chip.rose { background: var(--rose-soft); color: var(--rose) }
+.chip.amber { background: var(--amber-soft); color: var(--amber-dark) }
+.chip.blue { background: var(--blue-soft); color: var(--blue) }
+.chip.purple { background: var(--purple-soft); color: var(--purple) }
+
+.period-header { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 10px 0 26px }
+.period-box { border-radius: var(--radius); padding: 20px 22px; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; overflow: hidden }
+.period-box::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 3px }
+.period-box.p1::before { background: var(--rose) }
+.period-box.p2::before { background: var(--amber) }
+.period-box.p3::before { background: var(--teal) }
+.period-box .when { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; color: var(--ink-mute); margin-bottom: 6px }
+.period-box .name { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.01em }
+.period-box .n { font-size: 13px; color: var(--ink-soft); font-weight: 600 }
+
+.act-card { background: var(--card); border-radius: var(--radius); padding: 28px 30px; border: 1px solid var(--line); box-shadow: var(--shadow); position: relative; overflow: hidden }
+.act-card::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: var(--rose) }
+.act-card.act-2::before { background: var(--amber) }
+.act-card.act-3::before { background: var(--teal) }
+.act-card .act-label { display: inline-block; padding: 4px 11px; border-radius: 999px; background: var(--rose-soft); color: var(--rose); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; font-weight: 800; margin-bottom: 14px }
+.act-card.act-2 .act-label { background: var(--amber-soft); color: var(--amber-dark) }
+.act-card.act-3 .act-label { background: var(--teal-soft); color: var(--teal-dark) }
+.act-card p { font-size: 14px; color: var(--ink-soft); line-height: 1.55 }
+.act-card p:last-child { margin-bottom: 0 }
+.act-stack > * + * { margin-top: 20px }
+
+.callout { background: var(--card); padding: 26px 30px; border-radius: var(--radius); border: 1px solid var(--line); border-left: 4px solid var(--purple); box-shadow: var(--shadow) }
+.callout.teal { border-left-color: var(--teal) }
+.callout.rose { border-left-color: var(--rose) }
+.callout.amber { border-left-color: var(--amber) }
+.callout.blue { border-left-color: var(--blue) }
+.callout.purple { background: linear-gradient(135deg, rgba(155,143,219,.08), rgba(91,106,191,.04)); border-left-color: var(--purple-deep) }
+.callout h3 { margin-bottom: 10px }
+
+.priority-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 16px }
+.priority-card { background: var(--card); border-radius: var(--radius); padding: 24px 26px; border: 1px solid var(--line); box-shadow: var(--shadow); position: relative; transition: border-color .25s, transform .2s, box-shadow .25s; overflow: hidden }
+.priority-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px }
+.priority-card.opp::before { background: var(--teal) }
+.priority-card.threat::before { background: var(--rose) }
+.priority-card:hover { border-color: var(--line-hover); transform: translateY(-1px); box-shadow: var(--shadow-lg) }
+.priority-card .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px }
+.priority-card.opp .tag { background: var(--teal-soft); color: var(--teal-dark) }
+.priority-card.threat .tag { background: var(--rose-soft); color: var(--rose) }
+.priority-card h4 { margin-bottom: 8px; font-size: 16px }
+.priority-card p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.55 }
+
+.tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px }
+
+.footer { margin-top: 80px; padding: 36px 0 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-mute); line-height: 1.6 }
+.footer a { color: var(--ink-soft) }
+.footer p { margin: 0 0 12px }
+
+@media (max-width: 860px) {
+  h1 { font-size: 36px }
+  h2 { font-size: 26px }
+  .container { padding: 40px 20px 72px }
+  .stat-row { grid-template-columns: 1fr 1fr }
+  .grid-2, .grid-3, .priority-row, .quote-grid, .period-header, .act-stack.grid-3 { grid-template-columns: 1fr }
+  .kv-row { grid-template-columns: 1fr auto; gap: 8px }
+  .kv-row .bar-wrap { grid-column: 1 / -1; width: 100% }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Seneca · Student Post-Subscription Survey · Apr 2025 – Apr 2026</div>
+  <h1>The year Cram mode reshaped student conversion</h1>
+  <p class="sub">A year of post-subscription feedback from 846 students who upgraded to Seneca Premium between April 2025 and April 2026. This report traces how a single commercial decision — placing Cram mode behind a paywall — reshaped the conversion conversation across three seasonal periods, and what it reveals about where Seneca's B2C growth lever really sits.</p>
+  <div class="meta">
+    <span><strong>846</strong> student responses</span>
+    <span><strong>12 months</strong> of continuous fielding</span>
+    <span><strong>8-question</strong> in-product survey</span>
+    <span><strong>3 periods</strong> · exam, autumn, spring</span>
+  </div>
+</header>
+
+<!-- Top-line takeaway -->
+<section>
+  <div class="callout purple">
+    <h3 style="margin-bottom:12px;color:var(--purple-deep)">The one-minute takeaway</h3>
+    <p style="font-size:17px;color:var(--ink);font-weight:500;line-height:1.55;margin:0">Seneca's B2C conversion in 2025/26 is defined by three things: <strong>a paywall mechanic that worked</strong> (Cram mode gating converted the largest exam-season cohort Seneca has collected), <strong>a feature story stabilising</strong> (Mini-mocks is the lead feature, Exam Questions and Cram mode complete the top three, Amelia sits as the premium tier), and <strong>a commercial gap that was finally closed</strong> — a monthly subscription shipped in February 2026 after a year of testing to 10% of users, which reshapes the "let me pay monthly" hesitation that had appeared in every post-subscription survey since October 2022. Competitive pressure is real but manageable — ChatGPT as an Amelia substitute is the one strategic signal to act on quickly.</p>
+  </div>
+</section>
+
+<!-- Intro / period framing -->
+<section>
+  <h2>One year, three periods, one commercial pivot</h2>
+  <p class="sub">The survey ran continuously across a full academic cycle. To separate exam-season urgency from autumn reflection and spring-term panic, the full-year dataset is analysed across three matched periods.</p>
+  <div class="period-header">
+    <div class="period-box p1">
+      <div class="when">P1 · Apr–Aug 2025</div>
+      <div class="name">Exam Season 2025</div>
+      <div class="n">337 responses · The Cram gating lands</div>
+    </div>
+    <div class="period-box p2">
+      <div class="when">P2 · Sep–Dec 2025</div>
+      <div class="name">Autumn 2025</div>
+      <div class="n">247 responses · The heat cools</div>
+    </div>
+    <div class="period-box p3">
+      <div class="when">P3 · Jan–Apr 2026</div>
+      <div class="name">Spring 2026</div>
+      <div class="n">262 responses · Normalised, Mini-mocks resurgent</div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="stat teal"><div class="val">3 in 4</div><div class="lbl">Buy Exam Boost (~72–75%)</div></div>
+    <div class="stat purple"><div class="val">60%</div><div class="lbl">Say Cram mode is a motivator</div></div>
+    <div class="stat amber"><div class="val">80%</div><div class="lbl">Mini-mocks appeal in Spring '26</div></div>
+    <div class="stat rose"><div class="val">9 in 10</div><div class="lbl">Involve a parent when buying (prior survey)</div></div>
+  </div>
+</section>
+
+<!-- Who's buying -->
+<section>
+  <h2>Who is upgrading to Premium?</h2>
+  <p class="sub">GCSE families dominate — Y10 and Y11 account for 64–72% of every period. Sixth-formers are a small but real share.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Year group — share of purchases</h3>
+      <div class="kv-row"><div class="lbl">Year 11</div><div class="bar-wrap"><div class="bar teal" data-w="53"></div></div><div class="val">53%</div></div>
+      <div class="kv-row"><div class="lbl">Year 10</div><div class="bar-wrap"><div class="bar teal" data-w="19"></div></div><div class="val">19%</div></div>
+      <div class="kv-row"><div class="lbl">Year 9</div><div class="bar-wrap"><div class="bar blue" data-w="6"></div></div><div class="val">6%</div></div>
+      <div class="kv-row"><div class="lbl">Year 13 (Upper 6th)</div><div class="bar-wrap"><div class="bar blue" data-w="5"></div></div><div class="val">5%</div></div>
+      <div class="kv-row"><div class="lbl">Year 12 (Lower 6th)</div><div class="bar-wrap"><div class="bar blue" data-w="5"></div></div><div class="val">5%</div></div>
+      <div class="kv-row"><div class="lbl">Year 7</div><div class="bar-wrap"><div class="bar blue" data-w="5"></div></div><div class="val">5%</div></div>
+      <p style="font-size:12px;color:var(--ink-mute);margin-top:10px">Share shown: Spring 2026 period. GCSE years dominate across the whole year.</p>
+    </div>
+
+    <div class="card">
+      <h3>Personal vs school email at purchase</h3>
+      <div class="kv-row"><div class="lbl">Personal email</div><div class="bar-wrap"><div class="bar purple" data-w="61"></div></div><div class="val">~61%</div></div>
+      <div class="kv-row"><div class="lbl">School email</div><div class="bar-wrap"><div class="bar blue" data-w="39"></div></div><div class="val">~39%</div></div>
+      <p style="margin-top:18px;color:var(--ink-soft);font-size:14px">We ask what email students buy Premium on to see whether purchases go overwhelmingly to personal accounts or to school-managed ones. The recovery email feature was originally added for students using school accounts (so they could keep access after leaving school), though it's no longer actively promoted.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Packages -->
+<section>
+  <h2>What they buy</h2>
+  <p class="sub">Seneca Premium has a three-tier line-up on the student platform: Exam Boost as the middle tier, Amelia AI Assistant as the premium upgrade, and Supreme as the cheapest option. The mix is broadly stable across the year.</p>
+
+  <div class="card">
+    <h3>Package choice by period</h3>
+    <table class="period-table">
+      <thead>
+        <tr>
+          <th>Package</th>
+          <th>P1 Exam '25</th>
+          <th>P2 Autumn '25</th>
+          <th>P3 Spring '26</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Exam Boost <span style="font-size:11px;color:var(--ink-mute);font-weight:500;margin-left:6px">· middle tier</span></td>
+          <td class="num">72%</td>
+          <td class="num">69%</td>
+          <td class="num">75%</td>
+        </tr>
+        <tr>
+          <td>Amelia AI Assistant <span style="font-size:11px;color:var(--ink-mute);font-weight:500;margin-left:6px">· premium upgrade</span></td>
+          <td class="num">24%</td>
+          <td class="num">25%</td>
+          <td class="num">20%</td>
+        </tr>
+        <tr>
+          <td>Supreme <span style="font-size:11px;color:var(--ink-mute);font-weight:500;margin-left:6px">· cheapest</span></td>
+          <td class="num">11%</td>
+          <td class="num">15%</td>
+          <td class="num">13%</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:18px;color:var(--ink-soft);font-size:14px">Exam Boost dominates every period at 69–75%. Amelia sits between 20–25%; Supreme between 11–15%. Percentages exceed 100% because some students selected more than one package.</p>
+  </div>
+</section>
+
+<!-- The Cram Mode story -->
+<section>
+  <h2>The Cram Mode story — in three acts</h2>
+  <p class="sub">In April 2025 Seneca placed Cram mode — previously free and unlimited — behind a paywall. It was the most aggressive feature gating since Mini-mocks in 2023. A subsequent A/B test softened it to a 20-question partial-free gate. This year's survey captures the full emotional arc in real time.</p>
+
+  <div class="act-stack grid-3">
+    <div class="act-card act-1" style="border-top: 3px solid var(--rose)">
+      <span class="act-label">Act 1 · Exam 2025</span>
+      <h3>The gating lands</h3>
+      <p><strong>337 responses</strong> — 22% more than exam season 2024 on the same instrument. The conversion lift is real.</p>
+      <p>Unlimited Cram mode enters the multi-select at <strong>60% feature appeal</strong> — the highest debut share of any new feature option across the post-subscription surveys.</p>
+      <p>Dozens of students name Cram mode as the <em>only</em> reason they upgraded. The anger is loud and concentrated in April–May.</p>
+    </div>
+    <div class="act-card act-2" style="border-top: 3px solid var(--amber)">
+      <span class="act-label">Act 2 · Autumn 2025</span>
+      <h3>The heat cools</h3>
+      <p>Cram-mode mentions drop in volume and soften in tone. The motivation voice stops sounding coerced.</p>
+      <p>New students coming to Seneca don't know Cram used to be free — they just know it's part of Premium.</p>
+      <p>Feature appeal settles at 54% — still top-three, but no longer a lightning rod.</p>
+    </div>
+    <div class="act-card act-3" style="border-top: 3px solid var(--teal)">
+      <span class="act-label">Act 3 · Spring 2026</span>
+      <h3>Normalised</h3>
+      <p>Cram mode is integrated into the everyday motivation vocabulary. "<em>Quizzing and cram mode</em>" is a typical motivation answer.</p>
+      <p>By now, Mini-mocks has resurged to 80% feature appeal — the product story has moved on.</p>
+      <p>The commercial benefit persists; the emotional cost had a half-life of roughly three months.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:36px">The voice of the gating, captured verbatim</h3>
+  <p style="color:var(--ink-soft);font-size:15px;margin-bottom:6px">The P1 free text contains the sharpest adversarial quotes in any Seneca post-subscription survey to date. Students understand the mechanic perfectly — and they say so.</p>
+  <div class="big-quote rose">
+    <span class="qmark">“</span><p>The app is practically unusable without it. I did not want to get it, I had to. I will be leaving a bad review.</p>
+    <div class="attr">Anonymous · April 2025</div>
+  </div>
+  <div class="big-quote amber">
+    <span class="qmark">“</span><p>Because I use it as the main tool in my revision, especially the cram mode, but then YOU MADE US PAY FOR IT.</p>
+    <div class="attr">Year 12 · April 2025</div>
+  </div>
+  <div class="big-quote">
+    <span class="qmark">“</span><p>I want access to cram mode and you are now making me pay for it which is not very nice as it takes advantage of students.</p>
+    <div class="attr">Year 12 · May 2025</div>
+  </div>
+
+  <div class="quote-grid">
+    <div class="quote-card rose">
+      <span class="qmark">“</span><p>You took away cram mode from me and I needed that so thanks.</p>
+      <div class="attr">Year 11 · April 2025</div>
+    </div>
+    <div class="quote-card rose">
+      <span class="qmark">“</span><p>It is quite a ridiculous amount of money for something that was free about 2 weeks ago.</p>
+      <div class="attr">Year 12 · April 2025</div>
+    </div>
+    <div class="quote-card amber">
+      <span class="qmark">“</span><p>Limit on cram mode.</p>
+      <div class="attr">Year 11 · the motivation, in full</div>
+    </div>
+    <div class="quote-card amber">
+      <span class="qmark">“</span><p>i wanted unlimited cram.</p>
+      <div class="attr">Year 11 · April 2025</div>
+    </div>
+  </div>
+
+  <div class="callout teal" style="margin-top:22px">
+    <h3>The read for the roadmap</h3>
+    <p>The gating worked commercially — P1 delivered the largest exam-season sample Seneca has collected in a post-subscription survey. But the emotional cost was real and concentrated. The subsequent softening to a 20-question partial-free gate appears to be the right response. Any future gating decision should bank both outcomes into its expectations: a conversion lift <em>and</em> a spike of adversarial voice that needs communications-level care. By Spring 2026 new students don't remember the change at all — the anger half-life is roughly three months.</p>
+  </div>
+</section>
+
+<!-- Features -->
+<section>
+  <h2>What actually converts</h2>
+  <p class="sub">The features that drive upgrade are clearer than ever. Mini-mocks has regained its throne. Exam Questions is the stable second. Cram mode is the new third. Everything else is supporting cast.</p>
+
+  <div class="card">
+    <h3>Feature appeal · full-year multi-select, n=846</h3>
+    <div class="kv-row"><div class="lbl">Mini-mocks</div><div class="bar-wrap"><div class="bar teal" data-w="76"></div></div><div class="val">76%</div></div>
+    <div class="kv-row"><div class="lbl">Exam Questions</div><div class="bar-wrap"><div class="bar teal" data-w="65"></div></div><div class="val">65%</div></div>
+    <div class="kv-row"><div class="lbl">Unlimited Cram mode <span class="chip purple" style="margin-left:8px;vertical-align:middle">Gated Apr 2025</span></div><div class="bar-wrap"><div class="bar purple" data-w="57"></div></div><div class="val">57%</div></div>
+    <div class="kv-row"><div class="lbl">Quiz mode</div><div class="bar-wrap"><div class="bar blue" data-w="48"></div></div><div class="val">48%</div></div>
+    <div class="kv-row"><div class="lbl">Wrong Answer Mode</div><div class="bar-wrap"><div class="bar blue" data-w="38"></div></div><div class="val">38%</div></div>
+    <div class="kv-row"><div class="lbl">Hardest questions</div><div class="bar-wrap"><div class="bar amber" data-w="39"></div></div><div class="val">39%</div></div>
+    <div class="kv-row"><div class="lbl">Premium Courses</div><div class="bar-wrap"><div class="bar blue" data-w="33"></div></div><div class="val">33%</div></div>
+    <div class="kv-row"><div class="lbl">Smart Learning Mode <span class="chip teal" style="margin-left:8px;vertical-align:middle">Made free Nov 2025</span></div><div class="bar-wrap"><div class="bar blue" data-w="30"></div></div><div class="val">30%</div></div>
+    <div class="kv-row"><div class="lbl">Amelia AI Assistant</div><div class="bar-wrap"><div class="bar rose" data-w="25"></div></div><div class="val">25%</div></div>
+  </div>
+
+  <div class="grid-3" style="margin-top:26px">
+    <div class="callout teal">
+      <h3>Mini-mocks: 80% in Spring '26</h3>
+      <p style="color:var(--ink-soft);font-size:14px">After softening to 73–76% across the autumn 2024 survey and P1/P2 of this one, Mini-mocks recovered to <strong>80%</strong> in P3 Spring 2026 — near its historical peak. Whatever was shipped on the feature in the past year has landed.</p>
+    </div>
+    <div class="callout amber">
+      <h3>Hardest questions growing quietly</h3>
+      <p style="color:var(--ink-soft);font-size:14px">36% (P1) → 38% (P2) → <strong>42%</strong> (P3). One of the few features gaining ground. Worth naming and investing in as a distinct value proposition.</p>
+    </div>
+    <div class="callout rose">
+      <h3>Wrong Answer Mode softening</h3>
+      <p style="color:var(--ink-soft);font-size:14px">Stuck at 38% across all three periods — down from 44% in the previous year's survey. As Cram mode and Mini-mocks dominate the revision loop, Wrong Answers is losing relative appeal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Motivations -->
+<section>
+  <h2>Why they actually upgrade</h2>
+  <p class="sub">Behind the package and feature choices sits the emotional driver. Exam anxiety is still the primary one — but the shape of the conversation has become more specific, more peer-influenced, and more regret-aware.</p>
+
+  <div class="card">
+    <h3>Decision drivers · period-weighted, pick any that apply</h3>
+    <table class="period-table">
+      <thead>
+        <tr>
+          <th>Driver</th>
+          <th>P1 Exam '25</th>
+          <th>P2 Autumn '25</th>
+          <th>P3 Spring '26</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>"I've got exams coming up and I'm stressed"</td><td class="num hi">60%</td><td class="num">50%</td><td class="num">56%</td></tr>
+        <tr><td>"I use it regularly and wanted premium features"</td><td class="num">40%</td><td class="num">36%</td><td class="num hi">44%</td></tr>
+        <tr><td>"My parents got it for me"</td><td class="num">33%</td><td class="num hi">35%</td><td class="num">32%</td></tr>
+        <tr><td>"My school uses it and I thought it'd help me"</td><td class="num">19%</td><td class="num hi">32%</td><td class="num">21%</td></tr>
+        <tr><td>"A friend/sibling recommended it"</td><td class="num">7%</td><td class="num hi">10%</td><td class="num">8%</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:18px;color:var(--ink-soft);font-size:14px">Classic autumn/spring rhythm: exam stress dominates the panic periods; "I use it regularly" peaks in spring when reflective buyers close the loop; school social-proof spikes at back-to-school. Friend/sibling referral holds in a steady 7–10% band.</p>
+  </div>
+
+  <h3 style="margin-top:32px">The three motivation modes</h3>
+  <div class="grid-3" style="margin-top:16px">
+    <div class="card">
+      <span class="chip rose">Panic</span>
+      <h4 style="margin-top:10px">Exam anxiety, bluntly stated</h4>
+      <p style="color:var(--ink-soft);font-size:14px">The single largest motivation cluster. Students name specific grades, specific subjects, specific weeks. Sharper in spring than autumn.</p>
+      <div class="quote-card rose" style="margin-top:14px">
+        <span class="qmark">“</span><p>I need to lock in or I might just be cooked.</p>
+        <div class="attr">Year 13 · April 2025</div>
+      </div>
+      <div class="quote-card rose" style="margin-top:10px">
+        <span class="qmark">“</span><p>i have only 2 months before my exams and i have yet to start revision.</p>
+        <div class="attr">Year 11 · March 2026</div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="chip teal">Reflective</span>
+      <h4 style="margin-top:10px">Habit graduating into commitment</h4>
+      <p style="color:var(--ink-soft);font-size:14px">Returning users who've used the free product for months or years and finally cross the paid threshold. Peaks in spring (44%) — more stable than panic-purchase cohort.</p>
+      <div class="quote-card teal" style="margin-top:14px">
+        <span class="qmark">“</span><p>Had it before and found it useful for my gcses, seems like it will also be useful for my alevels.</p>
+        <div class="attr">Year 12 · April 2026</div>
+      </div>
+      <div class="quote-card teal" style="margin-top:10px">
+        <span class="qmark">“</span><p>It got me through GCSE sociology, hoping it can do the same for alevel business.</p>
+        <div class="attr">Year 12 · January 2026</div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="chip amber">Regret</span>
+      <h4 style="margin-top:10px">The cost of not buying</h4>
+      <p style="color:var(--ink-soft);font-size:14px">A motivation mode that has grown across recent surveys — students framing the purchase as repairing a past under-investment. Marketing copy doesn't currently address this.</p>
+      <div class="quote-card amber" style="margin-top:14px">
+        <span class="qmark">“</span><p>I didn't get it at GCSE and now I'm not allowed to do A-Level Chemistry.</p>
+        <div class="attr">Year 12 · autumn 2023 survey → recurring motif</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>It's too late for an academic comeback. I need an academic miracle.</p>
+        <div class="attr">Year 12 · January 2024 survey → still the archetype</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hesitations -->
+<section>
+  <h2>Why they nearly don't</h2>
+  <p class="sub">Across 846 responses, two hesitations dominate — and have been consistent across every post-subscription survey since October 2022. A new concerning signal has also emerged: peer-level negative word of mouth.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Hesitation themes · full-year</h3>
+      <div class="kv-row"><div class="lbl">Price / cost</div><div class="bar-wrap"><div class="bar rose" data-w="37"></div></div><div class="val">~37%</div></div>
+      <div class="kv-row"><div class="lbl">None</div><div class="bar-wrap"><div class="bar teal" data-w="36"></div></div><div class="val">~36%</div></div>
+      <div class="kv-row"><div class="lbl">Payment structure</div><div class="bar-wrap"><div class="bar amber" data-w="17"></div></div><div class="val">~17%</div></div>
+      <div class="kv-row"><div class="lbl">Will it be worth it?</div><div class="bar-wrap"><div class="bar blue" data-w="4"></div></div><div class="val">~4%</div></div>
+      <p style="margin-top:16px;color:var(--ink-soft);font-size:14px">Price peaks at <strong>43%</strong> in Spring 2026 (pre-exam buyers are the most price-aware). Payment-structure complaints soften across the year — partly as students get used to the seasonal/annual commitment, and partly because a monthly option shipped in Feb 2026 for the tail of the P3 period.</p>
+    </div>
+
+    <div class="card">
+      <h3>The monthly subscription ask</h3>
+      <p style="color:var(--ink-soft);font-size:14px;margin-bottom:14px">Students asking for a monthly option has appeared in every post-subscription survey since October 2022. It became sharper during P1 and P2 of this survey, amplified by the Cram gating — students wanted Cram for one specific month but were forced into a four-month commitment. <strong>A monthly package shipped in February 2026</strong> after a year of testing with 10% of users — the pre-Feb-2026 quotes below are what made the case.</p>
+      <div class="quote-card amber">
+        <span class="qmark">“</span><p>I only need it for a month but I have to pay for 4 months.</p>
+        <div class="attr">Year 11 · May 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>That you can only buy it for 4 months. I wanted to buy it for one month to cram for my exams.</p>
+        <div class="attr">Year 13 · April 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>It was billed seasonally so I can't pay for months I'll actually use it for.</p>
+        <div class="attr">Year 11 · April 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:32px">New this year: peer negativity and pricing confusion</h3>
+  <div class="grid-2" style="margin-top:16px">
+    <div class="callout rose">
+      <h3>Negative social proof has entered the voice</h3>
+      <p style="color:var(--ink-soft);font-size:14px">First appeared in the autumn 2024 post-subscription survey (Sep 2024 – Apr 2025) and has continued into this one. Students now explicitly reference peer and review-site negativity in their pre-purchase thinking. None of the surveys before autumn 2024 contained this signal at all.</p>
+      <div class="quote-card rose" style="margin-top:12px">
+        <span class="qmark">“</span><p>Like some people's bad reviews saying it was useless.</p>
+        <div class="attr">Year 11 · January 2025</div>
+      </div>
+      <div class="quote-card rose" style="margin-top:10px">
+        <span class="qmark">“</span><p>people say it's not worth it.</p>
+        <div class="attr">Year 11 · January 2025</div>
+      </div>
+    </div>
+
+    <div class="callout amber">
+      <h3>Pricing transparency is leaking trust</h3>
+      <p style="color:var(--ink-soft);font-size:14px">A pricing-comms problem has surfaced: students see one price in marketing or on the initial screen and a higher one at checkout. The word "misleading" is used by both parents and students. This is now especially relevant with the monthly option live, since monthly-vs-seasonal price differences are a fresh source of confusion.</p>
+      <div class="quote-card amber" style="margin-top:12px">
+        <span class="qmark">“</span><p>The price initially said 8 pounds per month, but when I first tried getting it, it was suddenly 25 pounds.</p>
+        <div class="attr">Year 11 · March 2026</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>The price is outrageous luv xx 76 quid? i better get a 9 then.</p>
+        <div class="attr">Year 11 · exam season 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Opportunities & Threats -->
+<section>
+  <h2>Opportunities and threats for the B2C business</h2>
+  <p class="sub">The post-purchase voice, read across a full year, is not just diagnostic — it points at concrete levers and competitive pressure points.</p>
+
+  <h3 style="margin-top:20px">Opportunities</h3>
+  <div class="priority-row">
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Commercial <span style="background:var(--teal-soft);color:var(--teal-dark);margin-left:6px;padding:2px 7px;border-radius:4px;font-size:9px">NB: shipped Feb 2026</span></span>
+      <h4>Monthly subscription</h4>
+      <p>The single most-repeated hesitation in every post-subscription survey since October 2022 — sharpened further by the Cram gating during P1/P2 of this survey, where students wanted Cram for one specific month but faced a four-month commitment. <strong>A monthly package shipped in February 2026</strong> after a year of testing with 10% of users. The watching-brief now is monthly-vs-seasonal pricing perception, not availability.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Product</span>
+      <h4>Mini-mocks has room to extend its lead</h4>
+      <p>Back to 80% feature appeal in Spring 2026 after softening. The strongest single-feature conversion asset. More content depth, more subjects, better feedback loops — all compound on the most valued thing students buy.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Product</span>
+      <h4>Close named course coverage gaps</h4>
+      <p>"<em>There isn't a course for OCR psychology GCSE — that was the only thing I was debating</em>" (Y11, March 2025). One articulated missing course converted to a multi-week delay. The clearest coverage-gap-as-lost-revenue quote captured in the post-subscription surveys.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Positioning</span>
+      <h4>Lean into the "cost of not buying"</h4>
+      <p>Quotes like "<em>I didn't get it at GCSE and now I'm not allowed to do A-Level Chemistry</em>" and "<em>I need an academic miracle</em>" are marketing gold. The fear of under-investing is a stronger conversion lever than the excitement of feature access.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Feature</span>
+      <h4>Invest in "Hardest questions"</h4>
+      <p>Quietly growing feature appeal across every period (36% → 38% → 42%). One of the few rising signals in the dataset. Worth confirming what it maps to in-product and surfacing prominently.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Ops</span>
+      <h4>Fix the pricing-comms confusion</h4>
+      <p>Students and parents now use "misleading" to describe the price-teaser-at-marketing vs. higher-commitment-at-checkout flow. Especially relevant now the monthly option is live — monthly-vs-seasonal price differences are a fresh source of confusion that needs crystal-clear communication.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:36px">Threats</h3>
+  <div class="priority-row">
+    <div class="priority-card threat">
+      <span class="tag">Threat · Competitive</span>
+      <h4>ChatGPT is now named as an Amelia substitute</h4>
+      <p>"<em>The price is quite expensive especially the AI package for when you can just use a platform like ChatGPT for free.</em>" First explicit substitute-quote in the post-subscription surveys. Amelia's differentiation — curriculum awareness, progress integration, safety — needs sharper positioning before this pattern scales.</p>
+    </div>
+    <div class="priority-card threat">
+      <span class="tag">Threat · Competitive</span>
+      <h4>The competitor set has broadened</h4>
+      <p>In this and the previous year's survey, students named <strong>Uplearn, Savemyexams, BBC Bitesize, NotebookLM, GCSEpod</strong> and <strong>ChatGPT</strong> in their pre-purchase reasoning. Pre-purchase comparison is now standard — earlier post-subscription surveys contained near-zero competitor mentions.</p>
+    </div>
+    <div class="priority-card threat">
+      <span class="tag">Threat · Brand</span>
+      <h4>Peer negativity is in the voice for the first time</h4>
+      <p>"<em>People say it's not worth it</em>" and "<em>bad reviews saying it was useless</em>" did not appear in any post-subscription survey before autumn 2024. They appear now. External review defence (Trustpilot, App Store) is now a real marketing discipline.</p>
+    </div>
+    <div class="priority-card threat">
+      <span class="tag">Threat · Emotional</span>
+      <h4>Aggressive gating creates a review-risk tail</h4>
+      <p>The April 2025 Cram gating produced a small but vivid cohort saying "<em>I will be leaving a bad review</em>". The heat cooled within three months, but anyone searching for Seneca reviews during that window saw the cost of the decision. Any future gating needs a paired communications plan.</p>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <p>
+    <strong>Method.</strong> 846 post-subscription student responses collected 7 April 2025 – 14 April 2026, 8-question in-product survey. Analysed as three internal periods (P1 n=337, P2 n=247, P3 n=262). All quotes verbatim; spelling preserved. Feature-appeal shares use multi-select, so values can exceed 100% across a row. Hesitation themes derived from free-text keyword matching.
+  </p>
+  <p>
+    <strong>Source data.</strong> <a href="https://app.lyssna.com/tests/a2g9okdtg8kg/results/oc8lykrrtkdu">Lyssna · Student Post-Subscription Survey (Apr 2025 – Apr 2026)</a>. Full written report: <em>post-purchase-survey-apr2025.md</em> in the product-research repository.
+  </p>
+  <p style="margin-top:20px;color:var(--ink-mute)">Produced for the Seneca product team · Covering the Apr 2025 – Apr 2026 post-subscription survey window</p>
+</div>
+
+</div>
+
+<script>
+// Intersection-observer reveal for sections
+(function() {
+  const sections = document.querySelectorAll('section');
+  if (!('IntersectionObserver' in window)) {
+    sections.forEach(s => s.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  sections.forEach(s => io.observe(s));
+
+  // Animate bars when their parent card is in view
+  const bars = document.querySelectorAll('.bar[data-w]');
+  const barIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const w = e.target.getAttribute('data-w');
+        setTimeout(() => { e.target.style.width = w + '%'; }, 80);
+        barIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  bars.forEach(b => barIO.observe(b));
+})();
+</script>
+</body>
+</html>
