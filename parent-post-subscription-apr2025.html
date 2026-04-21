@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Seneca · Parent Post-Subscription Report · Apr 2025 – Apr 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box }
+:root {
+  /* Seneca Premium purple-tinted palette */
+  --bg: #F3EFFA;
+  --bg-alt: #EAE2F5;
+  --card: #FFFFFF;
+  --card-hover: #F9F6FD;
+
+  --ink: #1E2736;
+  --ink-soft: #4E5A75;
+  --ink-mute: #8A91A4;
+  --line: #E1D8F0;
+  --line-hover: #CFC2E5;
+
+  /* Seneca signal palette */
+  --teal: #4ECF86;
+  --teal-dark: #3AAD6E;
+  --teal-soft: #E1F5EA;
+
+  --rose: #F25C5C;
+  --rose-soft: #FBE3E3;
+
+  --amber: #F5A623;
+  --amber-dark: #D48A1A;
+  --amber-soft: #FBEBD2;
+
+  --blue: #5B9BD5;
+  --blue-soft: #E1EDF8;
+
+  --purple: #7B6FBF;
+  --purple-bright: #9B8FDB;
+  --purple-deep: #5B6ABF;
+  --purple-soft: #E9E3F7;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 1px 4px rgba(91,106,191,.06);
+  --shadow: 0 2px 12px rgba(91,106,191,.08);
+  --shadow-lg: 0 4px 24px rgba(91,106,191,.10);
+}
+html, body { background: var(--bg); color: var(--ink); margin: 0; padding: 0; font-family: 'Mulish', system-ui, sans-serif; font-weight: 400; line-height: 1.6; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale }
+body { background-image: radial-gradient(ellipse at top, rgba(155,143,219,.18), transparent 60%), radial-gradient(ellipse at bottom right, rgba(123,111,191,.12), transparent 55%); background-attachment: fixed }
+a { color: var(--purple-deep); text-decoration: none; border-bottom: 1px solid rgba(91,106,191,.3); transition: border-color .15s }
+a:hover { border-bottom-color: var(--purple-deep) }
+.container { max-width: 1120px; margin: 0 auto; padding: 56px 28px 96px }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: .14em; font-size: 11px; font-weight: 700; color: var(--purple-deep); background: rgba(91,106,191,.1); border: 1px solid rgba(91,106,191,.18); padding: 6px 14px; border-radius: 999px; margin-bottom: 22px }
+.eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--purple-deep); animation: pulse 2s infinite }
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+h1 { font-size: 52px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 20px; color: var(--ink) }
+h2 { font-size: 32px; font-weight: 800; letter-spacing: -0.015em; margin: 0 0 18px; color: var(--ink) }
+h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 12px; color: var(--ink) }
+h4 { font-size: 16px; font-weight: 700; letter-spacing: 0; margin: 0 0 8px; color: var(--ink) }
+p { margin: 0 0 14px }
+.sub { font-size: 18px; color: var(--ink-soft); max-width: 740px; margin: 0 0 28px; line-height: 1.55; font-weight: 400 }
+.meta { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 13px; color: var(--ink-mute); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px 0; margin: 0 0 48px }
+.meta span { display: inline-flex; align-items: baseline; gap: 6px }
+.meta strong { color: var(--ink); font-weight: 700; letter-spacing: -.005em }
+
+section { margin: 0 0 60px; opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease }
+section.in { opacity: 1; transform: none }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 0 0 32px }
+.stat { background: var(--card); border-radius: var(--radius); padding: 20px 22px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; overflow: hidden }
+.stat::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: var(--purple-bright) }
+.stat.teal::before { background: var(--teal) }
+.stat.rose::before { background: var(--rose) }
+.stat.amber::before { background: var(--amber) }
+.stat.purple::before { background: var(--purple) }
+.stat .val { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1.02; margin-bottom: 4px }
+.stat.teal .val { color: var(--teal-dark) }
+.stat.rose .val { color: var(--rose) }
+.stat.purple .val { color: var(--purple) }
+.stat.amber .val { color: var(--amber-dark) }
+.stat .lbl { font-size: 12px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: .1em; font-weight: 700 }
+
+.card { background: var(--card); border-radius: var(--radius); padding: 30px 32px; border: 1px solid var(--line); box-shadow: var(--shadow) }
+.card + .card { margin-top: 20px }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px }
+
+.kv-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line) }
+.kv-row:last-of-type { border-bottom: none }
+.kv-row .lbl { font-weight: 600; color: var(--ink); font-size: 14px }
+.kv-row .bar-wrap { width: 280px; background: rgba(91,106,191,.08); border-radius: 3px; height: 6px; overflow: hidden; position: relative }
+.kv-row .bar { height: 100%; width: 0; background: var(--purple-bright); border-radius: 3px; transition: width 1.2s cubic-bezier(.22,.8,.28,1) }
+.kv-row .bar.blue { background: var(--blue) }
+.kv-row .bar.rose { background: var(--rose) }
+.kv-row .bar.amber { background: var(--amber) }
+.kv-row .bar.purple { background: var(--purple) }
+.kv-row .bar.teal { background: var(--teal) }
+.kv-row .val { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; font-size: 14px }
+
+.period-table { width: 100%; border-collapse: collapse; margin-top: 12px }
+.period-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-mute); font-weight: 700; padding: 10px 12px; border-bottom: 2px solid var(--line) }
+.period-table td { padding: 13px 12px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle }
+.period-table td:first-child { font-weight: 600 }
+.period-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600 }
+.period-table tr:last-child td { border-bottom: none }
+.period-table tr:hover td { background: rgba(91,106,191,.03) }
+.period-table td.hi { color: var(--teal-dark); font-weight: 800 }
+
+.quote-card { border-radius: var(--radius-sm); background: var(--card); border: 1px solid var(--line); padding: 18px 22px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm); transition: border-color .22s, background .22s, box-shadow .22s }
+.quote-card:hover { border-color: var(--line-hover); background: var(--card-hover); box-shadow: var(--shadow) }
+.quote-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--teal) }
+.quote-card.rose::before { background: var(--rose) }
+.quote-card.amber::before { background: var(--amber) }
+.quote-card.blue::before { background: var(--blue) }
+.quote-card.purple::before { background: var(--purple) }
+.quote-card .qmark { font-size: 28px; font-weight: 800; color: var(--purple-deep); opacity: .3; line-height: 1; margin-bottom: 2px; font-family: Georgia, serif }
+.quote-card p { margin: 0 0 6px; font-size: 15px; color: var(--ink); font-weight: 500; line-height: 1.5 }
+.quote-card .attr { font-size: 11px; color: var(--purple-deep); background: rgba(91,106,191,.1); padding: 2px 9px; border-radius: 6px; font-weight: 600; display: inline-block; margin-top: 6px }
+.quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0 }
+.quote-grid.single { grid-template-columns: 1fr }
+.quote-stack > * + * { margin-top: 12px }
+
+.big-quote { padding: 32px 36px 28px; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); position: relative; overflow: hidden; box-shadow: var(--shadow); margin: 18px 0 }
+.big-quote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--purple) }
+.big-quote.amber::before { background: var(--amber) }
+.big-quote.rose::before { background: var(--rose) }
+.big-quote.teal::before { background: var(--teal) }
+.big-quote .qmark { font-size: 46px; font-weight: 800; color: var(--purple-deep); opacity: .2; line-height: .8; margin-bottom: 4px; font-family: Georgia, serif }
+.big-quote.amber .qmark { color: var(--amber-dark) }
+.big-quote.rose .qmark { color: var(--rose) }
+.big-quote.teal .qmark { color: var(--teal-dark) }
+.big-quote p { font-size: 20px; line-height: 1.5; font-weight: 600; color: var(--ink); margin: 0 0 6px }
+.big-quote .attr { font-size: 12px; color: var(--purple-deep); background: rgba(91,106,191,.1); padding: 3px 10px; border-radius: 6px; font-weight: 600; display: inline-block; margin-top: 10px }
+.big-quote.amber .attr { color: var(--amber-dark); background: rgba(245,166,35,.12) }
+.big-quote.rose .attr { color: var(--rose); background: rgba(242,92,92,.1) }
+.big-quote.teal .attr { color: var(--teal-dark); background: rgba(78,207,134,.12) }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 999px; background: var(--teal-soft); color: var(--teal-dark); font-size: 11px; font-weight: 700; letter-spacing: .04em }
+.chip.rose { background: var(--rose-soft); color: var(--rose) }
+.chip.amber { background: var(--amber-soft); color: var(--amber-dark) }
+.chip.blue { background: var(--blue-soft); color: var(--blue) }
+.chip.purple { background: var(--purple-soft); color: var(--purple) }
+
+.period-header { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 10px 0 26px }
+.period-box { border-radius: var(--radius); padding: 20px 22px; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; overflow: hidden }
+.period-box::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 3px }
+.period-box.p1::before { background: var(--rose) }
+.period-box.p2::before { background: var(--amber) }
+.period-box.p3::before { background: var(--teal) }
+.period-box .when { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; color: var(--ink-mute); margin-bottom: 6px }
+.period-box .name { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.01em }
+.period-box .n { font-size: 13px; color: var(--ink-soft); font-weight: 600 }
+
+.pathway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px }
+.pathway-card { background: var(--card); border-radius: var(--radius); padding: 26px 28px; border: 1px solid var(--line); box-shadow: var(--shadow); position: relative; overflow: hidden }
+.pathway-card::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: var(--purple-bright) }
+.pathway-card.school::before { background: var(--blue) }
+.pathway-card.child::before { background: var(--teal) }
+.pathway-card.ai::before { background: var(--purple) }
+.pathway-card.other::before { background: var(--amber) }
+.pathway-card .share { font-size: 38px; font-weight: 800; color: var(--purple-deep); letter-spacing: -0.02em; line-height: 1; margin-bottom: 6px }
+.pathway-card.school .share { color: var(--blue) }
+.pathway-card.child .share { color: var(--teal-dark) }
+.pathway-card.ai .share { color: var(--purple) }
+.pathway-card.other .share { color: var(--amber-dark) }
+.pathway-card h4 { margin-bottom: 10px; font-size: 18px }
+.pathway-card p { font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 14px }
+
+.callout { background: var(--card); padding: 26px 30px; border-radius: var(--radius); border: 1px solid var(--line); border-left: 4px solid var(--purple); box-shadow: var(--shadow) }
+.callout.teal { border-left-color: var(--teal) }
+.callout.rose { border-left-color: var(--rose) }
+.callout.amber { border-left-color: var(--amber) }
+.callout.blue { border-left-color: var(--blue) }
+.callout.purple { background: linear-gradient(135deg, rgba(155,143,219,.08), rgba(91,106,191,.04)); border-left-color: var(--purple-deep) }
+.callout h3 { margin-bottom: 10px }
+
+.priority-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 16px }
+.priority-card { background: var(--card); border-radius: var(--radius); padding: 24px 26px; border: 1px solid var(--line); box-shadow: var(--shadow); position: relative; transition: border-color .25s, transform .2s, box-shadow .25s; overflow: hidden }
+.priority-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px }
+.priority-card.opp::before { background: var(--teal) }
+.priority-card.threat::before { background: var(--rose) }
+.priority-card:hover { border-color: var(--line-hover); transform: translateY(-1px); box-shadow: var(--shadow-lg) }
+.priority-card .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px }
+.priority-card.opp .tag { background: var(--teal-soft); color: var(--teal-dark) }
+.priority-card.threat .tag { background: var(--rose-soft); color: var(--rose) }
+.priority-card h4 { margin-bottom: 8px; font-size: 16px }
+.priority-card p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.55 }
+
+.tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px }
+
+.footer { margin-top: 80px; padding: 36px 0 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-mute); line-height: 1.6 }
+.footer a { color: var(--ink-soft) }
+.footer p { margin: 0 0 12px }
+
+@media (max-width: 860px) {
+  h1 { font-size: 36px }
+  h2 { font-size: 26px }
+  .container { padding: 40px 20px 72px }
+  .stat-row { grid-template-columns: 1fr 1fr }
+  .grid-2, .grid-3, .priority-row, .quote-grid, .period-header, .pathway-grid { grid-template-columns: 1fr }
+  .kv-row { grid-template-columns: 1fr auto; gap: 8px }
+  .kv-row .bar-wrap { grid-column: 1 / -1; width: 100% }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Seneca · Parent Post-Subscription Survey · Apr 2025 – Apr 2026</div>
+  <h1>How parents come to buy Seneca Premium</h1>
+  <p class="sub">A full-year read of 626 parents who upgraded their child's Seneca account between April 2025 and April 2026 — told largely in their own words. This report traces the parent pathway to Premium: where they first hear about it, what triggers the purchase, which package they choose, and where they hesitate along the way.</p>
+  <div class="meta">
+    <span><strong>626</strong> parent responses</span>
+    <span><strong>12 months</strong> of continuous fielding</span>
+    <span><strong>6-question</strong> in-product survey</span>
+    <span><strong>First clean parent year</strong> since the routing fix</span>
+  </div>
+</header>
+
+<!-- Top-line takeaway -->
+<section>
+  <div class="callout purple">
+    <h3 style="margin-bottom:12px;color:var(--purple-deep)">The one-minute takeaway</h3>
+    <p style="font-size:17px;color:var(--ink);font-weight:500;line-height:1.55;margin:0">Parent conversion is not cold acquisition — it's a <strong>warm-hand-off from the child or from school</strong>. Roughly half of parents first hear about Seneca through their child's school; another big share through the child themselves. Once they find out, they convert with conviction — <strong>44% report no hesitation at all</strong>. Seven-in-ten buy Exam Boost (the middle tier); Amelia AI Assistant takes a remarkable <strong>52% of parent purchases in Autumn 2025</strong>, falling back to 20–37% in the rest of the year. Awareness is the single biggest barrier to earlier purchase — parents who don't know Premium exists simply don't buy it. When they do know, they buy.</p>
+  </div>
+</section>
+
+<!-- Period framing -->
+<section>
+  <h2>The parent buying year in three seasons</h2>
+  <p class="sub">The parent survey ran continuously for a full academic cycle. The three internal periods isolate the seasonal rhythm parents buy on — post-routing-fix recovery through exam 2025, the autumn buying surge, and the spring pre-exam run-up.</p>
+  <div class="period-header">
+    <div class="period-box p1">
+      <div class="when">P1 · Apr–Aug 2025</div>
+      <div class="name">Exam Season 2025</div>
+      <div class="n">104 responses · Routing fix restored</div>
+    </div>
+    <div class="period-box p2">
+      <div class="when">P2 · Sep–Dec 2025</div>
+      <div class="name">Autumn 2025</div>
+      <div class="n">307 responses · The parent surge</div>
+    </div>
+    <div class="period-box p3">
+      <div class="when">P3 · Jan–Apr 2026</div>
+      <div class="name">Spring 2026</div>
+      <div class="n">215 responses · Spring-term activation</div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="stat teal"><div class="val">7 in 10</div><div class="lbl">Buy Exam Boost (~69–75%)</div></div>
+    <div class="stat purple"><div class="val">52%</div><div class="lbl">Bought Amelia in Autumn '25 peak</div></div>
+    <div class="stat amber"><div class="val">~50%</div><div class="lbl">First heard of Seneca via school</div></div>
+    <div class="stat teal"><div class="val">44%</div><div class="lbl">Report no hesitation at all</div></div>
+  </div>
+</section>
+
+<!-- Who are they buying for -->
+<section>
+  <h2>Who are parents buying for?</h2>
+  <p class="sub">Parents buying Seneca Premium are overwhelmingly parents of GCSE-age children. Year 11 parents dominate every period — but Year 10 and the earlier secondary years each have a meaningful share, particularly in spring.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Child's year group · Spring 2026</h3>
+      <div class="kv-row"><div class="lbl">Year 11</div><div class="bar-wrap"><div class="bar teal" data-w="44"></div></div><div class="val">44%</div></div>
+      <div class="kv-row"><div class="lbl">Year 10</div><div class="bar-wrap"><div class="bar teal" data-w="21"></div></div><div class="val">21%</div></div>
+      <div class="kv-row"><div class="lbl">Year 9</div><div class="bar-wrap"><div class="bar blue" data-w="9"></div></div><div class="val">9%</div></div>
+      <div class="kv-row"><div class="lbl">Year 8</div><div class="bar-wrap"><div class="bar blue" data-w="8"></div></div><div class="val">8%</div></div>
+      <div class="kv-row"><div class="lbl">Year 7</div><div class="bar-wrap"><div class="bar blue" data-w="6"></div></div><div class="val">6%</div></div>
+      <div class="kv-row"><div class="lbl">Year 12 (Lower 6th)</div><div class="bar-wrap"><div class="bar blue" data-w="4"></div></div><div class="val">4%</div></div>
+      <div class="kv-row"><div class="lbl">Year 13 (Upper 6th)</div><div class="bar-wrap"><div class="bar blue" data-w="4"></div></div><div class="val">4%</div></div>
+      <p style="font-size:12px;color:var(--ink-mute);margin-top:10px">Y11 share was 33% in Exam 2025, rose to 45% in Autumn 2025, and holds at 44% in Spring 2026 — the final GCSE year is consistently the most active parent buying window.</p>
+    </div>
+
+    <div class="card">
+      <h3>What the numbers don't say</h3>
+      <p style="color:var(--ink-soft);font-size:14px">A year-group share doesn't capture why a parent is buying. Across the free text, the parent voice is dominated by <strong>a few recurring postures</strong> — the child who asked, the child who is struggling, the child with specific learning needs, and the parent trying to stretch limited resources.</p>
+      <div class="quote-card teal" style="margin-top:14px">
+        <span class="qmark">“</span><p>I'd like my child to achieve the best grades that he can. We can't afford private education, but hopefully modern tech pick him up in the areas where he struggles. My wife and I try to make ourselves available, but we can't always help between us both working.</p>
+        <div class="attr">Parent of Y9 · September 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>my child is behind a lot, expected grades are poor. i struggle to help him structure any revision at home and become lost due to my ADHD.</p>
+        <div class="attr">Parent of Y10 · February 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE CORE: Pathways to Premium -->
+<section>
+  <h2>Pathways into Premium — where parents first hear about Seneca</h2>
+  <p class="sub">Asked "is there any reason you didn't get Seneca Premium sooner?", about a third of parents tell the same story: they didn't know it existed. Reading through the answers, four distinct discovery pathways emerge — and their relative sizes matter for the marketing roadmap.</p>
+
+  <div class="pathway-grid">
+    <div class="pathway-card school">
+      <div class="share">~50%</div>
+      <h4>Through school</h4>
+      <p>By far the dominant discovery channel. Parents hear about Seneca because their child's school uses it — either for homework, classwork, or via direct communication from teachers and SEN coordinators. This is the warm handoff that the rest of the parent funnel depends on.</p>
+      <div class="quote-card blue">
+        <span class="qmark">“</span><p>I didn't know about it. SENDCo from school just sent the link tonight.</p>
+        <div class="attr">Parent of Y11 · September 2025</div>
+      </div>
+      <div class="quote-card blue" style="margin-top:10px">
+        <span class="qmark">“</span><p>Her school only introduced it this academic year and there only a couple of her subjects that use it.</p>
+        <div class="attr">Parent of Y11 · March 2026</div>
+      </div>
+      <div class="quote-card blue" style="margin-top:10px">
+        <span class="qmark">“</span><p>Learning resources from school were poor.</p>
+        <div class="attr">Parent of Y11 · September 2025</div>
+      </div>
+    </div>
+
+    <div class="pathway-card child">
+      <div class="share">~20%</div>
+      <h4>Through the child</h4>
+      <p>Students ask. They've been using free Seneca, run into the paywall (especially Cram mode), and come to their parent with a specific request. The parent then converts on the child's recommendation. This is the single most common purchase-trigger pattern.</p>
+      <div class="quote-card teal">
+        <span class="qmark">“</span><p>He asked for it!</p>
+        <div class="attr">Parent of Y11 · November 2025</div>
+      </div>
+      <div class="quote-card teal" style="margin-top:10px">
+        <span class="qmark">“</span><p>My child asked me to, so I did it.</p>
+        <div class="attr">Parent of Y11 · October 2025</div>
+      </div>
+      <div class="quote-card teal" style="margin-top:10px">
+        <span class="qmark">“</span><p>He's not revising for his exams, but he's just sent me a request to buy premium so I thought it was a positive step.</p>
+        <div class="attr">Parent of Y11 · November 2025</div>
+      </div>
+    </div>
+
+    <div class="pathway-card ai">
+      <div class="share">Emerging</div>
+      <h4>Through an AI assistant</h4>
+      <p>A genuinely new channel this year — parents finding Seneca via AI recommendations. Small in absolute count but notable for being the first time it appears in any post-subscription survey. Worth tracking whether it scales with general AI-search behaviour.</p>
+      <div class="quote-card purple">
+        <span class="qmark">“</span><p>Advice from Google Gemini that it could help with exam technique, which is our child's weak spot.</p>
+        <div class="attr">Parent of Y9 · December 2025</div>
+      </div>
+      <div class="quote-card purple" style="margin-top:10px">
+        <span class="qmark">“</span><p>I had never heard about it. I did a Gemini search for Duolingo for A levels and found it that way.</p>
+        <div class="attr">Parent of Y12 · September 2025</div>
+      </div>
+    </div>
+
+    <div class="pathway-card other">
+      <div class="share">~10–15%</div>
+      <h4>Through email, friends, or search</h4>
+      <p>A smaller mixed channel: parent-direct marketing emails, friend or colleague recommendations, social media referrals, and general Google searches. Email has started to convert parents directly — a pattern that first surfaced in the previous year's survey.</p>
+      <div class="quote-card amber">
+        <span class="qmark">“</span><p>Didn't know about it until email.</p>
+        <div class="attr">Parent of Y11 · October 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>Googled and it was ranked as the best.</p>
+        <div class="attr">Parent of Y11 · September 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>Social media recommendation.</p>
+        <div class="attr">Parent of Y11 · January 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout purple" style="margin-top:24px">
+    <h3 style="color:var(--purple-deep)">The awareness ceiling</h3>
+    <p style="color:var(--ink-soft);font-size:15px;margin:0">Across ~70 substantive "why not sooner?" answers, roughly <strong>one in three parents say they simply didn't know Seneca Premium existed</strong>. They aren't rejecting a product — they're discovering one. The single biggest lever on parent conversion isn't price or feature set; it's making sure parents hear about Premium earlier. Every warm-hand-off channel — school newsletters, parent emails, the child themselves — converts parents who, once told, convert.</p>
+  </div>
+</section>
+
+<!-- What triggers the actual purchase -->
+<section>
+  <h2>What triggers the actual purchase</h2>
+  <p class="sub">Once a parent knows Seneca Premium exists, the decision to buy usually has a specific trigger. Five recurring prompts show up in the free text — not exclusive, but clearly patterned.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <span class="chip teal">Trigger 1</span>
+      <h4 style="margin-top:10px">The child asks</h4>
+      <p style="color:var(--ink-soft);font-size:14px">The most common single trigger. Usually a child who's been using free Seneca and hits a specific feature limit — Cram mode, exam questions, or Mini-mocks. The parent buys on the back of a specific, child-articulated request.</p>
+      <div class="quote-card teal" style="margin-top:12px">
+        <span class="qmark">“</span><p>Child asked for it.</p>
+        <div class="attr">Parent of Y11 · February 2026</div>
+      </div>
+      <div class="quote-card teal" style="margin-top:10px">
+        <span class="qmark">“</span><p>My son used the free account and he asked to upgrade for premium to get more perks.</p>
+        <div class="attr">Parent of Y10/Y11 · November 2025</div>
+      </div>
+      <div class="quote-card teal" style="margin-top:10px">
+        <span class="qmark">“</span><p>She asked for it. Wanted the additional ai support for exam essay style answers.</p>
+        <div class="attr">Parent of Y10 · October 2025</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="chip amber">Trigger 2</span>
+      <h4 style="margin-top:10px">Exams are approaching</h4>
+      <p style="color:var(--ink-soft);font-size:14px">Y11 parents buying ahead of GCSEs; Y10 parents ahead of mocks. Often paired with the child-asks trigger but sometimes parent-initiated on the back of exam anxiety.</p>
+      <div class="quote-card amber" style="margin-top:12px">
+        <span class="qmark">“</span><p>Practice questions and mock exams.</p>
+        <div class="attr">Parent of Y11 · October 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>To optimise my sons learning time — he likes Seneca but was struggling to access the material he needed on the free account he had via school.</p>
+        <div class="attr">Parent of Y11 · April 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>She is anxious about her y10 gcse mocks and is keen to revise but didnt know where to start.</p>
+        <div class="attr">Parent of Y10 · April 2026</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="chip rose">Trigger 3</span>
+      <h4 style="margin-top:10px">The child is struggling</h4>
+      <p style="color:var(--ink-soft);font-size:14px">A distinct pattern — parents buying because their child is falling behind, has specific learning needs, or is not attending school full-time. The emotional register is different: less optimism, more rescue.</p>
+      <div class="quote-card rose" style="margin-top:12px">
+        <span class="qmark">“</span><p>My child isn't in school full time due to anxiety and has found Seneca very helpful.</p>
+        <div class="attr">Parent of Y11 · September 2025</div>
+      </div>
+      <div class="quote-card rose" style="margin-top:10px">
+        <span class="qmark">“</span><p>My child is registered as a Young Carer and has measures in place at school for timed tasks. He suffers from anxiety under pressure so this will really help him.</p>
+        <div class="attr">Parent of Y8 · February 2026</div>
+      </div>
+      <div class="quote-card rose" style="margin-top:10px">
+        <span class="qmark">“</span><p>My child struggles to learn / read / write. I wanted AI and access to spoken notes rather than her having to read.</p>
+        <div class="attr">Parent of Y10/Y11 · September 2025</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="chip purple">Trigger 4</span>
+      <h4 style="margin-top:10px">As an alternative to private tutoring</h4>
+      <p style="color:var(--ink-soft);font-size:14px">A growing positioning parents explicitly name. Seneca Premium — especially Amelia — is framed as a lower-cost alternative to one-to-one tutoring. The AI tutor proposition is doing real commercial work here.</p>
+      <div class="quote-card purple" style="margin-top:12px">
+        <span class="qmark">“</span><p>Instead of private tutor.</p>
+        <div class="attr">Parent of Y8 · December 2025</div>
+      </div>
+      <div class="quote-card purple" style="margin-top:10px">
+        <span class="qmark">“</span><p>my child likes the interactive nature of ai — like asking a teacher.</p>
+        <div class="attr">Parent of Y11 · November 2025</div>
+      </div>
+      <div class="quote-card purple" style="margin-top:10px">
+        <span class="qmark">“</span><p>I researched the varying ai packages being offered, and Seneca came up as the best for WJEC.</p>
+        <div class="attr">Parent of Y11 · November 2025</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="chip blue">Trigger 5</span>
+      <h4 style="margin-top:10px">Home education</h4>
+      <p style="color:var(--ink-soft);font-size:14px">A small but persistent segment — parents home-educating a child, often for medical, neurodivergence, or choice reasons. Seneca Premium is treated as a core curriculum resource rather than a supplement.</p>
+      <div class="quote-card blue" style="margin-top:12px">
+        <span class="qmark">“</span><p>To use for home education.</p>
+        <div class="attr">Parent of Y9 · October 2025</div>
+      </div>
+      <div class="quote-card blue" style="margin-top:10px">
+        <span class="qmark">“</span><p>She is elective home educated and what best possible outcomes for gcse studies and resource support.</p>
+        <div class="attr">Parent of Y11 · October 2025</div>
+      </div>
+      <div class="quote-card blue" style="margin-top:10px">
+        <span class="qmark">“</span><p>Educating from home. Sitting GCSE's in 2 months time.</p>
+        <div class="attr">Parent of Y11 · March 2026</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="chip">In one voice</span>
+      <h4 style="margin-top:10px">The emotional underneath</h4>
+      <p style="color:var(--ink-soft);font-size:14px">Beneath all five triggers, parents frame the purchase in the same terms — doing what they can for their child's chance. The language is caring, determined, sometimes desperate.</p>
+      <div class="big-quote teal" style="margin-top:14px">
+        <span class="qmark">“</span><p>James is autistic with learning challenges, low confidence and major anxieties. He's eager to learn and is an intelligent young man — he's just been pushed through a mainstream environment that isn't structured to support his needs. This offer provides some hope.</p>
+        <div class="attr">Parent of Y11 · September 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Package choice -->
+<section>
+  <h2>Which package parents buy</h2>
+  <p class="sub">Seneca Premium shows parents a three-option page: Exam Boost (Seneca's middle tier), Amelia AI Assistant (the premium AI tutor), and a 1:1 tutoring partner product. Parents don't see Supreme — the School-Premium lookup is too slow on the parent flow to safely offer it. The mix is stable except for one feature: Amelia's autumn surge.</p>
+
+  <div class="card">
+    <h3>Package choice by period</h3>
+    <table class="period-table">
+      <thead>
+        <tr>
+          <th>Package</th>
+          <th>P1 Exam '25</th>
+          <th>P2 Autumn '25</th>
+          <th>P3 Spring '26</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Exam Boost <span style="font-size:11px;color:var(--ink-mute);font-weight:500;margin-left:6px">· middle tier</span></td>
+          <td class="num">71%</td>
+          <td class="num">62%</td>
+          <td class="num">72%</td>
+        </tr>
+        <tr>
+          <td>Amelia AI Assistant <span style="font-size:11px;color:var(--ink-mute);font-weight:500;margin-left:6px">· premium AI upgrade</span></td>
+          <td class="num">33%</td>
+          <td class="num hi">52%</td>
+          <td class="num">37%</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:18px;color:var(--ink-soft);font-size:14px">Exam Boost remains dominant every period. Amelia, however, hit <strong>52% of parent purchases in Autumn 2025</strong> — the highest AI-tier uptake ever recorded in the parent post-subscription surveys. The previous autumn high was 40% (Autumn 2023, when Amelia was first locked in as the top tier). Two plausible drivers: parents more comfortable with the "AI tutor" category post-ChatGPT, and Amelia itself running on materially better LLMs than its 2023 davinci-era launch.</p>
+  </div>
+
+  <h3 style="margin-top:32px">Why parents pick Amelia specifically</h3>
+  <div class="quote-grid" style="margin-top:6px">
+    <div class="quote-card purple">
+      <span class="qmark">“</span><p>my child likes the interactive nature of ai — like asking a teacher.</p>
+      <div class="attr">Parent of Y11 · November 2025</div>
+    </div>
+    <div class="quote-card purple">
+      <span class="qmark">“</span><p>He asked for it to help with mock exam preparation. He was interested in the AI creation of mocks and feedback.</p>
+      <div class="attr">Parent of Y11 · October 2025</div>
+    </div>
+    <div class="quote-card purple">
+      <span class="qmark">“</span><p>Seeing my son wanting to do the full 100% of his homework and keep asking for ai packages too like chatgpt.</p>
+      <div class="attr">Parent of Y7 · November 2025</div>
+    </div>
+    <div class="quote-card purple">
+      <span class="qmark">“</span><p>Instead of private tutor.</p>
+      <div class="attr">Parent of Y8 · December 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- Hesitations -->
+<section>
+  <h2>Where parents hesitate</h2>
+  <p class="sub">Parents convert with relatively high conviction — 44% report no hesitation at all in Spring 2026, and the "no hesitation" share has never dropped below 39% across any period. But when parents do hesitate, the same two themes recur with identical language to every post-subscription survey since October 2022.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Hesitation themes · full-year</h3>
+      <div class="kv-row"><div class="lbl">None</div><div class="bar-wrap"><div class="bar teal" data-w="43"></div></div><div class="val">~43%</div></div>
+      <div class="kv-row"><div class="lbl">Price / cost</div><div class="bar-wrap"><div class="bar rose" data-w="24"></div></div><div class="val">~24%</div></div>
+      <div class="kv-row"><div class="lbl">Payment structure (pre-Feb-2026)</div><div class="bar-wrap"><div class="bar amber" data-w="13"></div></div><div class="val">~13%</div></div>
+      <div class="kv-row"><div class="lbl">Will it be worth it?</div><div class="bar-wrap"><div class="bar blue" data-w="5"></div></div><div class="val">~5%</div></div>
+      <div class="kv-row"><div class="lbl">Will my child actually use it?</div><div class="bar-wrap"><div class="bar blue" data-w="3"></div></div><div class="val">~3%</div></div>
+      <p style="margin-top:16px;color:var(--ink-soft);font-size:14px">"No hesitation" is the single most common answer in every period — 45%, 39%, 44% across P1/P2/P3. Parent conviction is a durable feature of the data, quite different from the student-side response where exam anxiety drives sharper hesitation.</p>
+    </div>
+
+    <div class="card">
+      <h3>The monthly subscription ask</h3>
+      <p style="color:var(--ink-soft);font-size:14px;margin-bottom:14px">The payment-structure complaint recurs across every parent post-subscription survey since October 2022 — parents know exactly how long they need the product for, and the four-month commitment rarely matches. <strong>A monthly package shipped in February 2026</strong> after a year of testing with 10% of users; the quotes below pre-date the ship and are part of the evidence base that made the case.</p>
+      <div class="quote-card amber">
+        <span class="qmark">“</span><p>It was advertised as monthly charged but when selecting its quarterly or yearly. This is misleading. I'd rather pay monthly it's easier to cover the costs.</p>
+        <div class="attr">Parent of Y10 · September 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>Having to pay for 4 months upfront is a lot. It would be better to pay monthly.</p>
+        <div class="attr">Parent of Y9 · December 2025</div>
+      </div>
+      <div class="quote-card amber" style="margin-top:10px">
+        <span class="qmark">“</span><p>I hate that you made me buy four months at once. Monthly subscription would have been much better and more affordable. Really grabby of you.</p>
+        <div class="attr">Parent of Y11 · January 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:32px">Other hesitations worth naming</h3>
+  <div class="quote-grid">
+    <div class="quote-card rose">
+      <span class="qmark">“</span><p>Yes. Multiple prompts to buy into more felt not nice. Lack of clarity regarding monthly/quarterly/annual package until the payment page was not nice. Didn't feel transparent.</p>
+      <div class="attr">Parent of Y7 · November 2025</div>
+    </div>
+    <div class="quote-card rose">
+      <span class="qmark">“</span><p>Cost is annoying. I have two children and feels mean choosing him when I have a SEN EBSA child who needs it more but I can't justify a £100 outlay for a child who [may not use it].</p>
+      <div class="attr">Parent of Y7 · November 2025</div>
+    </div>
+    <div class="quote-card amber">
+      <span class="qmark">“</span><p>None, only I don't see how I set them assignments, only teachers. I actually want to set them the whole course and watch them work through it. I can't find how to do that.</p>
+      <div class="attr">Parent of Y12 · September 2025</div>
+    </div>
+    <div class="quote-card amber">
+      <span class="qmark">“</span><p>We purchased premium last year but didn't think our son made most of it.</p>
+      <div class="attr">Parent of Y12 · October 2025</div>
+    </div>
+  </div>
+  <p style="margin-top:14px;color:var(--ink-soft);font-size:14px">Two smaller but recurring asks surface in the free text: <strong>parent-as-teacher functionality</strong> (the ability to assign work and watch progress, beyond just a report) and <strong>multi-child or family plans</strong>. Both have appeared in every parent survey since 2023. Neither is high-frequency; both are concrete product asks with specific use cases.</p>
+</section>
+
+<!-- Opportunities & Threats -->
+<section>
+  <h2>Opportunities and threats for the parent-funded B2C business</h2>
+  <p class="sub">Read across a full year, the parent voice points at concrete levers — and at one competitive threat that has emerged for the first time.</p>
+
+  <h3 style="margin-top:20px">Opportunities</h3>
+  <div class="priority-row">
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Marketing</span>
+      <h4>Close the awareness gap</h4>
+      <p>One in three parents who eventually buy say they didn't know Seneca Premium existed until recently. School partnerships, parent-direct email, and SEN coordinator outreach all convert when they reach a new parent. This is the single highest-leverage growth lever in the parent dataset.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Commercial <span style="background:var(--teal-soft);color:var(--teal-dark);margin-left:6px;padding:2px 7px;border-radius:4px;font-size:9px">NB: shipped Feb 2026</span></span>
+      <h4>Monthly subscription</h4>
+      <p>The most-repeated hesitation in every parent post-subscription survey since October 2022. <strong>Shipped in February 2026</strong> after a year of 10% testing. The watching-brief now is monthly-vs-seasonal pricing perception and whether the "advertised as monthly, quarterly at checkout" confusion has been resolved.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Product</span>
+      <h4>Lean into the "cheaper than a private tutor" frame</h4>
+      <p>Multiple parents explicitly position Amelia as a tutoring substitute — *"instead of private tutor"*, *"like asking a teacher"*. With private tutors at £30–40/hour, a sharper cost-comparison narrative on the Amelia upgrade page could grow share.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Product</span>
+      <h4>Parent-as-teacher functionality</h4>
+      <p>Repeated ask across parent surveys: *"I actually want to set them the whole course and watch them work through it."* Parents want to assign, track, and nudge — not just view a report. A light parent-dashboard with assignment capability would address a real, named gap.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Positioning</span>
+      <h4>Keep investing in the SEN / home-ed / struggling-child narrative</h4>
+      <p>A meaningful, emotionally-loaded share of parent buyers are supporting a child with ADHD, autism, anxiety, home education, or school attendance difficulties. Seneca Premium is serving them well — and the parent voice is grateful.</p>
+    </div>
+    <div class="priority-card opp">
+      <span class="tag">Opportunity · Commercial</span>
+      <h4>Family / multi-child plans</h4>
+      <p>Small-count but recurring — parents with multiple children explicitly say they'd pay for a second if the price-per-child was lower. Quote: *"I have two children... I can't justify a £100 outlay."* Scoping is not complex; the demand is documented.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:36px">Threats</h3>
+  <div class="priority-row">
+    <div class="priority-card threat">
+      <span class="tag">Threat · Competitive</span>
+      <h4>ChatGPT as an Amelia substitute</h4>
+      <p>First explicit "why pay for an AI tutor when ChatGPT is free?" quotes appeared this year on the student side. Amelia's differentiation — curriculum awareness, safety, progress integration — needs clearer positioning before the pattern scales to parents.</p>
+    </div>
+    <div class="priority-card threat">
+      <span class="tag">Threat · Trust</span>
+      <h4>Pricing-comms transparency</h4>
+      <p>Several parents used "misleading" in their hesitation free text — the price they saw in marketing or early in the flow didn't match the price at checkout. Especially relevant now that monthly is live alongside seasonal and annual. Fixable with comms, not product.</p>
+    </div>
+    <div class="priority-card threat">
+      <span class="tag">Threat · Experience</span>
+      <h4>Upsell-pressure fatigue</h4>
+      <p>Quote: *"Multiple prompts to buy into more felt not nice."* A small number of parents describe the purchase experience as over-nudgy. Worth a UX audit — parents converting despite friction is the kind of signal that erodes Trustpilot scores over time.</p>
+    </div>
+    <div class="priority-card threat">
+      <span class="tag">Threat · Attribution</span>
+      <h4>AI-recommendation discovery is a double-edged channel</h4>
+      <p>Gemini and similar AI tools are now an emerging discovery channel. Good news: it's converting. Risk: AI search indexing is volatile, and Seneca's appearance inside AI recommendations isn't something the business controls directly. Worth monitoring.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Parent stories — the emotional spine -->
+<section>
+  <h2>In their own words</h2>
+  <p class="sub">A short selection of quotes that together give a fuller picture of what it looks and feels like to be a parent buying Seneca Premium. No framing, no analysis — just the raw parent voice across the year.</p>
+
+  <div class="quote-stack" style="margin-top:20px">
+    <div class="big-quote">
+      <span class="qmark">“</span><p>I upgraded to Seneca's Premium plan for my daughter because I wanted to give her the best support as she prepares for her GCSE exams. The premium features, such as personalised feedback, were the appeal.</p>
+      <div class="attr">Parent of Y11 · October 2025</div>
+    </div>
+    <div class="big-quote teal">
+      <span class="qmark">“</span><p>He says Seneca explains subjects better than other revision apps and pleaded for us to sign up for the premium.</p>
+      <div class="attr">Parent of Y11 · January 2026</div>
+    </div>
+    <div class="big-quote amber">
+      <span class="qmark">“</span><p>We can't afford private education, but hopefully modern tech pick him up in the areas where he struggles.</p>
+      <div class="attr">Parent of Y9 · September 2025</div>
+    </div>
+    <div class="big-quote rose">
+      <span class="qmark">“</span><p>The price but I'm willing to give anything a go to support my child.</p>
+      <div class="attr">Parent of Y8 · February 2026</div>
+    </div>
+    <div class="big-quote teal">
+      <span class="qmark">“</span><p>Anything that helps is worth the money.</p>
+      <div class="attr">Parent of Y11 · December 2025</div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <p>
+    <strong>Method.</strong> 626 post-subscription parent responses collected 2 April 2025 – 14 April 2026, 6-question in-product survey. Analysed as three internal periods (P1 n=104, P2 n=307, P3 n=215). All quotes verbatim; spelling preserved. "Pathway to Premium" shares are directional estimates from consolidated free-text responses to the "how did you first hear?" question (asked as part of the "why not sooner?" question in this survey).
+  </p>
+  <p>
+    <strong>Context.</strong> Parent post-subscription survey routing was broken for much of 2024 due to a post-transfer routing change; this is the first clean parent year since the fix. Parents continue to see a three-option purchase page on the parent-facing "what is Premium" page (Exam Boost, Amelia AI Assistant, 1:1 tutoring partner) — Supreme is excluded because the School-Premium lookup is too slow on the parent flow.
+  </p>
+  <p>
+    <strong>Source data.</strong> <a href="https://app.lyssna.com/tests/a2f172e11d8a/results/659e3b03d1a3">Lyssna · Parent Post-Subscription Survey (Apr 2025 – Apr 2026)</a>. Full written report: <em>post-purchase-parent-survey-apr2025.md</em> in the product-research repository.
+  </p>
+  <p style="margin-top:20px;color:var(--ink-mute)">Produced for the Seneca product team · Covering the Apr 2025 – Apr 2026 parent post-subscription survey window</p>
+</div>
+
+</div>
+
+<script>
+(function() {
+  const sections = document.querySelectorAll('section');
+  if (!('IntersectionObserver' in window)) {
+    sections.forEach(s => s.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  sections.forEach(s => io.observe(s));
+
+  const bars = document.querySelectorAll('.bar[data-w]');
+  const barIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const w = e.target.getAttribute('data-w');
+        setTimeout(() => { e.target.style.width = w + '%'; }, 80);
+        barIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  bars.forEach(b => barIO.observe(b));
+})();
+</script>
+</body>
+</html>
