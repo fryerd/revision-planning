@@ -1,0 +1,4 @@
+.DS_Store
+encrypted/
+.staticrypt.json
+promo-video/node_modules/
